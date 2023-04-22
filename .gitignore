@@ -1,0 +1,17 @@
+# Configs
+**.env
+**.DS_Store
++ .turbo
+
+# Libraries
+**/node_modules
+
+# Typescript
+*.tsbuildinfo
+client/next-env.d.ts
+
+# Production
+**/build
+
+# NextJS
+client/.next
