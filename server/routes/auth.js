@@ -1,5 +1,5 @@
 /**
- * A route that handles auth request including login and signup.
+ * A route that handles auth request including login and signup
  *
  * @param {import("fastify").FastifyInstance} fastify
  * @param {import("fastify").FastifyPluginOptions} _options

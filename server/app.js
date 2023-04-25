@@ -3,20 +3,36 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import fastify from 'fastify'
+import pino from 'pino'
 
-const app = fastify({ logger: true })
+const app = fastify({
+	logger: pino({
+		level: 'trace',
+		transport: {
+			target: 'pino-pretty',
+			options: { colorize: true },
+		},
+	}),
+})
 
-app.register(require('@fastify/helmet'), {
+import postgreConnect from './utils/connections/postgreConnect.js'
+
+await postgreConnect()
+
+import helmet from '@fastify/helmet'
+import cors from '@fastify/cors'
+
+app.register(helmet, {
 	global: true,
 })
-app.register(require('@fastify/cors'), {
+app.register(cors, {
 	credentials: true,
 	strictPreflight: false,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 	origin: [process.env.CLIENT, 'http://localhost:8080'],
 })
 
-import auth from './routes/auth'
+import auth from './routes/auth.js'
 
 app.register(auth, { prefix: '/auth' })
 
