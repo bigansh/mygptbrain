@@ -29,8 +29,20 @@ app.register(cors, {
 	credentials: true,
 	strictPreflight: false,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-	origin: [process.env.CLIENT, 'http://localhost:8080'],
+	origin: [process.env.CLIENT, 'http://localhost:5000'],
 })
+
+import jwt from './utils/plugins/jwt.js'
+
+app.register(jwt)
+
+import clientAuth from './utils/decorators/clientAuth.js'
+import callbackAuth from './utils/decorators/callbackAuth.js'
+import userAuth from './utils/decorators/userAuth.js'
+
+app.register(clientAuth)
+app.register(callbackAuth)
+app.register(userAuth)
 
 import auth from './routes/auth.js'
 

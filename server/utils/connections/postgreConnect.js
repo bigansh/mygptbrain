@@ -37,6 +37,22 @@ const postgreConnect = async () => {
 			.authenticate()
 			.then(() => console.log('Connected to DB!'))
 
+		Auth.belongsTo(User)
+		Content.belongsTo(User)
+
+		User.hasOne(Auth, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+		User.hasMany(Content, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+
+		Reddit.belongsTo(Auth)
+		Pocket.belongsTo(Auth)
+		Twitter.belongsTo(Auth)
+		Google.belongsTo(Auth)
+
+		Auth.hasOne(Reddit, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+		Auth.hasOne(Pocket, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+		Auth.hasOne(Twitter, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+		Auth.hasOne(Google, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+
 		await sequelize
 			.sync({ alter: true, force: true })
 			.then(console.log('Sync complete!'))

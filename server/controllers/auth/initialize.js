@@ -13,10 +13,15 @@ const initialize = async (req, res) => {
 	try {
 		const { query_type, profile_id } = req.query
 
+		/**
+		 * @type {import('../../utils/types/authObjects.js').authObjects}
+		 */
+		let authObjects
+
 		if (query_type === 'twitter') {
 			const { url, state, codeVerifier } = twitterAuthFlow()
 
-			const authObjects = { state, codeVerifier, profile_id } || {}
+			authObjects = { state, codeVerifier, profile_id } || {}
 
 			cache.set(state, authObjects, 60 * 2)
 
@@ -24,7 +29,7 @@ const initialize = async (req, res) => {
 		} else if (query_type === 'google') {
 			const { state, url } = googleAuthFlow(query_type)
 
-			const authObjects = { state, profile_id } || {}
+			authObjects = { state, profile_id } || {}
 
 			cache.set(state, authObjects, 60 * 2)
 

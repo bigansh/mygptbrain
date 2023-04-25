@@ -1,7 +1,5 @@
 import { DataTypes, Sequelize } from 'sequelize'
 
-import { Auth, Content } from '../../connections/postgreConnect.js'
-
 /**
  * User schema
  *
@@ -17,19 +15,15 @@ const userSchema = (sequelize, DataTypes) => {
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true
 		},
 		profile_id: {
 			type: DataTypes.UUID,
 			allowNull: false,
 			primaryKey: true,
+			unique: true
 		},
 	})
-
-	Auth.belongsTo(User)
-	Content.belongsTo(User)
-
-	User.hasOne(Auth, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-	User.hasMany(Content, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 
 	return User
 }

@@ -1,4 +1,4 @@
-import { UUIDV4 } from 'sequelize'
+import { v4 as uuidV4 } from 'uuid'
 
 import { User, Auth } from '../../../../utils/connections/postgreConnect.js'
 
@@ -9,7 +9,7 @@ import { User, Auth } from '../../../../utils/connections/postgreConnect.js'
  */
 const createUser = async ({ authDetails, personalDetails }) => {
 	try {
-		const profile_id = UUIDV4()
+		const profile_id = uuidV4()
 
 		const user = await User.create({
 			...personalDetails,

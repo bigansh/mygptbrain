@@ -15,19 +15,17 @@ const callback = async (req, res) => {
 
 		let sessionToken
 
+		const { state, code } = req.query
+
 		/**
 		 * @type {import('../../utils/types/authObjects.js').authObjects}
 		 */
-		const authObjects = cache.get(state)
+		let authObjects = cache.get(state)
+
+		if (!authObjects)
+			throw new Error('Authorization token expired. Please try again.')
 
 		if (platform === 'twitter') {
-			const { state, code } = req.query
-
-			if (!authObjects)
-				throw new Error(
-					'Authorization token expired. Please try again.'
-				)
-
 			const { profile_id } = await twitterCallback(
 				state,
 				code,
@@ -36,12 +34,7 @@ const callback = async (req, res) => {
 
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'google') {
-			const { state, code } = req.query
-
-			if (!authObjects)
-				throw new Error(
-					'Authorization token expired. Please try again.'
-				)
+			console.log(authObjects)
 
 			const { profile_id } = await googleCallback(
 				state,

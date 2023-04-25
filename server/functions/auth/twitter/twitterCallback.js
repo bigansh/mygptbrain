@@ -13,7 +13,7 @@ import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
 const twitterCallback = async (
 	state,
 	code,
-	{ codeVerifier, sessionState, profile_id }
+	{ codeVerifier, state: sessionState, profile_id }
 ) => {
 	try {
 		if (!codeVerifier || !state || !sessionState || !code)
@@ -34,7 +34,7 @@ const twitterCallback = async (
 		/**
 		 * @type {import('../../../utils/types/userObject.js').userObject}
 		 */
-		const userObject = {
+		let userObject = {
 			personalDetails: {
 				profile_id: profile_id,
 				name: data.name,
@@ -48,9 +48,9 @@ const twitterCallback = async (
 			},
 		}
 
-		await authFinderAndUpdater(userObject)
-
 		const user = await userFinderAndUpdater(userObject)
+
+		await authFinderAndUpdater(userObject)
 
 		return user
 	} catch (error) {

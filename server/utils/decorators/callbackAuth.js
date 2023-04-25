@@ -1,7 +1,7 @@
 import fastifyPlugin from 'fastify-plugin'
 
 /**
- * A plugin that checks for the auth callback types
+ * A decorator that checks for the auth callback types
  */
 const callbackAuth = fastifyPlugin(
 	/**
@@ -19,7 +19,7 @@ const callbackAuth = fastifyPlugin(
 			 */
 			(req, res, done) => {
 				try {
-					if (!req.params.platforms)
+					if (!req.params.platform)
 						throw new Error('Undefined callback platform.')
 					else if (
 						![

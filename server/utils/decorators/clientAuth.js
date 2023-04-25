@@ -5,7 +5,7 @@ dotenv.config()
 import fastifyPlugin from 'fastify-plugin'
 
 /**
- * A plugin that authenticates if the client is authorized
+ * A decorator that authenticates if the client is authorized
  */
 const clientAuth = fastifyPlugin(
 	/**

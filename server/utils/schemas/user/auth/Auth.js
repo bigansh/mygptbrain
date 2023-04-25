@@ -1,8 +1,5 @@
 import { DataTypes, Sequelize } from 'sequelize'
 
-import { Google, Pocket, Reddit, Twitter } from '../../../connections/postgreConnect.js'
-
-
 /**
  * Auth schema
  *
@@ -14,43 +11,39 @@ const authSchema = (sequelize, DataTypes) => {
 		reddit_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		twitter_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		pocket_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		google_id: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		password_salt: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		profile_id: {
 			type: DataTypes.UUID,
 			allowNull: false,
 			primaryKey: true,
+			unique: true,
 			references: {
 				model: 'users',
 				key: 'profile_id',
 			},
 		},
 	})
-
-	Reddit.belongsTo(Auth)
-	Pocket.belongsTo(Auth)
-	Twitter.belongsTo(Auth)
-	Google.belongsTo(Auth)
-
-	Auth.hasOne(Reddit, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-	Auth.hasOne(Pocket, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-	Auth.hasOne(Twitter, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-	Auth.hasOne(Google, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 
 	return Auth
 }

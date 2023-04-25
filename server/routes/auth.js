@@ -10,7 +10,7 @@ import initialize from '../controllers/auth/initialize.js'
  */
 const auth = (fastify, _options, done) => {
 	fastify.get(
-		'initialize',
+		'/initialize',
 		{
 			onRequest: [fastify.clientAuth],
 		},

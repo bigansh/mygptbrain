@@ -12,7 +12,7 @@ import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
  * @param {String} code
  * @param {import('../../../utils/types/authObjects.js').authObjects} authObjects
  */
-const googleCallback = async (state, code, { sessionState }) => {
+const googleCallback = async (state, code, { state: sessionState }) => {
 	try {
 		if (!state || !sessionState || !code)
 			throw new Error('You denied the app or your session expired!')
@@ -39,7 +39,7 @@ const googleCallback = async (state, code, { sessionState }) => {
 		/**
 		 * @type {import('../../../utils/types/userObject.js').userObject}
 		 */
-		const userObject = {
+		let userObject = {
 			personalDetails: {
 				name: data.names[0].displayName,
 				email: data.emailAddresses[0].value,
@@ -54,6 +54,8 @@ const googleCallback = async (state, code, { sessionState }) => {
 		}
 
 		const user = await userFinderAndUpdater(userObject)
+
+		userObject.personalDetails.profile_id = user.dataValues.profile_id
 
 		await authFinderAndUpdater(userObject)
 

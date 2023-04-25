@@ -1,4 +1,11 @@
-import { User, Auth } from '../../utils/connections/postgreConnect.js'
+import {
+	User,
+	Auth,
+	Google,
+	Reddit,
+	Pocket,
+	Twitter,
+} from '../../utils/connections/postgreConnect.js'
 
 import createAuth from '../crud/user/auth/createAuth.js'
 import updateAuth from '../crud/user/auth/updateAuth.js'
@@ -12,18 +19,24 @@ const authFinderAndUpdater = async (userObject) => {
 	try {
 		let query = {}
 
-		if (userObject.authDetails.google_id)
-			query = { ...query, google_id: userObject.authDetails.google_id }
-		else if (userObject.authDetails.pocket_id)
-			query = { ...query, pocket_id: userObject.authDetails.pocket_id }
-		else if (userObject.authDetails.twitter_id)
-			query = { ...query, twitter_id: userObject.authDetails.twitter_id }
-		else if (userObject.authDetails.reddit_id)
-			query = { ...query, reddit_id: userObject.authDetails.reddit_id }
+		let user
 
-		const user = await Auth.findOne({
-			where: query,
-		})
+		if (userObject.authDetails.google_id)
+			user = await Google.findOne({
+				where: { google_id: userObject.authDetails.google_id },
+			})
+		else if (userObject.authDetails.pocket_id)
+			user = await Pocket.findOne({
+				where: { pocket_id: userObject.authDetails.pocket_id },
+			})
+		else if (userObject.authDetails.twitter_id)
+			user = await Twitter.findOne({
+				where: { twitter_id: userObject.authDetails.twitter_id },
+			})
+		else if (userObject.authDetails.reddit_id)
+			user = await Reddit.findOne({
+				where: { reddit_id: userObject.authDetails.reddit_id },
+			})
 
 		if (!user) return await createAuth(userObject)
 		else return await updateAuth(userObject)
