@@ -1,16 +1,18 @@
 import { User } from '../../utils/connections/postgreConnect.js'
 
-import createUser from '../crud/user/createUser.js'
-import updateUser from '../crud/user/updateUser.js'
+import createUser from '../crud/user/profile/createUser.js'
+import updateUser from '../crud/user/profile/updateUser.js'
 
 /**
- * A function to check if the user exists or and update them accordingly
+ * A function to check if the user exists or not and update them accordingly
  *
- * @param {*} userObject
+ * @param {import('../../utils/types/userObject.js').userObject} userObject
  */
 const userFinderAndUpdater = async (userObject) => {
 	try {
-		const user = await User.findOne({ where: { email: userObject.email } })
+		const user = await User.findOne({
+			where: { email: userObject.personalDetails.email },
+		})
 
 		if (!user) return await createUser(userObject)
 		else return await updateUser(userObject)

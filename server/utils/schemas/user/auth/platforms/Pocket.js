@@ -8,20 +8,20 @@ import { DataTypes, Sequelize } from 'sequelize'
  */
 const pocketSchema = (sequelize, DataTypes) => {
 	const Pocket = sequelize.define('pocket', {
-        auth_token: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        profile_id: {
-			type: DataTypes.UUID,
+		access_token: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		pocket_id: {
+			type: DataTypes.STRING,
 			allowNull: false,
 			primaryKey: true,
 			references: {
 				model: 'auths',
-				key: 'profile_id',
+				key: 'pocket_id',
 			},
 		},
-    })
+	})
 
 	return Pocket
 }

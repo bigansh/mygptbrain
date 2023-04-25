@@ -2,22 +2,17 @@ import { google } from 'googleapis'
 
 import googleClient from '../../../utils/api/google.js'
 
-const userFinderAndUpdater = require('../../lifecycle/userFinderAndUpdater')
+import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
+import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
 
 /**
  * A function that handles the callback request for Google
  *
- * @param {String} sessionState
  * @param {String} state
  * @param {String} code
- * @param {String} profile_id
+ * @param {import('../../../utils/types/authObjects.js').authObjects} authObjects
  */
-const googleCallback = async (
-	sessionState,
-	state,
-	code,
-	profile_id = undefined
-) => {
+const googleCallback = async (state, code, { sessionState }) => {
 	try {
 		if (!state || !sessionState || !code)
 			throw new Error('You denied the app or your session expired!')
@@ -41,17 +36,26 @@ const googleCallback = async (
 
 		const google_id = data.resourceName.match('[0-9]+$')[0]
 
+		/**
+		 * @type {import('../../../utils/types/userObject.js').userObject}
+		 */
 		const userObject = {
-			name: data.names[0].displayName,
-			google_id: google_id,
-			email: data.emailAddresses[0].value,
-			google_auth_tokens: {
+			personalDetails: {
+				name: data.names[0].displayName,
+				email: data.emailAddresses[0].value,
+			},
+			authDetails: {
+				google_id: google_id,
+			},
+			googleTokens: {
 				access_token: tokens.access_token,
 				refresh_token: tokens.refresh_token,
 			},
 		}
 
-		const user = await userFinderAndUpdater(profile_id, userObject)
+		const user = await userFinderAndUpdater(userObject)
+
+		await authFinderAndUpdater(userObject)
 
 		return user
 	} catch (error) {

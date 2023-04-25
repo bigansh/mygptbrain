@@ -16,13 +16,13 @@ const twitterSchema = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        profile_id: {
-			type: DataTypes.UUID,
+        twitter_id: {
+			type: DataTypes.STRING,
 			allowNull: false,
 			primaryKey: true,
 			references: {
 				model: 'auths',
-				key: 'profile_id',
+				key: 'twitter_id',
 			},
 		},
     })

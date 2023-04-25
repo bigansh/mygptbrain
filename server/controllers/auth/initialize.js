@@ -1,6 +1,7 @@
 import cache from '../../utils/initializers/cache.js'
 
 import twitterAuthFlow from '../../functions/auth/twitter/twitterAuthFlow.js'
+import googleAuthFlow from '../../functions/auth/google/googleAuthFlow.js'
 
 /**
  * A controller to handle the auth initialization requests
@@ -21,7 +22,13 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'google') {
-			
+			const { state, url } = googleAuthFlow(query_type)
+
+			const authObjects = { state, profile_id } || {}
+
+			cache.set(state, authObjects, 60 * 2)
+
+			res.status(302).redirect(url)
 		}
 	} catch (error) {
 		throw error

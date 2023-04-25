@@ -8,17 +8,21 @@ import { DataTypes, Sequelize } from 'sequelize'
  */
 const googleSchema = (sequelize, DataTypes) => {
 	const Google = sequelize.define('google', {
-        auth_token: {
+        access_token: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        profile_id: {
-			type: DataTypes.UUID,
+		refresh_token: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        google_id: {
+			type: DataTypes.STRING,
 			allowNull: false,
 			primaryKey: true,
 			references: {
 				model: 'auths',
-				key: 'profile_id',
+				key: 'google_id',
 			},
 		},
     })

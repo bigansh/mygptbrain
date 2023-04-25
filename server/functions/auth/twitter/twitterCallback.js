@@ -1,6 +1,7 @@
 import twitterClient from '../../../utils/api/twitter.js'
 
-import updateUser from '../../crud/user/updateUser.js'
+import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
+import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
 
 /**
  * A function that handles callbacks for Twitter
@@ -30,17 +31,26 @@ const twitterCallback = async (
 
 		const { data } = await client.v2.me()
 
+		/**
+		 * @type {import('../../../utils/types/userObject.js').userObject}
+		 */
 		const userObject = {
-			profile_id: profile_id,
-			name: data.name,
-			twitter_id: data.id,
-			twitter_auth_tokens: {
+			personalDetails: {
+				profile_id: profile_id,
+				name: data.name,
+			},
+			authDetails: {
+				twitter_id: data.id,
+			},
+			twitterTokens: {
 				access_token: accessToken,
 				refresh_token: refreshToken,
 			},
 		}
 
-		const user = await updateUser(userObject)
+		await authFinderAndUpdater(userObject)
+
+		const user = await userFinderAndUpdater(userObject)
 
 		return user
 	} catch (error) {

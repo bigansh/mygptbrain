@@ -1,9 +1,7 @@
 import { DataTypes, Sequelize } from 'sequelize'
 
-import redditSchema from './platforms/Reddit.js'
-import pocketSchema from './platforms/Pocket.js'
-import twitterSchema from './platforms/Twitter.js'
-import googleSchema from './platforms/Google.js'
+import { Google, Pocket, Reddit, Twitter } from '../../../connections/postgreConnect.js'
+
 
 /**
  * Auth schema
@@ -43,11 +41,6 @@ const authSchema = (sequelize, DataTypes) => {
 			},
 		},
 	})
-
-	const Reddit = redditSchema(sequelize, DataTypes)
-	const Pocket = pocketSchema(sequelize, DataTypes)
-	const Twitter = twitterSchema(sequelize, DataTypes)
-	const Google = googleSchema(sequelize, DataTypes)
 
 	Reddit.belongsTo(Auth)
 	Pocket.belongsTo(Auth)

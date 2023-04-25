@@ -1,6 +1,7 @@
 import cache from '../../utils/initializers/cache.js'
 
 import twitterCallback from '../../functions/auth/twitter/twitterCallback.js'
+import googleCallback from '../../functions/auth/google/googleCallback.js'
 
 /**
  * A controller to handle the auth callback requests
@@ -28,6 +29,21 @@ const callback = async (req, res) => {
 				)
 
 			const { profile_id } = await twitterCallback(
+				state,
+				code,
+				authObjects
+			)
+
+			sessionToken = await res.jwtSign({ profile_id })
+		} else if (platform === 'google') {
+			const { state, code } = req.query
+
+			if (!authObjects)
+				throw new Error(
+					'Authorization token expired. Please try again.'
+				)
+
+			const { profile_id } = await googleCallback(
 				state,
 				code,
 				authObjects

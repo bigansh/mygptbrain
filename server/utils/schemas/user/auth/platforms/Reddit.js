@@ -12,17 +12,17 @@ const redditSchema = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        auth_token: {
+        access_token: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        profile_id: {
-			type: DataTypes.UUID,
+        reddit_id: {
+			type: DataTypes.STRING,
 			allowNull: false,
 			primaryKey: true,
 			references: {
 				model: 'auths',
-				key: 'profile_id',
+				key: 'reddit_id',
 			},
 		},
     })
