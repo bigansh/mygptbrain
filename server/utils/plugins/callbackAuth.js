@@ -21,13 +21,13 @@ const callbackAuth = fastifyPlugin(
 				try {
 					if (!req.params.platforms)
 						throw new Error('Undefined callback platform.')
-					if (
+					else if (
 						![
 							'twitter',
 							'reddit',
 							'pinterest',
 							'google',
-							'tumblr',
+							'login',
 							'pocket',
 						].some((platform) => platform === req.params.platform)
 					)

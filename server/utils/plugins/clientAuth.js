@@ -20,8 +20,9 @@ const clientAuth = fastifyPlugin(
 			/**
 			 * @param {import('fastify/fastify').FastifyRequest} req
 			 * @param {import('fastify/fastify').FastifyReply} res
+			 * @param {import('fastify/fastify').DoneFuncWithErrOrRes} done
 			 */
-			(req, res, next) => {
+			(req, res, done) => {
 				try {
 					if (
 						!req.query['authorization'] &&
@@ -33,7 +34,7 @@ const clientAuth = fastifyPlugin(
 						req.query['authorization'] ||
 						req.headers['authorization'].split(' ')[1]
 
-					if (authToken === process.env.STATIC_AUTH) next()
+					if (authToken === process.env.STATIC_AUTH) done()
 					else
 						throw new Error(
 							'Client not authorized to access this route.'

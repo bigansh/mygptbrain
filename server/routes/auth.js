@@ -1,5 +1,5 @@
-import callback from '../controllers/auth/callback'
-import initialize from '../controllers/auth/initialize'
+import callback from '../controllers/auth/callback.js'
+import initialize from '../controllers/auth/initialize.js'
 
 /**
  * A route that handles auth request including login and signup

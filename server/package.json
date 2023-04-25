@@ -13,14 +13,20 @@
   "dependencies": {
     "@fastify/cors": "^8.2.1",
     "@fastify/helmet": "^10.1.0",
+    "@fastify/jwt": "^6.7.1",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "fastify-plugin": "^4.5.0",
+    "googleapis": "^118.0.0",
+    "node-cache": "^5.1.2",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "pgvector": "^0.1.2",
     "pino": "^8.11.0",
-    "sequelize": "^6.31.0"
+    "randomstring": "^1.2.3",
+    "sequelize": "^6.31.0",
+    "twitter-api-v2": "^1.14.2"
   },
   "devDependencies": {
     "pino-pretty": "^10.0.0"
