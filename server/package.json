@@ -15,6 +15,7 @@
     "@fastify/helmet": "^10.1.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
+    "fastify-plugin": "^4.5.0",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "pgvector": "^0.1.2",
