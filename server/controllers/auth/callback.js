@@ -2,6 +2,7 @@ import cache from '../../utils/initializers/cache.js'
 
 import twitterCallback from '../../functions/auth/twitter/twitterCallback.js'
 import googleCallback from '../../functions/auth/google/googleCallback.js'
+import pocketCallback from '../../functions/auth/pocket/pocketCallback.js'
 
 /**
  * A controller to handle the auth callback requests
@@ -34,9 +35,15 @@ const callback = async (req, res) => {
 
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'google') {
-			console.log(authObjects)
-
 			const { profile_id } = await googleCallback(
+				state,
+				code,
+				authObjects
+			)
+
+			sessionToken = await res.jwtSign({ profile_id })
+		} else if (platform === 'pocket') {
+			const { profile_id } = await pocketCallback(
 				state,
 				code,
 				authObjects

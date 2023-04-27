@@ -10,8 +10,18 @@ import updateUser from '../crud/user/profile/updateUser.js'
  */
 const userFinderAndUpdater = async (userObject) => {
 	try {
+		let query = {}
+
+		if (userObject.personalDetails.email)
+			query = { ...query, email: userObject.personalDetails.email }
+		else if (userObject.personalDetails.profile_id)
+			query = {
+				...query,
+				profile_id: userObject.personalDetails.profile_id,
+			}
+
 		const user = await User.findOne({
-			where: { email: userObject.personalDetails.email },
+			where: query,
 		})
 
 		if (!user) return await createUser(userObject)

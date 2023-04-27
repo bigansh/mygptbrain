@@ -12,7 +12,7 @@ import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
  * @param {String} code
  * @param {import('../../../utils/types/authObjects.js').authObjects} authObjects
  */
-const googleCallback = async (state, code, { state: sessionState }) => {
+const googleCallback = async (state, code, { state: sessionState, profile_id }) => {
 	try {
 		if (!state || !sessionState || !code)
 			throw new Error('You denied the app or your session expired!')
@@ -43,6 +43,7 @@ const googleCallback = async (state, code, { state: sessionState }) => {
 			personalDetails: {
 				name: data.names[0].displayName,
 				email: data.emailAddresses[0].value,
+				profile_id: profile_id
 			},
 			authDetails: {
 				google_id: google_id,

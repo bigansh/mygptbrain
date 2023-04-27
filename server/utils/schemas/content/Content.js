@@ -22,7 +22,7 @@ const contentSchema = (sequelize, DataTypes) => {
         },
         url: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         profile_id: {
             type: DataTypes.UUID,

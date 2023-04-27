@@ -2,6 +2,7 @@ import cache from '../../utils/initializers/cache.js'
 
 import twitterAuthFlow from '../../functions/auth/twitter/twitterAuthFlow.js'
 import googleAuthFlow from '../../functions/auth/google/googleAuthFlow.js'
+import pocketAuthFlow from '../../functions/auth/pocket/pocketAuthFlow.js'
 
 /**
  * A controller to handle the auth initialization requests
@@ -30,6 +31,22 @@ const initialize = async (req, res) => {
 			const { state, url } = googleAuthFlow(query_type)
 
 			authObjects = { state, profile_id } || {}
+
+			cache.set(state, authObjects, 60 * 2)
+
+			res.status(302).redirect(url)
+		} else if (query_type === 'pocket') {
+			const { state, url, code } = await pocketAuthFlow()
+
+			authObjects = { state, profile_id, code } || {}
+
+			cache.set(state, authObjects, 60 * 2)
+
+			res.status(302).redirect(url)
+		} else if (query_type === 'reddit') {
+			const { state, url } = redditAuthFlow()
+
+			const authObjects = { state, profile_id } || {}
 
 			cache.set(state, authObjects, 60 * 2)
 

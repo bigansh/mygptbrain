@@ -25,8 +25,8 @@ const callbackAuth = fastifyPlugin(
 						![
 							'twitter',
 							'reddit',
-							'pinterest',
 							'google',
+							'notion',
 							'login',
 							'pocket',
 						].some((platform) => platform === req.params.platform)
