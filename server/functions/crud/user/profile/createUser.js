@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 
-import { User, Auth } from '../../../../utils/connections/postgreConnect.js'
+import { User, Auth } from '../../../../utils/connections/prismaConnect.js'
 
 /**
  * A function to create the user object
@@ -12,11 +12,10 @@ const createUser = async ({ authDetails, personalDetails }) => {
 		const profile_id = uuidV4()
 
 		const user = await User.create({
-			...personalDetails,
-			profile_id: profile_id,
+			data: { ...personalDetails, profile_id: profile_id },
 		})
 
-		await Auth.create({ ...authDetails, profile_id: profile_id })
+		await Auth.create({ data: { ...authDetails, profile_id: profile_id } })
 
 		return user
 	} catch (error) {

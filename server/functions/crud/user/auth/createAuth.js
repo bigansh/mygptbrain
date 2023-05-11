@@ -4,7 +4,7 @@ import {
 	Pocket,
 	Reddit,
 	Twitter,
-} from '../../../../utils/connections/postgreConnect.js'
+} from '../../../../utils/connections/prismaConnect.js'
 
 /**
  * A function to create the auth object of a user
@@ -20,29 +20,28 @@ const createAuth = async ({
 	redditTokens,
 }) => {
 	try {
-		await Auth.update(authDetails, {
-			where: { profile_id: personalDetails.profile_id },
-		})
+		await Auth.update(
+			{ data: authDetails },
+			{
+				where: { profile_id: personalDetails.profile_id },
+			}
+		)
 
 		if (authDetails.google_id)
 			await Google.create({
-				google_id: authDetails.google_id,
-				...googleTokens,
+				data: { google_id: authDetails.google_id, ...googleTokens },
 			})
 		else if (authDetails.twitter_id)
 			await Twitter.create({
-				twitter_id: authDetails.twitter_id,
-				...twitterTokens,
+				data: { twitter_id: authDetails.twitter_id, ...twitterTokens },
 			})
 		else if (authDetails.pocket_id)
 			await Pocket.create({
-				pocket_id: authDetails.pocket_id,
-				...pocketTokens,
+				data: { pocket_id: authDetails.pocket_id, ...pocketTokens },
 			})
 		else if (authDetails.reddit_id)
 			await Reddit.create({
-				reddit_id: authDetails.reddit_id,
-				...redditTokens,
+				data: { reddit_id: authDetails.reddit_id, ...redditTokens },
 			})
 	} catch (error) {
 		throw error

@@ -12,7 +12,7 @@
     "start": "node app.js"
   },
   "prisma": {
-    "schema": "utils/prisma/schema.prisma"
+    "schema": "utils/schema/schema.prisma"
   },
   "dependencies": {
     "@fastify/cors": "^8.2.1",

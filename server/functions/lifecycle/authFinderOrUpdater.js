@@ -5,7 +5,7 @@ import {
 	Reddit,
 	Pocket,
 	Twitter,
-} from '../../utils/connections/postgreConnect.js'
+} from '../../utils/connections/prismaConnect.js'
 
 import createAuth from '../crud/user/auth/createAuth.js'
 import updateAuth from '../crud/user/auth/updateAuth.js'
@@ -22,19 +22,19 @@ const authFinderAndUpdater = async (userObject) => {
 		let user
 
 		if (userObject.authDetails.google_id)
-			user = await Google.findOne({
+			user = await Google.findUnique({
 				where: { google_id: userObject.authDetails.google_id },
 			})
 		else if (userObject.authDetails.pocket_id)
-			user = await Pocket.findOne({
+			user = await Pocket.findUnique({
 				where: { pocket_id: userObject.authDetails.pocket_id },
 			})
 		else if (userObject.authDetails.twitter_id)
-			user = await Twitter.findOne({
+			user = await Twitter.findUnique({
 				where: { twitter_id: userObject.authDetails.twitter_id },
 			})
 		else if (userObject.authDetails.reddit_id)
-			user = await Reddit.findOne({
+			user = await Reddit.findUnique({
 				where: { reddit_id: userObject.authDetails.reddit_id },
 			})
 

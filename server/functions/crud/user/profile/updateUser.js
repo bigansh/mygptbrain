@@ -1,4 +1,4 @@
-import { User } from '../../../../utils/connections/postgreConnect.js'
+import { User } from '../../../../utils/connections/prismaConnect.js'
 
 /**
  * A function to update the user and the corresponding objects
@@ -7,9 +7,12 @@ import { User } from '../../../../utils/connections/postgreConnect.js'
  */
 const updateUser = async ({ personalDetails }) => {
 	try {
-		const user = await User.update(personalDetails, {
-			where: { profile_id: personalDetails.profile_id },
-		})
+		const user = await User.update(
+			{ data: personalDetails },
+			{
+				where: { profile_id: personalDetails.profile_id },
+			}
+		)
 
 		return user
 	} catch (error) {

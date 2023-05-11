@@ -1,4 +1,4 @@
-import { User } from '../../utils/connections/postgreConnect.js'
+import { User } from '../../utils/connections/prismaConnect.js'
 
 import createUser from '../crud/user/profile/createUser.js'
 import updateUser from '../crud/user/profile/updateUser.js'
@@ -20,7 +20,7 @@ const userFinderAndUpdater = async (userObject) => {
 				profile_id: userObject.personalDetails.profile_id,
 			}
 
-		const user = await User.findOne({
+		const user = await User.findUnique({
 			where: query,
 		})
 
