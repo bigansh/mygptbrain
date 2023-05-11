@@ -6,7 +6,7 @@ import officeParser from 'officeparser'
  *
  * @param {import("@fastify/multipart").MultipartFile} file
  */
-const upload = async (file) => {
+const uploadDocument = async (file) => {
 	try {
         /**
          * @type {import('../../../utils/types/contentObjects').contentObjects}
@@ -35,4 +35,4 @@ const upload = async (file) => {
 	}
 }
 
-export default upload
+export default uploadDocument

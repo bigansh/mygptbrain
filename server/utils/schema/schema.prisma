@@ -9,13 +9,13 @@ datasource db {
 
 model User {
   name       String
-  email      String    @unique
-  profile_id String    @id @unique
+  email      String     @unique
+  profile_id String     @id @unique
   auth       Auth?
-  content    Content[]
-  chat       Chat[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  documents  Document[]
+  chats      Chat[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
   @@index([profile_id])
 }
@@ -73,7 +73,7 @@ model Pocket {
   updatedAt    DateTime @updatedAt
 }
 
-model Content {
+model Document {
   source     String
   body       String
   heading    String
@@ -87,13 +87,13 @@ model Content {
 }
 
 model Chat {
-  chat_id             String        @id @unique
-  profile_id          String        @unique
-  chat_history        String
-  user                User          @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  chatSettings        ChatSettings?
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  chat_id      String        @id @unique
+  profile_id   String        @unique
+  chat_history String
+  user         User          @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  chatSettings ChatSettings?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@index([chat_id, profile_id])
 }

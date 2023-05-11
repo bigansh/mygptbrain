@@ -4,7 +4,7 @@
  * @param {import("../../../utils/types/contentObjects").contentObjects} contentObjects 
  * @param {String} profile_id 
  */
-const create = async (contentObjects, profile_id) => {
+const createDocument = async (contentObjects, profile_id) => {
     try {
         
     } catch (error) {
@@ -12,4 +12,4 @@ const create = async (contentObjects, profile_id) => {
     }
 }
 
-export default create
+export default createDocument

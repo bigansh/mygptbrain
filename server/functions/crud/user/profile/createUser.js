@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 
-import { User, Auth } from '../../../../utils/connections/prismaConnect.js'
+import { User, Auth } from '../../../../utils/initializers/prisma.js'
 
 /**
  * A function to create the user object

@@ -4,7 +4,7 @@ import {
 	Pocket,
 	Reddit,
 	Twitter,
-} from '../../../../utils/connections/prismaConnect.js'
+} from '../../../../utils/initializers/prisma.js'
 
 /**
  * A function to create the auth object of a user

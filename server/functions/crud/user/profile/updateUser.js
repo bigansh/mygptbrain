@@ -1,4 +1,4 @@
-import { User } from '../../../../utils/connections/prismaConnect.js'
+import { User } from '../../../../utils/initializers/prisma.js'
 
 /**
  * A function to update the user and the corresponding objects

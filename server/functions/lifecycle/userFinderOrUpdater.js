@@ -1,4 +1,4 @@
-import { User } from '../../utils/connections/prismaConnect.js'
+import { User } from '../../utils/initializers/prisma.js'
 
 import createUser from '../crud/user/profile/createUser.js'
 import updateUser from '../crud/user/profile/updateUser.js'
