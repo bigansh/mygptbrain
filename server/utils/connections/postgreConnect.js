@@ -54,8 +54,7 @@ const postgreConnect = async () => {
 		Auth.hasOne(Google, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 
 		await sequelize
-			.sync()
-			// .sync({ alter: true, force: true })
+			.sync({ alter: true, force: true })
 			.then(console.log('Sync complete!'))
 	} catch (error) {
 		throw error
