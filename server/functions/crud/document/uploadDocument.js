@@ -46,7 +46,7 @@ const uploadDocument = async (file, profile_id) => {
 			data: { documents: { connect: { document_id: createdDocument.document_id } } },
 		})
 
-		console.log(data)
+		return createdDocument
 	} catch (error) {
 		throw error
 	}

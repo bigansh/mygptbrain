@@ -1,4 +1,4 @@
-import uploadDocument from '../../functions/crud/document/uploadDocument.js'
+import documentLoadAndStore from '../../functions/lifecycle/documentLoadAndStore.js'
 
 /**
  * A controller to handle the create requests for documents
@@ -15,7 +15,7 @@ const create = async (req, res) => {
 		let data
 
 		if (query_type === 'upload') {
-			await uploadDocument(await req.file(), profile_id)
+			await documentLoadAndStore('upload', profile_id, await req.file())
 		}
 	} catch (error) {
 		throw error

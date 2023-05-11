@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRESQL")
+  provider   = "postgresql"
+  url        = env("POSTGRESQL")
+  extensions = [vector]
 }
 
 model User {
@@ -88,19 +90,27 @@ model Document {
   @@index([profile_id])
 }
 
+model Vector {
+  vector_id   String                   @id @unique
+  document_id String                   @unique
+  embeddings  Unsupported("vector(3)")
+
+  @@index([document_id, vector_id])
+}
+
 model Chat {
-  chat_id      String        @id @unique
-  profile_id   String        @unique
+  chat_id      String           @id @unique
+  profile_id   String           @unique
   chat_history String
-  user         User          @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  chatSettings ChatSettings?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  user         User             @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  preferences  ChatPreferences?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
   @@index([chat_id, profile_id])
 }
 
-model ChatSettings {
+model ChatPreferences {
   llm_model    String   @default("ChatGPT")
   data_sources String[]
   chat_id      String   @id @unique
