@@ -11,8 +11,9 @@ model User {
   name       String
   email      String    @unique
   profile_id String    @id @unique
-  Auth       Auth[]
-  Content    Content[]
+  auth       Auth?
+  content    Content[]
+  chat       Chat[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
@@ -26,11 +27,11 @@ model Auth {
   google_id     String?  @unique
   password_salt String?  @unique
   profile_id    String   @id @unique
-  profile       User     @relation(fields: [profile_id], references: [profile_id])
-  Google        Google?
-  Reddit        Reddit?
-  Twitter       Twitter?
-  Pocket        Pocket?
+  user          User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  google        Google?
+  reddit        Reddit?
+  twitter       Twitter?
+  pocket        Pocket?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -41,43 +42,35 @@ model Google {
   access_token  String   @unique
   refresh_token String   @unique
   google_id     String   @id @unique
-  auth          Auth     @relation(fields: [google_id], references: [profile_id])
+  auth          Auth     @relation(fields: [google_id], references: [profile_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
-  @@index([google_id])
 }
 
 model Reddit {
   access_token  String   @unique
   refresh_token String   @unique
   reddit_id     String   @id @unique
-  auth          Auth     @relation(fields: [reddit_id], references: [profile_id])
+  auth          Auth     @relation(fields: [reddit_id], references: [profile_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
-  @@index([reddit_id])
 }
 
 model Twitter {
   access_token  String   @unique
   refresh_token String   @unique
   twitter_id    String   @id @unique
-  auth          Auth     @relation(fields: [twitter_id], references: [profile_id])
+  auth          Auth     @relation(fields: [twitter_id], references: [profile_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-
-  @@index([twitter_id])
 }
 
 model Pocket {
   access_token String   @unique
   pocket_id    String   @id @unique
-  auth         Auth     @relation(fields: [pocket_id], references: [profile_id])
+  auth         Auth     @relation(fields: [pocket_id], references: [profile_id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  @@index([pocket_id])
 }
 
 model Content {
@@ -86,9 +79,30 @@ model Content {
   heading    String
   url        String?
   profile_id String   @id @unique
-  profile    User     @relation(fields: [profile_id], references: [profile_id])
+  user       User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@index([profile_id])
+}
+
+model Chat {
+  chat_id             String        @id @unique
+  profile_id          String        @unique
+  chat_history        String
+  user                User          @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  chatSettings        ChatSettings?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([chat_id, profile_id])
+}
+
+model ChatSettings {
+  llm_model    String   @default("ChatGPT")
+  data_sources String[]
+  chat_id      String   @id @unique
+  chat         Chat     @relation(fields: [chat_id], references: [chat_id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
