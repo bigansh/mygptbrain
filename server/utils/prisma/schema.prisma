@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL")
+}
+
+model User {
+  name       String
+  email      String    @unique
+  profile_id String    @id @unique
+  Auth       Auth[]
+  Content    Content[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([profile_id])
+}
+
+model Auth {
+  reddit_id     String?  @unique
+  twitter_id    String?  @unique
+  pocket_id     String?  @unique
+  google_id     String?  @unique
+  password_salt String?  @unique
+  profile_id    String   @id @unique
+  profile       User     @relation(fields: [profile_id], references: [profile_id])
+  Google        Google?
+  Reddit        Reddit?
+  Twitter       Twitter?
+  Pocket        Pocket?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([profile_id])
+}
+
+model Google {
+  access_token  String   @unique
+  refresh_token String   @unique
+  google_id     String   @id @unique
+  auth          Auth     @relation(fields: [google_id], references: [profile_id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([google_id])
+}
+
+model Reddit {
+  access_token  String   @unique
+  refresh_token String   @unique
+  reddit_id     String   @id @unique
+  auth          Auth     @relation(fields: [reddit_id], references: [profile_id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([reddit_id])
+}
+
+model Twitter {
+  access_token  String   @unique
+  refresh_token String   @unique
+  twitter_id    String   @id @unique
+  auth          Auth     @relation(fields: [twitter_id], references: [profile_id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([twitter_id])
+}
+
+model Pocket {
+  access_token String   @unique
+  pocket_id    String   @id @unique
+  auth         Auth     @relation(fields: [pocket_id], references: [profile_id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([pocket_id])
+}
+
+model Content {
+  source     String
+  body       String
+  heading    String
+  url        String?
+  profile_id String   @id @unique
+  profile    User     @relation(fields: [profile_id], references: [profile_id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([profile_id])
+}
