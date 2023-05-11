@@ -15,10 +15,6 @@ const app = fastify({
 	}),
 })
 
-import postgreConnect from './utils/connections/postgreConnect.js'
-
-await postgreConnect()
-
 import helmet from '@fastify/helmet'
 import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
