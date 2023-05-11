@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient({
-	log: 'query',
+	log: ['query'],
 })
 
 export default prisma
@@ -12,4 +12,4 @@ export const Reddit = prisma.reddit
 export const Twitter = prisma.twitter
 export const Pocket = prisma.pocket
 export const Google = prisma.google
-export const Content = prisma.content
+export const Document = prisma.document

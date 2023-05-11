@@ -10,12 +10,12 @@ const create = async (req, res) => {
 	try {
 		const { query_type } = req.query
 
-		// const { profile_id } = req.user
+		const { profile_id } = req.user
 
 		let data
 
 		if (query_type === 'upload') {
-			await uploadDocument(await req.file())
+			await uploadDocument(await req.file(), profile_id)
 		}
 	} catch (error) {
 		throw error

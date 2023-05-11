@@ -20,12 +20,10 @@ const createAuth = async ({
 	redditTokens,
 }) => {
 	try {
-		await Auth.update(
-			{ data: authDetails },
-			{
-				where: { profile_id: personalDetails.profile_id },
-			}
-		)
+		await Auth.update({
+			data: authDetails,
+			where: { profile_id: personalDetails.profile_id },
+		})
 
 		if (authDetails.google_id)
 			await Google.create({

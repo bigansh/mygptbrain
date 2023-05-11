@@ -24,6 +24,8 @@ const userFinderAndUpdater = async (userObject) => {
 			where: query,
 		})
 
+		user && (userObject.personalDetails.profile_id = user.profile_id)
+
 		if (!user) return await createUser(userObject)
 		else return await updateUser(userObject)
 	} catch (error) {

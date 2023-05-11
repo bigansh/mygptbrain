@@ -7,12 +7,10 @@ import { User } from '../../../../utils/initializers/prisma.js'
  */
 const updateUser = async ({ personalDetails }) => {
 	try {
-		const user = await User.update(
-			{ data: personalDetails },
-			{
-				where: { profile_id: personalDetails.profile_id },
-			}
-		)
+		const user = await User.update({
+			data: personalDetails,
+			where: { profile_id: personalDetails.profile_id },
+		})
 
 		return user
 	} catch (error) {

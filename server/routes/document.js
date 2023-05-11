@@ -11,7 +11,7 @@ const document = (fastify, _options, done) => {
 	fastify.post(
 		'/create',
 		{
-			// onRequest: [fastify.userAuth],
+			onRequest: [fastify.userAuth],
 		},
 		create
 	)

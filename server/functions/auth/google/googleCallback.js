@@ -56,7 +56,7 @@ const googleCallback = async (state, code, { state: sessionState, profile_id }) 
 
 		const user = await userFinderAndUpdater(userObject)
 
-		userObject.personalDetails.profile_id = user.dataValues.profile_id
+		userObject.personalDetails.profile_id = user.profile_id
 
 		await authFinderAndUpdater(userObject)
 

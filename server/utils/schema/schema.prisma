@@ -21,12 +21,13 @@ model User {
 }
 
 model Auth {
+  auth_id       String   @id @unique @default(uuid())
   reddit_id     String?  @unique
   twitter_id    String?  @unique
   pocket_id     String?  @unique
   google_id     String?  @unique
   password_salt String?  @unique
-  profile_id    String   @id @unique
+  profile_id    String   @unique
   user          User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
   google        Google?
   reddit        Reddit?
@@ -42,7 +43,7 @@ model Google {
   access_token  String   @unique
   refresh_token String   @unique
   google_id     String   @id @unique
-  auth          Auth     @relation(fields: [google_id], references: [profile_id], onDelete: Cascade)
+  auth          Auth     @relation(fields: [google_id], references: [google_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -51,7 +52,7 @@ model Reddit {
   access_token  String   @unique
   refresh_token String   @unique
   reddit_id     String   @id @unique
-  auth          Auth     @relation(fields: [reddit_id], references: [profile_id], onDelete: Cascade)
+  auth          Auth     @relation(fields: [reddit_id], references: [reddit_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -60,7 +61,7 @@ model Twitter {
   access_token  String   @unique
   refresh_token String   @unique
   twitter_id    String   @id @unique
-  auth          Auth     @relation(fields: [twitter_id], references: [profile_id], onDelete: Cascade)
+  auth          Auth     @relation(fields: [twitter_id], references: [twitter_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -68,20 +69,21 @@ model Twitter {
 model Pocket {
   access_token String   @unique
   pocket_id    String   @id @unique
-  auth         Auth     @relation(fields: [pocket_id], references: [profile_id], onDelete: Cascade)
+  auth         Auth     @relation(fields: [pocket_id], references: [pocket_id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
 
 model Document {
-  source     String
-  body       String
-  heading    String
-  url        String?
-  profile_id String   @id @unique
-  user       User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  document_id String   @id @unique @default(uuid())
+  source      String
+  body        String
+  heading     String
+  url         String?
+  profile_id  String   @unique
+  user        User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([profile_id])
 }

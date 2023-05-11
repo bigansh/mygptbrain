@@ -21,6 +21,8 @@ const authFinderAndUpdater = async (userObject) => {
 
 		let user
 
+		console.log(userObject)
+
 		if (userObject.authDetails.google_id)
 			user = await Google.findUnique({
 				where: { google_id: userObject.authDetails.google_id },
@@ -37,6 +39,8 @@ const authFinderAndUpdater = async (userObject) => {
 			user = await Reddit.findUnique({
 				where: { reddit_id: userObject.authDetails.reddit_id },
 			})
+
+		console.log(user)
 
 		if (!user) return await createAuth(userObject)
 		else return await updateAuth(userObject)
