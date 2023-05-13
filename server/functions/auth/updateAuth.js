@@ -4,12 +4,12 @@ import {
 	Pocket,
 	Reddit,
 	Twitter,
-} from '../../../utils/initializers/prisma.js'
+} from '../../utils/initializers/prisma.js'
 
 /**
  * A function to create the auth object of a user
  *
- * @param {import('../../../utils/types/userObject.js').userObject} userObject
+ * @param {import('../../utils/types/userObject.js').userObject} userObject
  */
 const updateAuth = async ({
 	authDetails,

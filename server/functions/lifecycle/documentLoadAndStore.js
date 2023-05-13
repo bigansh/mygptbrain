@@ -7,13 +7,24 @@ import embedAndStore from '../processing/embedAndStore.js'
  * A function that loads/uploads the documents and then stores them in the DB after processing it
  *
  * @param {String} profile_id
+ * @param {String} process_type
  * @param {import("@fastify/multipart").MultipartFile} file
+ * @param {import('@prisma/client').Document} document
  */
-const documentLoadAndStore = async (profile_id, file = undefined) => {
+const documentLoadAndStore = async (
+	profile_id,
+	process_type = undefined,
+	file = undefined,
+	document = undefined
+) => {
 	try {
-		if (!file) throw new Error('File not present')
+		if (process_type === 'upload') {
+			if (!file) throw new Error('File not present')
 
-		const document = await uploadDocument(file, profile_id)
+			document = await uploadDocument(file, profile_id)
+		}
+
+		if (!document) throw new Error('Failed to load the document')
 
 		const chunks = await loadAndSplit(document, profile_id)
 

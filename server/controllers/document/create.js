@@ -15,8 +15,7 @@ const create = async (req, res) => {
 		let data
 
 		if (query_type === 'upload') {
-			data = await documentLoadAndStore(profile_id, await req.file())
-		} else if (query_type === 'sync') {
+			data = await documentLoadAndStore(profile_id, 'upload', await req.file())
 		}
 
 		res.status(200).send(data)

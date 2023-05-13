@@ -1,14 +1,12 @@
 import {
-	User,
-	Auth,
 	Google,
 	Reddit,
 	Pocket,
 	Twitter,
 } from '../../utils/initializers/prisma.js'
 
-import createAuth from '../user/auth/createAuth.js'
-import updateAuth from '../user/auth/updateAuth.js'
+import createAuth from '../auth/createAuth.js'
+import updateAuth from '../auth/updateAuth.js'
 
 /**
  * A function to check if the a user platform auth exists or not and update them accordingly
@@ -17,32 +15,26 @@ import updateAuth from '../user/auth/updateAuth.js'
  */
 const authFinderAndUpdater = async (userObject) => {
 	try {
-		let query = {}
-
-		let user
-
-		console.log(userObject)
+		let foundUser
 
 		if (userObject.authDetails.google_id)
-			user = await Google.findUnique({
+			foundUser = await Google.findUnique({
 				where: { google_id: userObject.authDetails.google_id },
 			})
 		else if (userObject.authDetails.pocket_id)
-			user = await Pocket.findUnique({
+			foundUser = await Pocket.findUnique({
 				where: { pocket_id: userObject.authDetails.pocket_id },
 			})
 		else if (userObject.authDetails.twitter_id)
-			user = await Twitter.findUnique({
+			foundUser = await Twitter.findUnique({
 				where: { twitter_id: userObject.authDetails.twitter_id },
 			})
 		else if (userObject.authDetails.reddit_id)
-			user = await Reddit.findUnique({
+			foundUser = await Reddit.findUnique({
 				where: { reddit_id: userObject.authDetails.reddit_id },
 			})
 
-		console.log(user)
-
-		if (!user) return await createAuth(userObject)
+		if (!foundUser) return await createAuth(userObject)
 		else return await updateAuth(userObject)
 	} catch (error) {
 		throw error

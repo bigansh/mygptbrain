@@ -1,11 +1,11 @@
 import { v4 as uuidV4 } from 'uuid'
 
-import { User, Auth } from '../../../utils/initializers/prisma.js'
+import { User, Auth } from '../../utils/initializers/prisma.js'
 
 /**
  * A function to create the user object
  *
- * @param {import('../../../utils/types/userObject.js').userObject} userObject
+ * @param {import('../../utils/types/userObject.js').userObject} userObject
  */
 const createUser = async ({ authDetails, personalDetails }) => {
 	try {

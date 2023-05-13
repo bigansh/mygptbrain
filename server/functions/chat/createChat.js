@@ -1,4 +1,4 @@
-import { User, Chat, ChatPreferences } from '../../utils/initializers/prisma.js'
+import { User, Chat } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that creates a chat object in the DB

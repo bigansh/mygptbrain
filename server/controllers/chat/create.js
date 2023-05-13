@@ -8,15 +8,9 @@ import createChat from '../../functions/chat/createChat.js'
  */
 const create = async (req, res) => {
 	try {
-		const { query_type } = req.query
-
 		const { profile_id } = req.user
 
-		let data
-
-		if (query_type === 'create') {
-			data = await createChat(profile_id)
-		}
+		const data = await createChat(profile_id)
 
 		res.status(200).send(data)
 	} catch (error) {

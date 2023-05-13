@@ -1,8 +1,8 @@
 import cache from '../../utils/initializers/cache.js'
 
-import twitterCallback from '../../functions/auth/twitter/twitterCallback.js'
-import googleCallback from '../../functions/auth/google/googleCallback.js'
-import pocketCallback from '../../functions/auth/pocket/pocketCallback.js'
+import twitterCallback from '../../functions/platforms/twitter/twitterCallback.js'
+import googleCallback from '../../functions/platforms/google/googleCallback.js'
+import pocketCallback from '../../functions/platforms/pocket/pocketCallback.js'
 
 /**
  * A controller to handle the auth callback requests

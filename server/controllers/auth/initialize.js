@@ -1,8 +1,8 @@
 import cache from '../../utils/initializers/cache.js'
 
-import twitterAuthFlow from '../../functions/auth/twitter/twitterAuthFlow.js'
-import googleAuthFlow from '../../functions/auth/google/googleAuthFlow.js'
-import pocketAuthFlow from '../../functions/auth/pocket/pocketAuthFlow.js'
+import twitterAuthFlow from '../../functions/platforms/twitter/twitterAuthFlow.js'
+import googleAuthFlow from '../../functions/platforms/google/googleAuthFlow.js'
+import pocketAuthFlow from '../../functions/platforms/pocket/pocketAuthFlow.js'
 
 /**
  * A controller to handle the auth initialization requests

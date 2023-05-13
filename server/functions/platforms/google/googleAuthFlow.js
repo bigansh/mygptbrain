@@ -5,9 +5,9 @@ import googleClient from '../../../utils/api/google.js'
 /**
  * A function to handle the 3-legged authentication for Google
  *
- * @param {String} queryType
+ * @param {String} query_type
  */
-const googleAuthFlow = (queryType) => {
+const googleAuthFlow = (query_type) => {
 	try {
 		const state = randomstring.generate(7)
 
@@ -16,7 +16,7 @@ const googleAuthFlow = (queryType) => {
 			'https://www.googleapis.com/auth/userinfo.profile',
 		]
 
-		if (queryType === 'keep')
+		if (query_type === 'keep')
 			scopes = [
 				...scopes,
 				'https://www.googleapis.com/auth/keep',
