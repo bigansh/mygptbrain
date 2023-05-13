@@ -15,6 +15,7 @@
     "schema": "utils/schema/schema.prisma"
   },
   "dependencies": {
+    "@dqbd/tiktoken": "^1.0.7",
     "@fastify/cors": "^8.2.1",
     "@fastify/helmet": "^10.1.0",
     "@fastify/jwt": "^6.7.1",

@@ -12,21 +12,29 @@ import prisma from '../../utils/initializers/prisma'
 const embedAndStore = async (chunks) => {
 	try {
 		const vectorStore = PrismaVectorStore.withModel(prisma).create(
-			new OpenAIEmbeddings(),
+			new OpenAIEmbeddings({
+				stripNewLines: false,
+				openAIApiKey: process.env.OPENAI_ID,
+				verbose: true,
+			}),
 			{
 				prisma: Prisma,
 				tableName: 'Vector',
-				vectorColumnName: 'embeddings',
+				vectorColumnName: 'embedding',
 				columns: {
-					id: PrismaVectorStore.IdColumn,
-					content: PrismaVectorStore.ContentColumn,
+					vector_id: PrismaVectorStore.IdColumn,
+					chunk: PrismaVectorStore.ContentColumn,
 				},
 			}
 		)
 
 		await vectorStore.addModels(
 			await prisma.$transaction(
-				chunks.map((data) => prisma.vector.create({ data: { data } }))
+				chunks.map((chunk) =>
+					prisma.vector.create({
+						data: { chunk: chunk.pageContent, ...chunk.metadata },
+					})
+				)
 			)
 		)
 	} catch (error) {

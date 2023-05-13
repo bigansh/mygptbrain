@@ -91,11 +91,14 @@ model Document {
 }
 
 model Vector {
-  vector_id   String                   @id @unique
-  document_id String                   @unique
-  embeddings  Unsupported("vector(3)")
+  vector_id    String                       @id @unique @default(uuid())
+  document_id  String                       @unique
+  profile_id   String                       @unique
+  chunk        String
+  chunk_source String
+  embedding    Unsupported("vector(1536)")?
 
-  @@index([document_id, vector_id])
+  @@index([document_id, profile_id])
 }
 
 model Chat {

@@ -16,7 +16,7 @@ const documentLoadAndStore = async (loadType, profile_id, file = undefined) => {
 		if (loadType === 'upload' && file) {
 			const document = await uploadDocument(file, profile_id)
 
-			const chunks = await loadAndSplit(document)
+			const chunks = await loadAndSplit(document, profile_id)
 
 			await embedAndStore(chunks)
 		}

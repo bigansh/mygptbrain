@@ -5,9 +5,15 @@ import { TokenTextSplitter } from 'langchain/text_splitter'
  * A function that loads and splits the documents for the vector store
  *
  * @param {import('@prisma/client').Document} document
+ * @param {String} profile_id
  */
-const loadAndSplit = async (document) => {
+const loadAndSplit = async (document, profile_id) => {
 	try {
+		if (document.profile_id !== profile_id)
+			throw new Error(
+				"Document doesn't match with the profile_id passed."
+			)
+
 		const vectorDocument = new Document({
 			pageContent: document.body,
 			metadata: {
@@ -34,9 +40,10 @@ const loadAndSplit = async (document) => {
 				new Document({
 					pageContent: chunk.pageContent,
 					metadata: {
-						source: chunk.metadata.source,
+						chunk_source: chunk.metadata.source,
 						document_id: chunk.metadata.document_id,
-						chunk_id: `${chunk.metadata.document_id}-${i}`,
+						profile_id: profile_id,
+						vector_id: `${chunk.metadata.document_id}-${i}`,
 					},
 				})
 			)
