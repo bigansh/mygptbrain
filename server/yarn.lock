@@ -173,9 +173,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "20.1.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.2.tgz#8fd63447e3f99aba6c3168fd2ec4580d5b97886f"
-  integrity sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==
+  version "20.1.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.4.tgz#83f148d2d1f5fe6add4c53358ba00d97fc4cdb71"
+  integrity sha512-At4pvmIOki8yuwLtd7BNHl3CiWNbtclUbNtScGx4OHfBd4/oWoJC8KRCIxXwkdndzhxOsPXihrsOoydxBjlE9Q==
 
 "@types/retry@0.12.0":
   version "0.12.0"
@@ -751,9 +751,9 @@ fast-json-stringify@^5.7.0:
     rfdc "^1.2.0"
 
 fast-jwt@^2.0.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/fast-jwt/-/fast-jwt-2.2.2.tgz#5fa3123c8f9a8a39e0a88663ba3cbae54962b287"
-  integrity sha512-hjp4OixZaQmYnSdmROOxWXpeOKoZsoMYvCwDnqZ7cRXhBusxKFOzfdim20HA3hDg5KrD2/3NiECkamQrSrY//w==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/fast-jwt/-/fast-jwt-2.2.3.tgz#c9bc42387f04368d2d36971eb9db03e5766a706f"
+  integrity sha512-ziANDWUZpgUyE+A8YAkauVnGa/XXJGEXC1H3qXAYnT8v4Et3EsC8Zuvw8ljiqDgRearw9Wy+Q/Miw5x1XmPJTA==
   dependencies:
     asn1.js "^5.4.1"
     ecdsa-sig-formatter "^1.0.11"
@@ -2001,9 +2001,9 @@ semver@^6.0.0:
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
 semver@^7.3.5, semver@^7.3.7:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.0.tgz#ed8c5dc8efb6c629c88b23d41dc9bf40c1d96cd0"
-  integrity sha512-+XC0AD/R7Q2mPSRuy2Id0+CGTZ98+8f+KvwirxOKIEyid+XSx6HbC63p+O4IndTHuX5Z+JxQ0TghCkO5Cg/2HA==
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.1.tgz#c90c4d631cf74720e46b21c1d37ea07edfab91ec"
+  integrity sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==
   dependencies:
     lru-cache "^6.0.0"
 
@@ -2405,9 +2405,9 @@ yauzl@^2.4.2:
     fd-slicer "~1.1.0"
 
 zod-to-json-schema@^3.20.4:
-  version "3.21.0"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.21.0.tgz#b6f2fc4284c44c0d0b7ed121620f2a0107609d1e"
-  integrity sha512-+KyFCzqKwE6CxMSZxEUBaGmdXzB09BoFebO+xef/ISE4cTfReQlyThYbS8aqd3uWkdt9fz5BGHsY0CbY+Ra9oA==
+  version "3.21.1"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.21.1.tgz#a24b2737bf361fc516c92421eb59988b6e2fc046"
+  integrity sha512-y5g0MPxDq+YG/T+cHGPYH4PcBpyCqwK6wxeJ76MR563y0gk/14HKfebq8xHiItY7lkc9GDFygCnkvNDTvAhYAg==
 
 zod@^3.21.4:
   version "3.21.4"

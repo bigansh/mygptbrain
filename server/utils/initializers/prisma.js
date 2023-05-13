@@ -14,3 +14,6 @@ export const Twitter = prisma.twitter
 export const Pocket = prisma.pocket
 export const Google = prisma.google
 export const Document = prisma.document
+export const Chat = prisma.chat
+export const ChatPreferences = prisma.chatPreferences
+export const Vector = prisma.vector

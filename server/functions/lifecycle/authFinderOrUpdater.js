@@ -7,8 +7,8 @@ import {
 	Twitter,
 } from '../../utils/initializers/prisma.js'
 
-import createAuth from '../crud/user/auth/createAuth.js'
-import updateAuth from '../crud/user/auth/updateAuth.js'
+import createAuth from '../user/auth/createAuth.js'
+import updateAuth from '../user/auth/updateAuth.js'
 
 /**
  * A function to check if the a user platform auth exists or not and update them accordingly

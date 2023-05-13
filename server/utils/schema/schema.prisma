@@ -4,9 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("POSTGRESQL")
-  extensions = [vector]
+  provider          = "postgresql"
+  url               = env("POSTGRESQL")
+  shadowDatabaseUrl = env("POSTGREURLSHADOW")
+  extensions        = [vector]
 }
 
 model User {
@@ -92,8 +93,8 @@ model Document {
 
 model Vector {
   vector_id    String                       @id @unique @default(uuid())
-  document_id  String                       @unique
-  profile_id   String                       @unique
+  document_id  String
+  profile_id   String
   chunk        String
   chunk_source String
   embedding    Unsupported("vector(1536)")?
@@ -102,9 +103,9 @@ model Vector {
 }
 
 model Chat {
-  chat_id      String           @id @unique
+  chat_id      String           @id @unique @default(uuid())
   profile_id   String           @unique
-  chat_history String
+  chat_history String?
   user         User             @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
   preferences  ChatPreferences?
   createdAt    DateTime         @default(now())
@@ -115,7 +116,7 @@ model Chat {
 
 model ChatPreferences {
   llm_model    String   @default("ChatGPT")
-  data_sources String[]
+  data_sources String[] @default(["All"])
   chat_id      String   @id @unique
   chat         Chat     @relation(fields: [chat_id], references: [chat_id])
   createdAt    DateTime @default(now())

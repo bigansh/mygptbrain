@@ -1,9 +1,9 @@
-import { User } from '../../../../utils/initializers/prisma.js'
+import { User } from '../../../utils/initializers/prisma.js'
 
 /**
  * A function to update the user and the corresponding objects
  *
- * @param {import('../../../../utils/types/userObject.js').userObject} userObject
+ * @param {import('../../../utils/types/userObject.js').userObject} userObject
  */
 const updateUser = async ({ personalDetails }) => {
 	try {

@@ -44,9 +44,11 @@ app.register(userAuth)
 
 import auth from './routes/auth.js'
 import document from './routes/document.js'
+import chat from './routes/chat.js'
 
 app.register(auth, { prefix: '/auth' })
 app.register(document, { prefix: '/document' })
+app.register(chat, { prefix: '/chat' })
 
 app.listen({ port: process.env.PORT || 3000, host: '0.0.0.0' }, (error) => {
 	if (error) throw error

@@ -2,7 +2,7 @@ import { PrismaVectorStore } from 'langchain/vectorstores/prisma'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { Prisma } from '@prisma/client'
 
-import prisma from '../../utils/initializers/prisma'
+import prisma from '../../utils/initializers/prisma.js'
 
 /**
  * A function that creates the OpenAI embeddings of the chunks and stores them to the DB

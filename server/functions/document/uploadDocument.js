@@ -1,7 +1,7 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
 
-import { Document, User } from '../../../utils/initializers/prisma.js'
+import { Document, User } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that extracts the content of the uploaded file and create a record in the DB
@@ -12,7 +12,7 @@ import { Document, User } from '../../../utils/initializers/prisma.js'
 const uploadDocument = async (file, profile_id) => {
 	try {
 		/**
-		 * @type {import('../../../utils/types/documentObjects.js').documentObjects}
+		 * @type {import('../../utils/types/documentObjects.js').documentObjects}
 		 */
 		let documentObjects = {}
 

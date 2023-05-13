@@ -1,7 +1,7 @@
 import { User } from '../../utils/initializers/prisma.js'
 
-import createUser from '../crud/user/profile/createUser.js'
-import updateUser from '../crud/user/profile/updateUser.js'
+import createUser from '../user/profile/createUser.js'
+import updateUser from '../user/profile/updateUser.js'
 
 /**
  * A function to check if the user exists or not and update them accordingly

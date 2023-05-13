@@ -1,13 +1,13 @@
-import create from '../controllers/document/create.js'
+import create from '../controllers/chat/create.js'
 
 /**
- * A route that handles document requests
+ * A route that handles chat requests
  *
  * @param {import("fastify").FastifyInstance} fastify
  * @param {import("fastify").FastifyPluginOptions} _options
  * @param {import("fastify").DoneFuncWithErrOrRes} done
  */
-const document = (fastify, _options, done) => {
+const chat = (fastify, _options, done) => {
 	fastify.post(
 		'/create',
 		{
@@ -19,4 +19,4 @@ const document = (fastify, _options, done) => {
 	done()
 }
 
-export default document
+export default chat
