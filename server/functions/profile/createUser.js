@@ -1,6 +1,4 @@
-import { v4 as uuidV4 } from 'uuid'
-
-import { User, Auth } from '../../utils/initializers/prisma.js'
+import { User } from '../../utils/initializers/prisma.js'
 
 /**
  * A function to create the user object
@@ -9,13 +7,12 @@ import { User, Auth } from '../../utils/initializers/prisma.js'
  */
 const createUser = async ({ authDetails, personalDetails }) => {
 	try {
-		const profile_id = uuidV4()
-
 		const user = await User.create({
-			data: { ...personalDetails, profile_id: profile_id },
+			data: {
+				...personalDetails,
+				auth: { create: authDetails },
+			},
 		})
-
-		await Auth.create({ data: { ...authDetails, profile_id: profile_id } })
 
 		return user
 	} catch (error) {

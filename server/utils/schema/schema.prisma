@@ -13,7 +13,7 @@ datasource db {
 model User {
   name       String
   email      String     @unique
-  profile_id String     @id @unique
+  profile_id String     @id @unique @default(uuid())
   auth       Auth?
   documents  Document[]
   chats      Chat[]
@@ -78,17 +78,28 @@ model Pocket {
 }
 
 model Document {
-  document_id String   @id @unique @default(uuid())
-  source      String
-  body        String
-  heading     String
-  url         String?
-  profile_id  String   @unique
-  user        User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  document_id      String            @id @unique @default(uuid())
+  profile_id       String
+  body             String
+  heading          String
+  user             User              @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  documentMetadata DocumentMetadata?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
   @@index([profile_id])
+}
+
+model DocumentMetadata {
+  document_id        String   @id @unique
+  twitter_status_id  String?
+  reddit_post_id     String?
+  pocket_article_id  String?
+  document_file_type String?
+  url                String?
+  document           Document @relation(fields: [document_id], references: [document_id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model Vector {

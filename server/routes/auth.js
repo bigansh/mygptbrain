@@ -24,7 +24,7 @@ const auth = (fastify, _options, done) => {
 		callback
 	)
 
-    done()
+	done()
 }
 
 export default auth
