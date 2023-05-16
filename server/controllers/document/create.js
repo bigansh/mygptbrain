@@ -1,4 +1,6 @@
-import documentLoadAndStore from '../../functions/lifecycle/documentLoadAndStore.js'
+import platformSyncAndLoadAndStore from '../../functions/lifecycle/platformSyncAndLoadAndStore.js'
+
+import uploadDocument from '../../functions/document/uploadDocument.js'
 
 /**
  * A controller to handle the create requests for documents
@@ -15,7 +17,9 @@ const create = async (req, res) => {
 		let data
 
 		if (query_type === 'upload') {
-			data = await documentLoadAndStore(profile_id, 'upload', await req.file())
+			data = await uploadDocument(await req.file(), profile_id)
+		} else if (query_type === 'sync') {
+			data = await platformSyncAndLoadAndStore(profile_id)
 		}
 
 		res.status(200).send(data)

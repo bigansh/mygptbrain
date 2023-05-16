@@ -1,6 +1,8 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
 
+import documentLoadAndStore from '../lifecycle/documentLoadAndStore.js'
+
 import { Document } from '../../utils/initializers/prisma.js'
 
 /**
@@ -32,6 +34,7 @@ const uploadDocument = async (file, profile_id) => {
 			...documentObj,
 			heading: file.filename,
 			documentMetadata: {
+				source: 'upload',
 				document_file_type: file.mimetype,
 			},
 		}
@@ -44,6 +47,8 @@ const uploadDocument = async (file, profile_id) => {
 				documentMetadata: { create: documentObj.documentMetadata },
 			},
 		})
+
+		documentLoadAndStore(profile_id, createdDocument)
 
 		return createdDocument
 	} catch (error) {

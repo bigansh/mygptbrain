@@ -92,6 +92,7 @@ model Document {
 
 model DocumentMetadata {
   document_id        String   @id @unique
+  source             String
   twitter_status_id  String?
   reddit_post_id     String?
   pocket_article_id  String?

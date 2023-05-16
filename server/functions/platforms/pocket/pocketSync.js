@@ -17,7 +17,7 @@ import { Document, User } from '../../../utils/initializers/prisma.js'
  */
 const pocketSync = async (profile_id) => {
 	try {
-		const foundDocumentsIds = await findDocuments({
+		const foundArticleIds = await findDocuments({
 			profile_id: profile_id,
 			documentMetadata: { pocket_article_id: { not: null } },
 		}).then((documents) =>
@@ -40,7 +40,7 @@ const pocketSync = async (profile_id) => {
 
 		for await (const article of pocketArticles) {
 			if (
-				foundDocumentsIds.some(
+				foundArticleIds.some(
 					(pocket_article_id) => pocket_article_id === article.item_id
 				)
 			)
@@ -55,6 +55,7 @@ const pocketSync = async (profile_id) => {
 						heading: articleData.title,
 						documentMetadata: {
 							create: {
+								source: 'pocket',
 								pocket_article_id: article.item_id,
 								url: article.resolved_url,
 							},
@@ -73,14 +74,9 @@ const pocketSync = async (profile_id) => {
 					},
 				})
 
-				documentLoadAndStore(
-					profile_id,
-					undefined,
-					undefined,
-					createdDocument
-				)
+				documentLoadAndStore(profile_id, createdDocument)
 
-				resolve()
+				resolve(createdDocument)
 			})
 
 			promiseArray.push(scrapeAndSavePromise)

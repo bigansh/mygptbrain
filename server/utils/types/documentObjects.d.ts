@@ -5,6 +5,7 @@ export interface documentObjects {
 }
 
 interface documentMetadataObjects {
+	source: string
 	twitter_status_id?: string
 	reddit_post_id?: string
 	pocket_article_id?: string

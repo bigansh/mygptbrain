@@ -19,7 +19,7 @@ const platformSyncAndLoadAndStore = async (profile_id) => {
 		if (userAuth.reddit_id) platforms.push(redditSync(profile_id))
 		if (userAuth.twitter_id) platforms.push(twitterSync(profile_id))
 
-		await Promise.all(platforms)
+		return (await Promise.all(platforms)).flat()
 	} catch (error) {
 		throw error
 	}
