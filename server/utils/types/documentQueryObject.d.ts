@@ -1,4 +1,4 @@
-export interface documentMetadataObjects {
+export interface documentQueryObject {
 	profile_id?: string
 	document_id?: string
 	documentMetadata?: {

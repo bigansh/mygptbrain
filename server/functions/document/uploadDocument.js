@@ -13,38 +13,31 @@ import { Document } from '../../utils/initializers/prisma.js'
  */
 const uploadDocument = async (file, profile_id) => {
 	try {
-		/**
-		 * @type {import('utils/types/documentObjects.js').documentObjects}
-		 */
-		let documentObj = {}
+		let content
 
-		if (file.mimetype === 'application/pdf')
-			documentObj.body = (await pdf(await file.toBuffer()))?.text
-		else if (
+		if (file.mimetype === 'application/pdf') {
+			content = (await pdf(await file.toBuffer()))?.text
+		} else if (
 			file.mimetype.includes(
 				'application/vnd.openxmlformats-officedocument'
 			)
-		)
-			documentObj.body = officeParser.parseOfficeAsync(
-				await file.toBuffer()
-			)
-		else throw new Error('File type is currently not supported!')
-
-		documentObj = {
-			...documentObj,
-			heading: file.filename,
-			documentMetadata: {
-				source: 'upload',
-				document_file_type: file.mimetype,
-			},
+		) {
+			content = officeParser.parseOfficeAsync(await file.toBuffer())
+		} else {
+			throw new Error('File type is currently not supported!')
 		}
 
 		const createdDocument = await Document.create({
 			data: {
-				body: documentObj.body,
-				heading: documentObj.heading,
+				body: content,
+				heading: file.filename,
 				profile_id: profile_id,
-				documentMetadata: { create: documentObj.documentMetadata },
+				documentMetadata: {
+					create: {
+						source: 'upload',
+						document_file_type: file.mimetype,
+					},
+				},
 			},
 		})
 

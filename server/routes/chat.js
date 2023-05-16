@@ -20,7 +20,7 @@ const chat = (fastify, _options, done) => {
 		},
 		create
 	)
-	fastify.post(
+	fastify.patch(
 		'/query',
 		{
 			onRequest: [fastify.userAuth],

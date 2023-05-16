@@ -8,7 +8,7 @@ import { User, Chat } from '../../utils/initializers/prisma.js'
 const createChat = async (profile_id) => {
 	try {
 		const createdChat = await Chat.create({
-			data: { profile_id, preferences: { create: {} } },
+			data: { profile_id: profile_id, preferences: { create: {} } },
 		})
         
 		await User.update({

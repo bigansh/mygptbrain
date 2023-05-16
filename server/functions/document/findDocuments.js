@@ -3,7 +3,7 @@ import { Document } from 'utils/initializers/prisma.js'
 /**
  * A function that returns the found document
  *
- * @param {import('utils/types/documentQueryObjects').documentMetadataObjects} query
+ * @param {import('utils/types/documentQueryObject').documentQueryObject} query
  */
 const findDocuments = async (query) => {
 	try {

@@ -15,40 +15,40 @@ const initialize = async (req, res) => {
 		const { query_type, profile_id } = req.query
 
 		/**
-		 * @type {import('../../utils/types/authObjects.js').authObjects}
+		 * @type {import('../../utils/types/authObject.js').authObject}
 		 */
-		let authObjects
+		let authObject
 
 		if (query_type === 'twitter') {
 			const { url, state, codeVerifier } = twitterAuthFlow()
 
-			authObjects = { state, codeVerifier, profile_id } || {}
+			authObject = { state, codeVerifier, profile_id } || {}
 
-			cache.set(state, authObjects, 60 * 2)
+			cache.set(state, authObject, 60 * 2)
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'google') {
 			const { state, url } = googleAuthFlow(query_type)
 
-			authObjects = { state, profile_id } || {}
+			authObject = { state, profile_id } || {}
 
-			cache.set(state, authObjects, 60 * 2)
+			cache.set(state, authObject, 60 * 2)
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'pocket') {
 			const { state, url, code } = await pocketAuthFlow()
 
-			authObjects = { state, profile_id, code } || {}
+			authObject = { state, profile_id, code } || {}
 
-			cache.set(state, authObjects, 60 * 2)
+			cache.set(state, authObject, 60 * 2)
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'reddit') {
 			const { state, url } = redditAuthFlow()
 
-			const authObjects = { state, profile_id } || {}
+			authObject = { state, profile_id } || {}
 
-			cache.set(state, authObjects, 60 * 2)
+			cache.set(state, authObject, 60 * 2)
 
 			res.status(302).redirect(url)
 		}

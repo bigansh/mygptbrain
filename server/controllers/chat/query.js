@@ -8,6 +8,8 @@ const query = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
+		
+
 		res.status(200).send(data)
 	} catch (error) {
 		throw error

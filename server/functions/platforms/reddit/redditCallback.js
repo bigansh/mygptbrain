@@ -10,7 +10,7 @@ import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
  *
  * @param {String} state
  * @param {String} code
- * @param {import('../../../utils/types/authObjects.js').authObjects} authObjects
+ * @param {import('../../../utils/types/authObject.js').authObject} authObject
  */
 const redditCallback = async (
 	state,

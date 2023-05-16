@@ -10,7 +10,7 @@ import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
  * 
  * @param {String} state
  * @param {String} code
- * @param {import('../../../utils/types/authObjects.js').authObjects} authObjects
+ * @param {import('../../../utils/types/authObject.js').authObject} authObject
  */
 const pocketCallback = async (
 	state,
