@@ -12,13 +12,17 @@ const userFinderAndUpdater = async (userObject) => {
 	try {
 		let query = {}
 
-		if (userObject.personalDetails.email)
-			query = { ...query, email: userObject.personalDetails.email }
-		else if (userObject.personalDetails.profile_id)
+		if (userObject.personalDetails.email) {
+			query = {
+				...query,
+				email: userObject.personalDetails.email,
+			}
+		} else if (userObject.personalDetails.profile_id) {
 			query = {
 				...query,
 				profile_id: userObject.personalDetails.profile_id,
 			}
+		}
 
 		const user = await User.findUnique({
 			where: query,
@@ -26,8 +30,11 @@ const userFinderAndUpdater = async (userObject) => {
 
 		user && (userObject.personalDetails.profile_id = user.profile_id)
 
-		if (!user) return await createUser(userObject)
-		else return await updateUser(userObject)
+		if (!user) {
+			return await createUser(userObject)
+		} else {
+			return await updateUser(userObject)
+		}
 	} catch (error) {
 		throw error
 	}

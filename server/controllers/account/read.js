@@ -10,7 +10,9 @@ const read = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
-		const data = await findUser(profile_id)
+		const data = await findUser({
+			personalDetails: { profile_id: profile_id },
+		})
 
 		res.status(200).send(data)
 	} catch (error) {

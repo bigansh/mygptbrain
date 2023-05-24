@@ -9,6 +9,7 @@ export interface userObject {
 		reddit_id?: string
 		twitter_id?: string
 		pocket_id?: string
+		password?: string
 		password_salt?: string
 	}
 	googleTokens?: {
