@@ -9,6 +9,9 @@ import { TokenTextSplitter } from 'langchain/text_splitter'
  */
 const loadAndSplit = async (document, profile_id) => {
 	try {
+		if (!document.documentMetadata)
+			throw new Error("Document metadata doesn't exist")
+
 		if (document.profile_id !== profile_id)
 			throw new Error(
 				"Document doesn't match with the profile_id passed."
@@ -17,7 +20,7 @@ const loadAndSplit = async (document, profile_id) => {
 		const vectorDocument = new Document({
 			pageContent: document.body,
 			metadata: {
-				source: document.source,
+				source: document.documentMetadata.source,
 				document_id: document.document_id,
 			},
 		})

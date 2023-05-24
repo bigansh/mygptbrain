@@ -1,20 +1,18 @@
-import deleteChat from '../../functions/chat/deleteChat.js'
+import findDocuments from '../../functions/document/findDocuments'
 
 /**
- * A controller to handle the delete requests for a chat
+ * A controller to handle the read requests for documents
  *
  * @param {import("fastify").FastifyRequest} req
  * @param {import("fastify").FastifyReply} res
  */
-const del = async (req, res) => {
+const read = async (req, res) => {
 	try {
-		const { profile_id } = req.user
-
 		const { query } = req.body
 
 		if (!query) throw new Error('Query not found.')
 
-		const data = await deleteChat(query, profile_id)
+		const data = await findDocuments(query)
 
 		res.status(200).send(data)
 	} catch (error) {
@@ -22,4 +20,4 @@ const del = async (req, res) => {
 	}
 }
 
-export default del
+export default read

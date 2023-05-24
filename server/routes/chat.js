@@ -2,6 +2,7 @@ import create from '../controllers/chat/create.js'
 import del from '../controllers/chat/del.js'
 import update from '../controllers/chat/update.js'
 import query from '../controllers/chat/query.js'
+import read from '../controllers/chat/read.js'
 
 /**
  * A route that handles chat requests
@@ -11,14 +12,26 @@ import query from '../controllers/chat/query.js'
  * @param {import("fastify").DoneFuncWithErrOrRes} done
  */
 const chat = (fastify, _options, done) => {
-	fastify.register(websocket)
-
 	fastify.post(
 		'/create',
 		{
 			onRequest: [fastify.userAuth],
 		},
 		create
+	)
+	fastify.get(
+		'/read',
+		{
+			onRequest: [fastify.userAuth],
+		},
+		read
+	)
+	fastify.patch(
+		'/update',
+		{
+			onRequest: [fastify.userAuth],
+		},
+		update
 	)
 	fastify.patch(
 		'/query',
@@ -33,13 +46,6 @@ const chat = (fastify, _options, done) => {
 			onRequest: [fastify.userAuth],
 		},
 		del
-	)
-	fastify.patch(
-		'/update',
-		{
-			onRequest: [fastify.userAuth],
-		},
-		update
 	)
 
 	done()

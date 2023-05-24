@@ -3,10 +3,10 @@ import { User, Chat, ChatPreferences } from '../../utils/initializers/prisma.js'
 /**
  * A function that deletes a chat object in the DB
  *
- * @param {String} chat_id
+ * @param {import('../../utils/types/chatQueryObject.js').chatQueryObject} query
  * @param {String} profile_id
  */
-const deleteChat = async (chat_id, profile_id) => {
+const deleteChat = async ({ chat_id }, profile_id) => {
 	try {
 		const foundChat = await Chat.findUnique({ where: { chat_id: chat_id } })
 

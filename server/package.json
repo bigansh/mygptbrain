@@ -31,7 +31,7 @@
     "fastify": "^4.15.0",
     "fastify-plugin": "^4.5.0",
     "googleapis": "^118.0.0",
-    "langchain": "^0.0.74",
+    "langchain": "^0.0.75",
     "node-cache": "^5.1.2",
     "officeparser": "^3.3.0",
     "pdf-parse": "^1.1.1",

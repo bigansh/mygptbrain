@@ -1,7 +1,7 @@
-import deleteChat from '../../functions/chat/deleteChat.js'
+import deleteDocument from '../../functions/document/deleteDocument.js'
 
 /**
- * A controller to handle the delete requests for a chat
+ * A controller to handle the delete requests for a document
  *
  * @param {import("fastify").FastifyRequest} req
  * @param {import("fastify").FastifyReply} res
@@ -14,7 +14,7 @@ const del = async (req, res) => {
 
 		if (!query) throw new Error('Query not found.')
 
-		const data = await deleteChat(query, profile_id)
+		const data = await deleteDocument(query, profile_id)
 
 		res.status(200).send(data)
 	} catch (error) {

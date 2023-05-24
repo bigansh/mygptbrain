@@ -39,6 +39,7 @@ const uploadDocument = async (file, profile_id) => {
 					},
 				},
 			},
+			include: { documentMetadata: true },
 		})
 
 		documentLoadAndStore(profile_id, createdDocument)

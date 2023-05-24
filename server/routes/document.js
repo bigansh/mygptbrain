@@ -1,3 +1,4 @@
+import read from '../controllers/document/read.js'
 import create from '../controllers/document/create.js'
 
 /**
@@ -14,6 +15,13 @@ const document = (fastify, _options, done) => {
 			onRequest: [fastify.userAuth],
 		},
 		create
+	)
+	fastify.get(
+		'/read',
+		{
+			onRequest: [fastify.userAuth],
+		},
+		read
 	)
 
 	done()

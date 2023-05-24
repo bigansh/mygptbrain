@@ -1,4 +1,4 @@
-import { Document } from 'utils/initializers/prisma.js'
+import { Document } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that returns the found document

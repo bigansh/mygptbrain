@@ -1,5 +1,3 @@
-import uploadDocument from '../document/uploadDocument.js'
-
 import loadAndSplit from '../processing/loadAndSplit.js'
 import embedAndStore from '../processing/embedAndStore.js'
 
