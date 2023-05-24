@@ -53,6 +53,7 @@ const pocketSync = async (profile_id) => {
 					data: {
 						body: articleData.content,
 						heading: articleData.title,
+						profile_id: profile_id,
 						documentMetadata: {
 							create: {
 								source: 'pocket',
@@ -60,8 +61,7 @@ const pocketSync = async (profile_id) => {
 								url: article.resolved_url,
 							},
 						},
-					},
-					include: { documentMetadata: true },
+					}
 				})
 
 				await User.update({
@@ -75,7 +75,7 @@ const pocketSync = async (profile_id) => {
 					},
 				})
 
-				documentLoadAndStore(profile_id, createdDocument)
+				await documentLoadAndStore(profile_id, createdDocument)
 
 				resolve(createdDocument)
 			})

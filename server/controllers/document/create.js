@@ -1,6 +1,6 @@
 import platformSyncAndLoadAndStore from '../../functions/lifecycle/platformSyncAndLoadAndStore.js'
-
 import uploadDocument from '../../functions/document/uploadDocument.js'
+import scrapeAndLoadAndStore from '../../functions/lifecycle/scrapeAndLoadAndStore.js'
 
 /**
  * A controller to handle the create requests for documents
@@ -20,6 +20,8 @@ const create = async (req, res) => {
 			data = await uploadDocument(await req.file(), profile_id)
 		} else if (query_type === 'sync') {
 			data = await platformSyncAndLoadAndStore(profile_id)
+		} else if (query_type === 'scrape') {
+			data = scrapeAndLoadAndStore(req.body.url, profile_id)
 		}
 
 		res.status(200).send(data)

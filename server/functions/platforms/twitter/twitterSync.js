@@ -47,6 +47,7 @@ const twitterSync = async (profile_id) => {
 					data: {
 						body: threadData.content,
 						heading: threadData.title,
+						profile_id: profile_id,
 						documentMetadata: {
 							create: {
 								source: 'twitter',
@@ -55,7 +56,6 @@ const twitterSync = async (profile_id) => {
 							},
 						},
 					},
-					include: { documentMetadata: true },
 				})
 
 				await User.update({
@@ -69,7 +69,7 @@ const twitterSync = async (profile_id) => {
 					},
 				})
 
-				documentLoadAndStore(profile_id, createdDocument)
+				await documentLoadAndStore(profile_id, createdDocument)
 
 				resolve(createdDocument)
 			})

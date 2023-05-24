@@ -1,5 +1,4 @@
 import authFinder from '../auth/authFinder.js'
-
 import redditSync from '../platforms/reddit/redditSync.js'
 import twitterSync from '../platforms/twitter/twitterSync.js'
 import pocketSync from '../platforms/pocket/pocketSync.js'
