@@ -1,3 +1,4 @@
+import update from '../controllers/auth/update.js'
 import callback from '../controllers/auth/callback.js'
 import initialize from '../controllers/auth/initialize.js'
 
@@ -22,6 +23,13 @@ const auth = (fastify, _options, done) => {
 			onRequest: [fastify.callbackAuth],
 		},
 		callback
+	)
+	fastify.post(
+		'/update',
+		{
+			onRequest: [fastify.userAuth],
+		},
+		update
 	)
 
 	done()
