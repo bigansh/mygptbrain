@@ -28,18 +28,25 @@ const createAuth = async ({
 		if (authDetails.google_id)
 			await Google.create({
 				data: { google_id: authDetails.google_id, ...googleTokens },
+				include: {auth: true}
+
 			})
 		else if (authDetails.twitter_id)
 			await Twitter.create({
 				data: { twitter_id: authDetails.twitter_id, ...twitterTokens },
+				include: {auth: true}
+
 			})
 		else if (authDetails.pocket_id)
 			await Pocket.create({
 				data: { pocket_id: authDetails.pocket_id, ...pocketTokens },
+				include: {auth: true}
+
 			})
 		else if (authDetails.reddit_id)
 			await Reddit.create({
 				data: { reddit_id: authDetails.reddit_id, ...redditTokens },
+				include: {auth: true}
 			})
 	} catch (error) {
 		throw error

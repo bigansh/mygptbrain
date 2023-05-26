@@ -1,4 +1,4 @@
-import updateUser from '../../functions/profile/updateUser'
+import updateUser from '../../functions/profile/updateUser.js'
 
 /**
  * A controller to handle the update requests for the account

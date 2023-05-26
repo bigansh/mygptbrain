@@ -12,6 +12,7 @@ const createUser = async ({ authDetails, personalDetails }) => {
 				...personalDetails,
 				auth: { create: authDetails },
 			},
+			include: { auth: true },
 		})
 
 		return user

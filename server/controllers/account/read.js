@@ -1,4 +1,4 @@
-import findUser from '../../functions/profile/findUser'
+import findUser from '../../functions/profile/findUser.js'
 
 /**
  * A controller to handle the read requests for the account
