@@ -1,0 +1,8 @@
+{
+    "name": "mygptbrain",
+    "version": "1.0.0",
+    "description": "QnA over your personal data and bookmarks",
+    "private": "true",
+    "author": "bigansh",
+    "license": "UNLICENSED"
+  }
