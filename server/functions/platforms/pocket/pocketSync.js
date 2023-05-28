@@ -61,7 +61,8 @@ const pocketSync = async (profile_id) => {
 								url: article.resolved_url,
 							},
 						},
-					}
+					},
+					include: { documentMetadata: true },
 				})
 
 				await User.update({

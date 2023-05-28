@@ -103,17 +103,6 @@ model DocumentMetadata {
   updatedAt          DateTime @updatedAt
 }
 
-model Vector {
-  vector_id    String                       @id @unique @default(uuid())
-  document_id  String
-  profile_id   String
-  chunk        String
-  chunk_source String
-  embedding    Unsupported("vector(1536)")?
-
-  @@index([document_id, profile_id])
-}
-
 model Chat {
   chat_id      String           @id @unique @default(uuid())
   chat_name    String

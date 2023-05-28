@@ -56,6 +56,7 @@ const twitterSync = async (profile_id) => {
 							},
 						},
 					},
+					include: { documentMetadata: true },
 				})
 
 				await User.update({

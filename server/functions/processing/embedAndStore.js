@@ -1,25 +1,7 @@
-import { PrismaVectorStore } from 'langchain/vectorstores/prisma'
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
-import { Prisma } from '@prisma/client'
+import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
-import prisma from '../../utils/initializers/prisma.js'
-
-export const vectorStore = PrismaVectorStore.withModel(prisma).create(
-	new OpenAIEmbeddings({
-		stripNewLines: false,
-		openAIApiKey: process.env.OPENAI_ID,
-		verbose: true,
-	}),
-	{
-		prisma: Prisma,
-		tableName: 'Vector',
-		vectorColumnName: 'embedding',
-		columns: {
-			vector_id: PrismaVectorStore.IdColumn,
-			chunk: PrismaVectorStore.ContentColumn,
-		},
-	}
-)
+import pineconeIndex from '../../utils/api/pinecone.js'
+import { embeddings } from '../../utils/api/openai.js'
 
 /**
  * A function that creates the OpenAI embeddings of the chunks and stores them to the DB
@@ -28,15 +10,7 @@ export const vectorStore = PrismaVectorStore.withModel(prisma).create(
  */
 const embedAndStore = async (chunks) => {
 	try {
-		await vectorStore.addModels(
-			await prisma.$transaction(
-				chunks.map((chunk) =>
-					prisma.vector.create({
-						data: { chunk: chunk.pageContent, ...chunk.metadata },
-					})
-				)
-			)
-		)
+		await PineconeStore.fromDocuments(chunks, embeddings, pineconeIndex)
 	} catch (error) {
 		throw error
 	}
