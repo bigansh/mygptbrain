@@ -1,4 +1,4 @@
-import { User } from '../../utils/initializers/prisma'
+import { User } from '../../utils/initializers/prisma.js'
 
 /**
  * A function to delete a particular user

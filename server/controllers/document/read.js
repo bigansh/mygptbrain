@@ -1,4 +1,4 @@
-import findDocuments from '../../functions/document/findDocuments'
+import findDocuments from '../../functions/document/findDocuments.js'
 
 /**
  * A controller to handle the read requests for documents

@@ -1,4 +1,4 @@
-import { User } from '../../utils/initializers/prisma'
+import { User } from '../../utils/initializers/prisma.js'
 
 /**
  * Function to find the user profile
