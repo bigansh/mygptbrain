@@ -15,7 +15,7 @@
     "schema": "utils/schema/schema.prisma"
   },
   "engines": {
-    :"node": ">=18"
+    "node": ">=18"
   },
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.7",
