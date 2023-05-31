@@ -22,7 +22,7 @@ const queryChat = async (chatQueryObject) => {
 			include: { preferences: true },
 		})
 
-		const { preferences } = foundChat
+		const { preferences, chat_history } = foundChat
 
 		const pineconeQuery = {
 			chunk_source: preferences.data_sources,
@@ -39,6 +39,8 @@ const queryChat = async (chatQueryObject) => {
 			retriever: vectorStore.asRetriever(5, pineconeQuery),
 			returnSourceDocuments: true,
 		})
+
+		const res = await chain.call({})
 	} catch (error) {
 		throw error
 	}
