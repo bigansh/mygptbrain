@@ -14,6 +14,9 @@
   "prisma": {
     "schema": "utils/schema/schema.prisma"
   },
+  "engines": {
+    :"node": ">=18"
+  },
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.7",
     "@fastify/cors": "^8.2.1",
