@@ -5,6 +5,9 @@
   "description": "QnA over your personal data and bookmarks",
   "author": "bigansh",
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
