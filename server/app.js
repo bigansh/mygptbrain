@@ -30,6 +30,10 @@ app.register(cors, {
 })
 app.register(multipart)
 
+// import errorHandler from './utils/handlers/errorHandler.js'
+
+// app.setErrorHandler(errorHandler)
+
 import jwt from './utils/plugins/jwt.js'
 
 app.register(jwt)

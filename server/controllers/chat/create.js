@@ -1,4 +1,4 @@
-import createChat from '../../functions/chat/createChat.js'
+import chatCreateAndQuery from '../../functions/lifecycle/chatCreateAndQuery.js'
 
 /**
  * A controller to handle the create requests for chat
@@ -10,7 +10,11 @@ const create = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
-		const data = await createChat(profile_id)
+		const { chatQueryObject } = req.body
+
+		if (chatQueryObject) throw new Error("Chat query doesn't exist.")
+
+		const data = await chatCreateAndQuery(profile_id, chatQueryObject)
 
 		res.status(200).send(data)
 	} catch (error) {

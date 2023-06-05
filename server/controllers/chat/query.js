@@ -1,3 +1,5 @@
+import chatQueryAndUpdate from '../../functions/lifecycle/chatQueryAndUpdate'
+
 /**
  * A controller to handle the query requests for chat
  *
@@ -6,9 +8,11 @@
  */
 const query = async (req, res) => {
 	try {
-		const { profile_id } = req.user
+		const { chatQueryObject } = req.body
 
-		
+		if (chatQueryObject) throw new Error("Chat query doesn't exist.")
+
+		const data = await chatQueryAndUpdate(chatQueryObject)
 
 		res.status(200).send(data)
 	} catch (error) {

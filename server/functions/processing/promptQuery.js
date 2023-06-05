@@ -7,22 +7,17 @@ import {
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
 import { embeddings, model } from '../../utils/api/openai.js'
-import { Chat } from '../../utils/initializers/prisma.js'
 import pineconeIndex from '../../utils/api/pinecone.js'
 
 /**
- * A function that manages queries of a chat
+ * A function that will query the LLMs based on the user prompt and chat history
  *
- * @param {import("../../utils/types/chatQueryObject.js").chatQueryObject} chatQueryObject
+ * @param {String} prompt
+ * @param {import("@prisma/client").Chat} chat
  */
-const queryChat = async (chatQueryObject) => {
+const promptQuery = async (prompt, chat = undefined) => {
 	try {
-		const foundChat = await Chat.findUnique({
-			where: { chat_id: chatQueryObject.chat_id },
-			include: { preferences: true },
-		})
-
-		const { preferences, chat_history } = foundChat
+		const { preferences, chat_history } = chat
 
 		const pineconeQuery = {
 			chunk_source: preferences.data_sources,
@@ -40,10 +35,15 @@ const queryChat = async (chatQueryObject) => {
 			returnSourceDocuments: true,
 		})
 
-		const res = await chain.call({})
+		const res = await chain.call({
+			question: prompt,
+			chat_history: chat_history,
+		})
+
+		return res.text
 	} catch (error) {
 		throw error
 	}
 }
 
-export default queryChat
+export default promptQuery
