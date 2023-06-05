@@ -21,7 +21,7 @@ const promptQuery = async (prompt, chat = undefined) => {
 
 		const pineconeQuery = {
 			chunk_source: preferences.data_sources,
-			profile_id: foundChat.profile_id,
+			profile_id: chat.profile_id,
 		}
 
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
@@ -40,7 +40,11 @@ const promptQuery = async (prompt, chat = undefined) => {
 			chat_history: chat_history,
 		})
 
-		return res.text
+		const sourceDocumentIds = res.sourceDocuments.map(
+			(document) => document.metadata.document_id
+		)
+
+		return { response: res.text, sourceDocumentIds: sourceDocumentIds }
 	} catch (error) {
 		throw error
 	}
