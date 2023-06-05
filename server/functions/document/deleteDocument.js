@@ -2,7 +2,6 @@ import {
 	User,
 	Document,
 	DocumentMetadata,
-	Vector,
 } from '../../utils/initializers/prisma.js'
 
 /**
@@ -18,14 +17,14 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 		})
 
 		if (foundDocument.profile_id !== profile_id)
-			throw new Error("You don't have access to this chat")
+			throw new Error("You don't have access to this document.")
 
 		await Promise.all([
 			Document.delete({ where: { chat_id: chat_id } }),
 
 			DocumentMetadata.delete({ where: { chat_id: chat_id } }),
 
-			Vector.deleteMany({ where: { document_id: document_id } }),
+			// ! Add function to delete a specific document from the vector store
 
 			User.update({
 				where: { profile_id: profile_id },
@@ -36,7 +35,7 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 		])
 
 		return {
-			chatDeleted: true,
+			documentDeleted: true,
 		}
 	} catch (error) {
 		throw error

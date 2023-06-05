@@ -10,11 +10,14 @@ const del = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
-		const { query } = req.body
+		/**
+		 * @type {{documentQueryObject: import('../../utils/types/documentQueryObject.js').documentQueryObject}}
+		 */
+		const { documentQueryObject } = req.body
 
-		if (!query) throw new Error('Query not found.')
+		if (!documentQueryObject) throw new Error('Document object not found.')
 
-		const data = await deleteDocument(query, profile_id)
+		const data = await deleteDocument(documentQueryObject, profile_id)
 
 		res.status(200).send(data)
 	} catch (error) {

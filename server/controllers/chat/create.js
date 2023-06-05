@@ -10,6 +10,9 @@ const create = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
+		/**
+		 * @type {{chatQueryObject: import('../../utils/types/chatQueryObject.js').chatQueryObject}}
+		 */
 		const { chatQueryObject } = req.body
 
 		if (chatQueryObject) throw new Error("Chat query doesn't exist.")

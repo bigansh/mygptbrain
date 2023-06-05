@@ -8,11 +8,14 @@ import findChats from '../../functions/chat/findChats.js'
  */
 const read = async (req, res) => {
 	try {
-		const { query } = req.body
+		/**
+		 * @type {{chatQueryObject: import('../../utils/types/chatQueryObject.js').chatQueryObject}}
+		 */
+		const { chatQueryObject } = req.body
 
-		if (!query) throw new Error('Query not found.')
+		if (chatQueryObject) throw new Error("Chat query doesn't exist.")
 
-		const data = await findChats(query)
+		const data = await findChats(chatQueryObject)
 
 		res.status(200).send(data)
 	} catch (error) {

@@ -22,7 +22,7 @@ const chatQueryAndUpdate = async (chatQueryObject) => {
 			...foundChat[0].chat_history,
 		}}\n\n\n\nuser input: ${
 			chatQueryObject.prompt
-		}\n\ngenerated result:${promptResult}`
+		}\n\ngenerated result: ${promptResult}`
 
 		await updateChat(chatQueryObject)
 

@@ -10,11 +10,14 @@ const del = async (req, res) => {
 	try {
 		const { profile_id } = req.user
 
-		const { query } = req.body
+		/**
+		 * @type {{chatQueryObject: import('../../utils/types/chatQueryObject.js').chatQueryObject}}
+		 */
+		const { chatQueryObject } = req.body
 
-		if (!query) throw new Error('Query not found.')
+		if (!chatQueryObject) throw new Error('Query not found.')
 
-		const data = await deleteChat(query, profile_id)
+		const data = await deleteChat(chatQueryObject, profile_id)
 
 		res.status(200).send(data)
 	} catch (error) {

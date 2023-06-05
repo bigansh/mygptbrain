@@ -21,7 +21,10 @@ const create = async (req, res) => {
 		} else if (query_type === 'sync') {
 			data = await platformSyncAndLoadAndStore(profile_id)
 		} else if (query_type === 'scrape') {
-			data = scrapeAndLoadAndStore(req.body.url, profile_id)
+			data = scrapeAndLoadAndStore(
+				req.body.documentQueryObject.url,
+				profile_id
+			)
 		}
 
 		res.status(200).send(data)

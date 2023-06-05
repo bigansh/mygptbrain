@@ -1,5 +1,6 @@
 import read from '../controllers/document/read.js'
 import create from '../controllers/document/create.js'
+import del from '../controllers/document/del.js'
 
 /**
  * A route that handles document requests
@@ -22,6 +23,13 @@ const document = (fastify, _options, done) => {
 			onRequest: [fastify.userAuth],
 		},
 		read
+	)
+	fastify.delete(
+		'/delete',
+		{
+			onRequest: [fastify.userAuth],
+		},
+		del
 	)
 
 	done()

@@ -1,4 +1,5 @@
 import updateChatPreferences from '../../functions/chat/updateChatPreferences.js'
+import chatQueryAndUpdate from '../../functions/lifecycle/chatQueryAndUpdate.js'
 
 /**
  * A controller to handle the update requests for chat
@@ -26,6 +27,14 @@ const update = async (req, res) => {
 				chatPreferences
 			)
 		} else if (query_type === 'chat') {
+			/**
+			 * @type {{chatQueryObject: import('../../utils/types/chatQueryObject.js').chatQueryObject}}
+			 */
+			const { chatQueryObject } = req.body
+
+			if (chatQueryObject) throw new Error("Chat query doesn't exist.")
+
+			data = await chatQueryAndUpdate(chatQueryObject)
 		}
 
 		res.status(200).send(data)
