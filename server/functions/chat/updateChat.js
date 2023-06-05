@@ -1,4 +1,4 @@
-import { Chat } from '../../utils/initializers/prisma'
+import { Chat } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that updates the said chat with the latest outputs

@@ -1,7 +1,6 @@
 import create from '../controllers/chat/create.js'
 import del from '../controllers/chat/del.js'
 import update from '../controllers/chat/update.js'
-import query from '../controllers/chat/query.js'
 import read from '../controllers/chat/read.js'
 
 /**
