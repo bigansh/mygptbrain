@@ -1,7 +1,7 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
 
-import documentLoadAndStore from '../lifecycle/documentLoadAndStore.js'
+import documentLoadAndStore from './documentLoadAndStore.js'
 
 import { Document } from '../../utils/initializers/prisma.js'
 
@@ -11,7 +11,7 @@ import { Document } from '../../utils/initializers/prisma.js'
  * @param {import("@fastify/multipart").MultipartFile} file
  * @param {String} profile_id
  */
-const uploadDocument = async (file, profile_id) => {
+const uploadDocumentAndStore = async (file, profile_id) => {
 	try {
 		let content
 
@@ -42,7 +42,7 @@ const uploadDocument = async (file, profile_id) => {
 			include: { documentMetadata: true },
 		})
 
-		documentLoadAndStore(profile_id, createdDocument)
+		await documentLoadAndStore(profile_id, createdDocument)
 
 		return createdDocument
 	} catch (error) {
@@ -50,4 +50,4 @@ const uploadDocument = async (file, profile_id) => {
 	}
 }
 
-export default uploadDocument
+export default uploadDocumentAndStore

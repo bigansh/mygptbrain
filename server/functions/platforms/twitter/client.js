@@ -33,7 +33,14 @@ const client = async (profile_id) => {
 		})
 
 		await Auth.update({
-			data: { twitter: { update: twitter } },
+			data: {
+				twitter: {
+					update: {
+						access_token: twitter.access_token,
+						refresh_token: twitter.refresh_token,
+					},
+				},
+			},
 			where: { profile_id: profile_id },
 		})
 

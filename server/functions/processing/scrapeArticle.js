@@ -1,9 +1,10 @@
 import { extract } from 'article-parser'
+import { NodeHtmlMarkdown } from 'node-html-markdown'
 
 /**
  * A function that scrapes the article of a particular link
- * 
- * @param {String} url 
+ *
+ * @param {String} url
  */
 const scrapeArticle = async (url) => {
 	try {
@@ -29,7 +30,7 @@ const scrapeArticle = async (url) => {
 				"Sorry, we don't have functionality needed to scrape this website. We will store this bookmark but you won't be able to open the canvas for the same. "
 			)
 
-		return { title, content }
+		return { title, content: NodeHtmlMarkdown.translate(content) }
 	} catch (error) {
 		throw error
 	}

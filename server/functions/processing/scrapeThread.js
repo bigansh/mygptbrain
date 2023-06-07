@@ -1,5 +1,6 @@
 import axios from 'axios'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
+import { NodeHtmlMarkdown } from 'node-html-markdown'
 
 /**
  * A function that scrapes a particular Twitter thread
@@ -17,13 +18,17 @@ const scrapeThread = async (url) => {
 		const tweetData = $('.tweet-body')
 			.map(function () {
 				let text = $(this).find('.tweet-content').html()
+
 				text = NodeHtmlMarkdown.translate(text)
+
 				let media = $(this).find('.attachments').html()
+
 				if (media) {
 					media = NodeHtmlMarkdown.translate(media)
 				} else {
 					media = undefined
 				}
+
 				let profile = $(this)
 					.find('.tweet-avatar')
 					.find('img')
@@ -58,6 +63,7 @@ const scrapeThread = async (url) => {
 		}
 
 		let finalTweet = ''
+		let media
 
 		for (let i = 0; i < tweetData.length; i++) {
 			if (tweetData[i].profile === nextProfilePicUrl) break

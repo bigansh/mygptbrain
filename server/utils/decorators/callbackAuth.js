@@ -29,6 +29,7 @@ const callbackAuth = fastifyPlugin(
 							'notion',
 							'login',
 							'pocket',
+							'microsoft',
 						].some((platform) => platform === req.params.platform)
 					)
 						throw new Error('Unsupported auth platform.')

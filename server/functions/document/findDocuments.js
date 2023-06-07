@@ -9,7 +9,7 @@ const findDocuments = async (documentQueryObject) => {
 	try {
 		return await Document.findMany({
 			where: documentQueryObject,
-			include: { documentMetadata: true, user: true },
+			include: { documentMetadata: true },
 		})
 	} catch (error) {
 		throw error

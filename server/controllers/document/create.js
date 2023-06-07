@@ -1,5 +1,5 @@
 import platformSyncAndLoadAndStore from '../../functions/lifecycle/platformSyncAndLoadAndStore.js'
-import uploadDocument from '../../functions/document/uploadDocument.js'
+import uploadDocumentAndStore from '../../functions/lifecycle/uploadDocumentAndStore.js'
 import scrapeAndLoadAndStore from '../../functions/lifecycle/scrapeAndLoadAndStore.js'
 
 /**
@@ -17,12 +17,12 @@ const create = async (req, res) => {
 		let data
 
 		if (query_type === 'upload') {
-			data = await uploadDocument(await req.file(), profile_id)
+			data = await uploadDocumentAndStore(await req.file(), profile_id)
 		} else if (query_type === 'sync') {
 			data = await platformSyncAndLoadAndStore(profile_id)
 		} else if (query_type === 'scrape') {
-			data = scrapeAndLoadAndStore(
-				req.body.documentQueryObject.url,
+			data = await scrapeAndLoadAndStore(
+				req.body.documentQueryObject.documentMetadata.url,
 				profile_id
 			)
 		}

@@ -8,12 +8,12 @@ import findDocuments from '../../functions/document/findDocuments.js'
  */
 const read = async (req, res) => {
 	try {
-			/**
+		/**
 		 * @type {{documentQueryObject: import('../../utils/types/documentQueryObject.js').documentQueryObject}}
 		 */
-			const { documentQueryObject } = req.body
+		const { documentQueryObject } = req.body
 
-			if (!documentQueryObject) throw new Error('Document object not found.')
+		if (!documentQueryObject) throw new Error('Document object not found.')
 
 		const data = await findDocuments(documentQueryObject)
 

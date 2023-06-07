@@ -8,7 +8,7 @@ import { User } from '../../utils/initializers/prisma.js'
 const findUser = async ({ personalDetails }) => {
 	try {
 		return await User.findUnique({
-			where: { profile_id: profile_id },
+			where: personalDetails,
 			include: { auth: true },
 		})
 	} catch (error) {

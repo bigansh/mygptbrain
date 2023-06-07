@@ -5,7 +5,7 @@ import documentLoadAndStore from './documentLoadAndStore.js'
 
 /**
  * A function that scrapes a given link and then stores it in the DB
- * 
+ *
  * @param {String} url
  * @param {String} profile_id
  */
@@ -28,16 +28,7 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			include: { documentMetadata: true },
 		})
 
-		await User.update({
-			where: { profile_id: profile_id },
-			data: {
-				documents: {
-					connect: {
-						document_id: createdDocument.document_id,
-					},
-				},
-			},
-		})
+		console.log(createdDocument)
 
 		await documentLoadAndStore(profile_id, createdDocument)
 

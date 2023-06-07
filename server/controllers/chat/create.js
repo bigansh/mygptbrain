@@ -15,7 +15,7 @@ const create = async (req, res) => {
 		 */
 		const { chatQueryObject } = req.body
 
-		if (chatQueryObject) throw new Error("Chat query doesn't exist.")
+		if (!chatQueryObject) throw new Error("Chat query doesn't exist.")
 
 		const data = await chatCreateAndQuery(profile_id, chatQueryObject)
 

@@ -1,3 +1,4 @@
+import pineconeIndex from '../../utils/api/pinecone.js'
 import { User } from '../../utils/initializers/prisma.js'
 
 /**
@@ -8,6 +9,12 @@ import { User } from '../../utils/initializers/prisma.js'
 const deleteUser = async (profile_id) => {
 	try {
 		await User.delete({ where: { profile_id: profile_id } })
+
+		await pineconeIndex.delete1({
+			filter: {
+				profile_id: profile_id,
+			},
+		})
 
 		return {
 			accountDeleted: true,

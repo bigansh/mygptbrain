@@ -17,7 +17,7 @@ const document = (fastify, _options, done) => {
 		},
 		create
 	)
-	fastify.get(
+	fastify.post(
 		'/read',
 		{
 			onRequest: [fastify.userAuth],

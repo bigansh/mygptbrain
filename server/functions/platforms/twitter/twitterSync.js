@@ -40,7 +40,7 @@ const twitterSync = async (profile_id) => {
 
 			const scrapeAndSavePromise = new Promise(async (resolve) => {
 				const threadData = await scrapeThread(
-					`https://twitter.com/${tweet.author_id}/status/${tweet.id}`
+					`https://twitter.com/mygptbrain/status/${tweet.id}`
 				)
 
 				const createdDocument = await Document.create({
@@ -52,7 +52,7 @@ const twitterSync = async (profile_id) => {
 							create: {
 								source: 'twitter',
 								twitter_status_id: tweet.id,
-								url: `https://twitter.com/${tweet.author_id}/status/${tweet.id}`,
+								url: `https://twitter.com/mygptbrain/status/${tweet.id}`,
 							},
 						},
 					},

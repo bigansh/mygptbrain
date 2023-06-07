@@ -7,15 +7,13 @@ import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
 
 /**
  * A function that handles the callback request for Pocket
- * 
+ *
  * @param {String} state
- * @param {String} code
  * @param {import('../../../utils/types/authObject.js').authObject} authObject
  */
 const pocketCallback = async (
 	state,
-	code,
-	{ state: sessionState, profile_id }
+	{ state: sessionState, profile_id, code }
 ) => {
 	try {
 		if (!state || !sessionState || !code)

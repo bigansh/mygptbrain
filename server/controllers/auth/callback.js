@@ -27,7 +27,11 @@ const callback = async (req, res) => {
 			throw new Error('Authorization token expired. Please try again.')
 
 		if (platform === 'twitter') {
-			const { profile_id } = await twitterCallback(state,code,authObject)
+			const { profile_id } = await twitterCallback(
+				state,
+				code,
+				authObject
+			)
 
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'google') {
@@ -35,7 +39,7 @@ const callback = async (req, res) => {
 
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'pocket') {
-			const { profile_id } = await pocketCallback(state, code, authObject)
+			const { profile_id } = await pocketCallback(state, authObject)
 
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'login') {
