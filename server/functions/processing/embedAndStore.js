@@ -10,7 +10,7 @@ import { embeddings } from '../../utils/api/openai.js'
  */
 const embedAndStore = async (chunks) => {
 	try {
-		await PineconeStore.fromDocuments(chunks, embeddings, pineconeIndex)
+		await PineconeStore.fromDocuments(chunks, embeddings, { pineconeIndex })
 	} catch (error) {
 		throw error
 	}

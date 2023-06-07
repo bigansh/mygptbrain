@@ -9,24 +9,29 @@ import promptQuery from '../processing/promptQuery.js'
  */
 const chatQueryAndUpdate = async (chatQueryObject) => {
 	try {
-		const foundChat = await findChats(chatQueryObject, true)
+		const foundChat = await findChats(
+			{ chat_id: chatQueryObject.chat_id },
+			true
+		)
 
-		if (foundChat) throw new Error('No chat with that Chat ID exists.')
+		if (!foundChat) throw new Error('No chat with that Chat ID exists.')
 
 		const promptResult = await promptQuery(
 			chatQueryObject.prompt,
 			foundChat[0]
 		)
 
-		chatQueryObject.chat_history = `${{
-			...foundChat[0].chat_history,
-		}}\n\n\n\nuser input: ${
-			chatQueryObject.prompt
-		}\n\ngenerated result: ${promptResult}`
+		chatQueryObject.chat_history = `${foundChat[0].chat_history}\n\nuser input: ${chatQueryObject.prompt}\n\ngenerated result: ${promptResult.response}`
+		chatQueryObject.chat_array = [
+			...foundChat[0].chat_array,
+			{ user: chatQueryObject.prompt, llm: promptResult.response },
+		]
+		chatQueryObject.prompt = undefined
 
-		await updateChat(chatQueryObject)
-
-		return promptResult
+		return {
+			chat: await updateChat(chatQueryObject),
+			sourceDocuments: promptResult.sourceDocumentIds,
+		}
 	} catch (error) {
 		throw error
 	}

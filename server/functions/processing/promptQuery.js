@@ -15,12 +15,12 @@ import pineconeIndex from '../../utils/api/pinecone.js'
  * @param {String} prompt
  * @param {import("@prisma/client").Chat} chat
  */
-const promptQuery = async (prompt, chat = undefined) => {
+const promptQuery = async (prompt, chat) => {
 	try {
 		const { preferences, chat_history } = chat
 
 		const pineconeQuery = {
-			chunk_source: preferences.data_sources,
+			// chunk_source: preferences.data_sources,
 			profile_id: chat.profile_id,
 		}
 
@@ -43,6 +43,8 @@ const promptQuery = async (prompt, chat = undefined) => {
 		const sourceDocumentIds = res.sourceDocuments.map(
 			(document) => document.metadata.document_id
 		)
+
+		console.log(res)
 
 		return { response: res.text, sourceDocumentIds: sourceDocumentIds }
 	} catch (error) {

@@ -1,12 +1,10 @@
 import client from './client.js'
 
 import findDocuments from '../../document/findDocuments.js'
-
 import scrapeThread from '../../processing/scrapeThread.js'
-
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
 
-import { Document, User } from '../../../utils/initializers/prisma.js'
+import { Document } from '../../../utils/initializers/prisma.js'
 
 /**
  * A function that syncs Twitter bookmarks
@@ -30,13 +28,14 @@ const twitterSync = async (profile_id) => {
 
 		const promiseArray = []
 
-		for await (const tweet of twitterBookmarks) {
+		for (const tweet of twitterBookmarks) {
 			if (
 				foundTwitterIds.some(
 					(twitter_status_id) => twitter_status_id === tweet.id
 				)
-			)
+			) {
 				continue
+			}
 
 			const scrapeAndSavePromise = new Promise(async (resolve) => {
 				const threadData = await scrapeThread(
@@ -59,17 +58,6 @@ const twitterSync = async (profile_id) => {
 					include: { documentMetadata: true },
 				})
 
-				await User.update({
-					where: { profile_id: profile_id },
-					data: {
-						documents: {
-							connect: {
-								document_id: createdDocument.document_id,
-							},
-						},
-					},
-				})
-
 				await documentLoadAndStore(profile_id, createdDocument)
 
 				resolve(createdDocument)
@@ -78,7 +66,7 @@ const twitterSync = async (profile_id) => {
 			promiseArray.push(scrapeAndSavePromise)
 		}
 
-		await Promise.allSettled(promiseArray)
+		return await Promise.all(promiseArray)
 	} catch (error) {
 		throw error
 	}

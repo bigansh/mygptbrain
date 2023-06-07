@@ -105,6 +105,7 @@ model Chat {
   chat_id      String           @id @unique @default(uuid())
   chat_name    String
   profile_id   String
+  chat_array   Json[]
   chat_history String?
   user         User             @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
   preferences  ChatPreferences?

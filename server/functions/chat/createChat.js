@@ -14,6 +14,7 @@ const createChat = async (chatQueryObject) => {
 				chat_history: chatQueryObject.chat_history,
 				preferences: { create: {} },
 			},
+			include: { preferences: true },
 		})
 
 		return createdChat

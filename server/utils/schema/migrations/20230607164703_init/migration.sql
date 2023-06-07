@@ -99,6 +99,7 @@ CREATE TABLE "Chat" (
     "chat_id" TEXT NOT NULL,
     "chat_name" TEXT NOT NULL,
     "profile_id" TEXT NOT NULL,
+    "chat_array" JSONB[],
     "chat_history" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

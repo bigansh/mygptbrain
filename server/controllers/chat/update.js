@@ -32,7 +32,7 @@ const update = async (req, res) => {
 			 */
 			const { chatQueryObject } = req.body
 
-			if (chatQueryObject) throw new Error("Chat query doesn't exist.")
+			if (!chatQueryObject) throw new Error("Chat query doesn't exist.")
 
 			data = await chatQueryAndUpdate(chatQueryObject)
 		}

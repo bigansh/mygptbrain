@@ -1,4 +1,5 @@
 import createChat from '../chat/createChat.js'
+import updateChat from '../chat/updateChat.js'
 import promptQuery from '../processing/promptQuery.js'
 
 /**
@@ -9,14 +10,32 @@ import promptQuery from '../processing/promptQuery.js'
  */
 const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 	try {
-		const promptResult = await promptQuery(chatQueryObject.prompt)
+		const createdChat = await createChat({
+			chat_name: 'untitled',
+			chat_history: '',
+			profile_id: profile_id,
+		})
 
-		chatQueryObject.chat_name = promptResult.substring(0, 10)
-		chatQueryObject.chat_history = `user input: ${chatQueryObject.prompt}\n\ngenerated result: ${promptResult}`
+		const promptResult = await promptQuery(
+			chatQueryObject.prompt,
+			createdChat
+		)
 
-		await createChat(profile_id, chat_name, chat_history)
+		chatQueryObject.chat_name = promptResult.response.substring(0, 10)
+		chatQueryObject.chat_history = `user input: ${chatQueryObject.prompt}\ngenerated result: ${promptResult.response}`
+		chatQueryObject.chat_array = [
+			{ user: chatQueryObject.prompt, llm: promptResult.response },
+		]
+		chatQueryObject.prompt = undefined
 
-		return promptResult
+		return {
+			chat: await updateChat({
+				...chatQueryObject,
+				profile_id: profile_id,
+				chat_id: createdChat.chat_id,
+			}),
+			sourceDocuments: promptResult.sourceDocumentIds,
+		}
 	} catch (error) {
 		throw error
 	}

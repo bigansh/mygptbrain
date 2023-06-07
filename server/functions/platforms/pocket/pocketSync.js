@@ -3,12 +3,10 @@ import axios from 'axios'
 import client from './client.js'
 
 import findDocuments from '../../document/findDocuments.js'
-
 import scrapeArticle from '../../processing/scrapeArticle.js'
-
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
 
-import { Document, User } from '../../../utils/initializers/prisma.js'
+import { Document } from '../../../utils/initializers/prisma.js'
 
 /**
  * A function that syncs Pocket bookmarks
@@ -38,13 +36,14 @@ const pocketSync = async (profile_id) => {
 
 		const promiseArray = []
 
-		for await (const article of pocketArticles) {
+		for (const article of pocketArticles) {
 			if (
 				foundArticleIds.some(
 					(pocket_article_id) => pocket_article_id === article.item_id
 				)
-			)
+			) {
 				continue
+			}
 
 			const scrapeAndSavePromise = new Promise(async (resolve) => {
 				const articleData = await scrapeArticle(article.resolved_url)
@@ -65,17 +64,6 @@ const pocketSync = async (profile_id) => {
 					include: { documentMetadata: true },
 				})
 
-				await User.update({
-					where: { profile_id: profile_id },
-					data: {
-						documents: {
-							connect: {
-								document_id: createdDocument.document_id,
-							},
-						},
-					},
-				})
-
 				await documentLoadAndStore(profile_id, createdDocument)
 
 				resolve(createdDocument)
@@ -84,7 +72,7 @@ const pocketSync = async (profile_id) => {
 			promiseArray.push(scrapeAndSavePromise)
 		}
 
-		await Promise.allSettled(promiseArray)
+		return await Promise.all(promiseArray)
 	} catch (error) {
 		throw error
 	}
