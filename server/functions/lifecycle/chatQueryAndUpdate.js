@@ -21,7 +21,7 @@ const chatQueryAndUpdate = async (chatQueryObject) => {
 			foundChat[0]
 		)
 
-		chatQueryObject.chat_history = `${foundChat[0].chat_history}\n\nuser input: ${chatQueryObject.prompt}\n\ngenerated result: ${promptResult.response}`
+		chatQueryObject.chat_history = `${foundChat[0].chat_history}\n\nuser input: ${chatQueryObject.prompt}\ngenerated result: ${promptResult.response}`
 		chatQueryObject.chat_array = [
 			...foundChat[0].chat_array,
 			{ user: chatQueryObject.prompt, llm: promptResult.response },
