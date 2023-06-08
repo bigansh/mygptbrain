@@ -54,9 +54,11 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'signup') {
+			console.log(req.body);
+
 			if (!req.body.userObject) throw new Error('User object missing.')
 
-			const { state, url } = signupAuthFlow(req.body.userObject)
+			// const { state, url } = signupAuthFlow(req.body.userObject)
 
 			authObject = { state, profile_id } || {}
 

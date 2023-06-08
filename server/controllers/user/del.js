@@ -1,4 +1,4 @@
-import deleteUser from '../../functions/profile/deleteUser.js'
+import deleteUser from '../../functions/user/deleteUser.js'
 
 /**
  * A controller to handle the delete requests for the account

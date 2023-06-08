@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 
-import findUser from '../../profile/findUser.js'
+import findUser from '../../user/findUser.js'
 
 /**
  * A function that starts the signup process using the generic auth flow

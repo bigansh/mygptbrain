@@ -3,7 +3,7 @@ import { User } from '../../utils/initializers/prisma.js'
 /**
  * Function to find the user profile
  *
- * @param {import('../../utils/types/userObject').userObject} userObject
+ * @param {import('../../utils/types/userObject.js').userObject} userObject
  */
 const findUser = async ({ personalDetails }) => {
 	try {

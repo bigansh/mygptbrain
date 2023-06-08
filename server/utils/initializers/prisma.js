@@ -8,6 +8,7 @@ const prisma = new PrismaClient({
 export default prisma
 
 export const User = prisma.user
+export const userMetadata = prisma.userMetadata
 export const Auth = prisma.auth
 export const Reddit = prisma.reddit
 export const Twitter = prisma.twitter

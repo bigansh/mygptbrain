@@ -1,5 +1,6 @@
 import createChat from '../chat/createChat.js'
 import updateChat from '../chat/updateChat.js'
+import findDocuments from '../document/findDocuments.js'
 import promptQuery from '../processing/promptQuery.js'
 
 /**
@@ -34,7 +35,9 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 				profile_id: profile_id,
 				chat_id: createdChat.chat_id,
 			}),
-			sourceDocuments: promptResult.sourceDocumentIds,
+			sourceDocuments: await findDocuments({
+				document_id: { in: [promptResult.sourceDocumentIds] },
+			}),
 		}
 	} catch (error) {
 		throw error

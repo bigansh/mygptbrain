@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
 import randomstring from 'randomstring'
 
-import findUser from '../../profile/findUser.js'
-import createUser from '../../profile/createUser.js'
+import findUser from '../../user/findUser.js'
+import createUser from '../../user/createUser.js'
 
 /**
  * A function that starts the signup process using the generic auth flow

@@ -11,6 +11,7 @@ const createUser = async ({ authDetails, personalDetails }) => {
 			data: {
 				...personalDetails,
 				auth: { create: authDetails },
+				userMetadata: { create: {} },
 			},
 			include: { auth: true },
 		})

@@ -9,16 +9,25 @@ datasource db {
 }
 
 model User {
-  name       String
-  email      String     @unique
-  profile_id String     @id @unique @default(uuid())
-  auth       Auth?
-  documents  Document[]
-  chats      Chat[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  name         String
+  email        String        @unique
+  profile_id   String        @id @unique @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  auth         Auth?
+  chats        Chat[]
+  documents    Document[]
+  userMetadata UserMetadata?
 
-  @@index([profile_id])
+  @@index([profile_id, email])
+}
+
+model UserMetadata {
+  profile_id          String   @id @unique
+  subscription_status Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
 }
 
 model Auth {
@@ -29,13 +38,13 @@ model Auth {
   google_id     String?  @unique
   password_salt String?  @unique
   profile_id    String   @unique
-  user          User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  google        Google?
-  reddit        Reddit?
-  twitter       Twitter?
-  pocket        Pocket?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  google        Google?
+  pocket        Pocket?
+  reddit        Reddit?
+  twitter       Twitter?
 
   @@index([profile_id])
 }
@@ -44,35 +53,35 @@ model Google {
   access_token  String   @unique
   refresh_token String   @unique
   google_id     String   @id @unique
-  auth          Auth     @relation(fields: [google_id], references: [google_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  auth          Auth     @relation(fields: [google_id], references: [google_id], onDelete: Cascade)
 }
 
 model Reddit {
   access_token  String   @unique
   refresh_token String   @unique
   reddit_id     String   @id @unique
-  auth          Auth     @relation(fields: [reddit_id], references: [reddit_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  auth          Auth     @relation(fields: [reddit_id], references: [reddit_id], onDelete: Cascade)
 }
 
 model Twitter {
   access_token  String   @unique
   refresh_token String   @unique
   twitter_id    String   @id @unique
-  auth          Auth     @relation(fields: [twitter_id], references: [twitter_id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  auth          Auth     @relation(fields: [twitter_id], references: [twitter_id], onDelete: Cascade)
 }
 
 model Pocket {
   access_token String   @unique
   pocket_id    String   @id @unique
-  auth         Auth     @relation(fields: [pocket_id], references: [pocket_id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  auth         Auth     @relation(fields: [pocket_id], references: [pocket_id], onDelete: Cascade)
 }
 
 model Document {
@@ -80,12 +89,12 @@ model Document {
   profile_id       String
   body             String
   heading          String
-  user             User              @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  documentMetadata DocumentMetadata?
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+  user             User              @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  documentMetadata DocumentMetadata?
 
-  @@index([profile_id])
+  @@index([profile_id, document_id])
 }
 
 model DocumentMetadata {
@@ -96,9 +105,9 @@ model DocumentMetadata {
   pocket_article_id  String?
   document_file_type String?
   url                String?
-  document           Document @relation(fields: [document_id], references: [document_id], onDelete: Cascade)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  document           Document @relation(fields: [document_id], references: [document_id], onDelete: Cascade)
 }
 
 model Chat {
@@ -107,10 +116,10 @@ model Chat {
   profile_id   String
   chat_array   Json[]
   chat_history String?
-  user         User             @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
-  preferences  ChatPreferences?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
+  user         User             @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  preferences  ChatPreferences?
 
   @@index([chat_id, profile_id])
 }
@@ -119,7 +128,7 @@ model ChatPreferences {
   llm_model    String   @default("ChatGPT")
   data_sources String[] @default(["All"])
   chat_id      String   @id @unique
-  chat         Chat     @relation(fields: [chat_id], references: [chat_id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  chat         Chat     @relation(fields: [chat_id], references: [chat_id])
 }

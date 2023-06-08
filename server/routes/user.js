@@ -1,6 +1,6 @@
-import del from '../controllers/account/del.js'
-import read from '../controllers/account/read.js'
-import update from '../controllers/account/update.js'
+import del from '../controllers/user/del.js'
+import read from '../controllers/user/read.js'
+import update from '../controllers/user/update.js'
 
 /**
  * A route that handles document requests
@@ -9,7 +9,7 @@ import update from '../controllers/account/update.js'
  * @param {import("fastify").FastifyPluginOptions} _options
  * @param {import("fastify").DoneFuncWithErrOrRes} done
  */
-const account = (fastify, _options, done) => {
+const user = (fastify, _options, done) => {
 	fastify.get(
 		'/read',
 		{
@@ -35,4 +35,4 @@ const account = (fastify, _options, done) => {
 	done()
 }
 
-export default account
+export default user
