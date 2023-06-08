@@ -12,7 +12,7 @@ const store = configureStore({
 	reducer: rootReducer,
 })
 
-const inter = Poppins({
+const poppins = Poppins({
 	subsets: ['latin'],
 	display: 'fallback',
 	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -21,7 +21,7 @@ const inter = Poppins({
 export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
-			<body className=''>
+			<body className={poppins.className}>
 				<Provider store={store}>
 					<ThemeProvider attribute='class'>{children}</ThemeProvider>
 				</Provider>
