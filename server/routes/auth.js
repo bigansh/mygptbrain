@@ -17,6 +17,13 @@ const auth = (fastify, _options, done) => {
 		},
 		initialize
 	)
+	fastify.post(
+		'/initialize',
+		{
+			onRequest: [fastify.clientAuth],
+		},
+		initialize
+	)
 	fastify.get(
 		'/callback/:platform',
 		{
@@ -24,7 +31,7 @@ const auth = (fastify, _options, done) => {
 		},
 		callback
 	)
-	fastify.post(
+	fastify.patch(
 		'/update',
 		{
 			onRequest: [fastify.userAuth],

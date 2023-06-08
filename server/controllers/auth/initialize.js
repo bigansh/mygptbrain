@@ -62,23 +62,19 @@ const initialize = async (req, res) => {
 		} else if (query_type === 'signup') {
 			if (!req.body.userObject) throw new Error('User object missing.')
 
-			const { state, url } = signupAuthFlow(req.body.userObject)
+			const { profile_id } = await signupAuthFlow(req.body.userObject)
 
-			authObject = { state, profile_id } || {}
+			const sessionToken = await res.jwtSign({ profile_id })
 
-			cache.set(state, authObject, 60 * 2)
-
-			res.status(302).redirect(url)
+			res.status(200).send({ sessionToken: sessionToken })
 		} else if (query_type === 'login') {
 			if (!req.body.userObject) throw new Error('User object missing.')
 
-			const { state, url } = loginAuthFlow(req.body.userObject)
+			const { profile_id } = await loginAuthFlow(req.body.userObject)
 
-			authObject = { state, profile_id } || {}
+			const sessionToken = await res.jwtSign({ profile_id })
 
-			cache.set(state, authObject, 60 * 2)
-
-			res.status(302).redirect(url)
+			res.status(200).send({ sessionToken: sessionToken })
 		}
 	} catch (error) {
 		throw error

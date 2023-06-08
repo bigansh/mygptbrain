@@ -24,11 +24,7 @@ const loginAuthFlow = async (userObject) => {
 
 		if (!result) throw new Error('Incorrect password!')
 
-		const state = randomstring.generate(7)
-
-		const url = `${process.env.HOST}/auth/callback/login?state=${state}&profile_id=${foundUser.profile_id}`
-
-		return { state, url }
+		return { profile_id: foundUser.profile_id }
 	} catch (error) {
 		throw error
 	}

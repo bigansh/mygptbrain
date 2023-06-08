@@ -27,7 +27,6 @@ const callbackAuth = fastifyPlugin(
 							'reddit',
 							'google',
 							'notion',
-							'login',
 							'pocket',
 							'microsoft',
 						].some((platform) => platform === req.params.platform)

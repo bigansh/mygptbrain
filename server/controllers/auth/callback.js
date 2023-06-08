@@ -42,13 +42,6 @@ const callback = async (req, res) => {
 			const { profile_id } = await pocketCallback(state, authObject)
 
 			sessionToken = await res.jwtSign({ profile_id })
-		} else if (platform === 'login') {
-			if (authObject.state !== state)
-				throw new Error('Something went wrong.')
-
-			const { profile_id } = req.query
-
-			sessionToken = await res.jwtSign({ profile_id })
 		}
 
 		res.status(302).redirect(

@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt'
-import randomstring from 'randomstring'
 
 import findUser from '../../user/findUser.js'
 import createUser from '../../user/createUser.js'
@@ -11,7 +10,11 @@ import createUser from '../../user/createUser.js'
  */
 const signupAuthFlow = async (userObject) => {
 	try {
-		const foundUser = await findUser(userObject)
+		console.log(userObject)
+
+		const foundUser = await findUser({
+			personalDetails: { email: userObject.personalDetails.email },
+		})
 
 		if (foundUser) {
 			throw new Error('User already exists with this particular email.')
@@ -20,15 +23,11 @@ const signupAuthFlow = async (userObject) => {
 		const hash = await bcrypt.hash(userObject.authDetails.password, 10)
 
 		userObject.authDetails.password_salt = hash
-		userObject.authDetails.password = null
-
-		const state = randomstring.generate(7)
+		userObject.authDetails.password = undefined
 
 		const { profile_id } = await createUser(userObject)
 
-		const url = `${process.env.HOST}/auth/callback/login?state=${state}&profile_id=${profile_id}`
-
-		return { state, url }
+		return { profile_id }
 	} catch (error) {
 		throw error
 	}

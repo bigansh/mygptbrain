@@ -47,10 +47,10 @@ const updateAuth = async ({
 				include: { auth: true },
 			})
 		} else if (authDetails.password) {
-			const hash = await bcrypt.hash(userObject.authDetails.password, 10)
+			const hash = await bcrypt.hash(authDetails.password, 10)
 
 			authDetails.password_salt = hash
-			authDetails.password = null
+			authDetails.password = undefined
 
 			return await Auth.update({
 				data: authDetails,
