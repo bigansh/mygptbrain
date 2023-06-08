@@ -36,17 +36,24 @@ const pocketSync = async (profile_id) => {
 
 		const promiseArray = []
 
+		console.log(foundArticleIds)
+
 		for (const article of pocketArticles) {
+			console.log(article.item_id)
+
 			if (
 				foundArticleIds.some(
 					(pocket_article_id) => pocket_article_id === article.item_id
 				)
 			) {
+				console.log('hi')
 				continue
 			}
 
 			const scrapeAndSavePromise = new Promise(async (resolve) => {
-				const articleData = await scrapeArticle(article.resolved_url)
+				const articleData = await scrapeArticle(
+					article.resolved_url
+				).catch((error) => new Error(error))
 
 				const createdDocument = await Document.create({
 					data: {
