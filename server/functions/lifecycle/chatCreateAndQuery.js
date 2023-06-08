@@ -36,7 +36,7 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 				chat_id: createdChat.chat_id,
 			}),
 			sourceDocuments: await findDocuments({
-				document_id: { in: [promptResult.sourceDocumentIds] },
+				document_id: { in: promptResult.sourceDocumentIds },
 			}),
 		}
 	} catch (error) {

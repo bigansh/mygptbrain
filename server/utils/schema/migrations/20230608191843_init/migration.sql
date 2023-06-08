@@ -10,6 +10,16 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "UserMetadata" (
+    "profile_id" TEXT NOT NULL,
+    "subscription_status" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "UserMetadata_pkey" PRIMARY KEY ("profile_id")
+);
+
+-- CreateTable
 CREATE TABLE "Auth" (
     "auth_id" TEXT NOT NULL,
     "reddit_id" TEXT,
@@ -125,7 +135,10 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_profile_id_key" ON "User"("profile_id");
 
 -- CreateIndex
-CREATE INDEX "User_profile_id_idx" ON "User"("profile_id");
+CREATE INDEX "User_profile_id_email_idx" ON "User"("profile_id", "email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserMetadata_profile_id_key" ON "UserMetadata"("profile_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Auth_auth_id_key" ON "Auth"("auth_id");
@@ -188,7 +201,7 @@ CREATE UNIQUE INDEX "Pocket_pocket_id_key" ON "Pocket"("pocket_id");
 CREATE UNIQUE INDEX "Document_document_id_key" ON "Document"("document_id");
 
 -- CreateIndex
-CREATE INDEX "Document_profile_id_idx" ON "Document"("profile_id");
+CREATE INDEX "Document_profile_id_document_id_idx" ON "Document"("profile_id", "document_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DocumentMetadata_document_id_key" ON "DocumentMetadata"("document_id");
@@ -201,6 +214,9 @@ CREATE INDEX "Chat_chat_id_profile_id_idx" ON "Chat"("chat_id", "profile_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ChatPreferences_chat_id_key" ON "ChatPreferences"("chat_id");
+
+-- AddForeignKey
+ALTER TABLE "UserMetadata" ADD CONSTRAINT "UserMetadata_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "User"("profile_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Auth" ADD CONSTRAINT "Auth_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "User"("profile_id") ON DELETE CASCADE ON UPDATE CASCADE;

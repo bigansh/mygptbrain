@@ -17,6 +17,8 @@ import pineconeIndex from '../../utils/api/pinecone.js'
  */
 const promptQuery = async (prompt, chat) => {
 	try {
+		if (!chat) throw new Error('No chat with that chat_id found.')
+
 		const { preferences, chat_history } = chat
 
 		const pineconeQuery = {
@@ -28,12 +30,24 @@ const promptQuery = async (prompt, chat) => {
 			pineconeIndex,
 		})
 
-		const chain = new ConversationalRetrievalQAChain({
-			combineDocumentsChain: loadQAStuffChain(model),
-			questionGeneratorChain: loadQAStuffChain(model),
-			retriever: vectorStore.asRetriever(5, pineconeQuery),
-			returnSourceDocuments: true,
-		})
+		// ! This will be used for to allow users to change how the query is fed to the system. For a later date.
+		// const method = new ConversationalRetrievalQAChain({
+		// 	combineDocumentsChain: loadQAStuffChain(model),
+		// 	questionGeneratorChain: loadQAStuffChain(model),
+		// 	retriever: vectorStore.asRetriever(5, pineconeQuery),
+		// 	returnSourceDocuments: true,
+		// })
+
+		// const chain = method.fromLLM(
+		// 	model,
+		// 	vectorStore.asRetriever(5, pineconeQuery)
+		// )
+
+		const chain = ConversationalRetrievalQAChain.fromLLM(
+			model,
+			vectorStore.asRetriever(5, pineconeQuery),
+			{ returnSourceDocuments: true }
+		)
 
 		const res = await chain.call({
 			question: prompt,
@@ -43,8 +57,6 @@ const promptQuery = async (prompt, chat) => {
 		const sourceDocumentIds = res.sourceDocuments.map(
 			(document) => document.metadata.document_id
 		)
-
-		console.log(res)
 
 		return { response: res.text, sourceDocumentIds: sourceDocumentIds }
 	} catch (error) {

@@ -32,8 +32,10 @@ const userFinderAndUpdater = async (userObject) => {
 
 		if (!user) {
 			return await createUser(userObject)
-		} else {
+		} else if (userObject.personalDetails.profile_id) {
 			return await updateUser(userObject)
+		} else {
+			throw new Error('No such user exist with that profile_id.')
 		}
 	} catch (error) {
 		throw error

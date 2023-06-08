@@ -32,7 +32,7 @@ const chatQueryAndUpdate = async (chatQueryObject) => {
 		return {
 			chat: await updateChat(chatQueryObject),
 			sourceDocuments: await findDocuments({
-				document_id: { in: [promptResult.sourceDocumentIds] },
+				document_id: { in: promptResult.sourceDocumentIds },
 			}),
 		}
 	} catch (error) {
