@@ -26,7 +26,12 @@ app.register(cors, {
 	credentials: true,
 	strictPreflight: false,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-	origin: [process.env.CLIENT, 'http://localhost:5000'],
+	origin: [
+		process.env.CLIENT,
+		'http://localhost:5000',
+		'http://localhost:3000',
+		'http://localhost:3001',
+	],
 })
 app.register(multipart)
 
