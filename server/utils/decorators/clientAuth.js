@@ -27,18 +27,21 @@ const clientAuth = fastifyPlugin(
 					if (
 						!req.query['authorization'] &&
 						!req.headers['authorization']
-					)
+					) {
 						throw new Error('Client authentication required.')
+					}
 
 					const authToken =
 						req.query['authorization'] ||
 						req.headers['authorization'].split(' ')[1]
 
-					if (authToken === process.env.STATIC_AUTH) done()
-					else
+					if (authToken === process.env.STATIC_AUTH) {
+						done()
+					} else {
 						throw new Error(
 							'Client not authorized to access this route.'
 						)
+					}
 				} catch (error) {
 					throw error
 				}

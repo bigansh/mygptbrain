@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
+import xss from 'xss'
 
 /**
  * A function that scrapes a particular Twitter thread
@@ -77,11 +78,14 @@ const scrapeThread = async (url) => {
 			}
 		}
 
-		const content = finalTweet.replaceAll(
+		let content = finalTweet.replaceAll(
 			`/pic`,
 			'https://nitter.fly.dev/pic'
 		)
-		const title = content.substring(0, 64).trimEnd()
+		let title = content.substring(0, 64).trimEnd()
+
+		content = xss(content)
+		title = xss(title)
 
 		return { title, content }
 	} catch (error) {

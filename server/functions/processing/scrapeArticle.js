@@ -1,5 +1,6 @@
 import { extract } from 'article-parser'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
+import xss from 'xss'
 
 /**
  * A function that scrapes the article of a particular link
@@ -8,7 +9,7 @@ import { NodeHtmlMarkdown } from 'node-html-markdown'
  */
 const scrapeArticle = async (url) => {
 	try {
-		const { title, content } = await extract(
+		let { title, content } = await extract(
 			url,
 			{},
 			{
@@ -24,6 +25,9 @@ const scrapeArticle = async (url) => {
 				},
 			}
 		)
+
+		content = xss(content)
+		title = xss(title)
 
 		if (!content || !title)
 			throw new Error(

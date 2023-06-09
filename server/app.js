@@ -19,25 +19,14 @@ import helmet from '@fastify/helmet'
 import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
 
-app.register(helmet, {
-	global: true,
-})
+app.register(multipart)
+app.register(helmet, { global: true })
 app.register(cors, {
 	credentials: true,
 	strictPreflight: false,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-	origin: [
-		process.env.CLIENT,
-		'http://localhost:5000',
-		'http://localhost:3000',
-		'http://localhost:3001',
-	],
+	origin: [process.env.CLIENT, 'http://localhost:3001'],
 })
-app.register(multipart)
-
-// import errorHandler from './utils/handlers/errorHandler.js'
-
-// app.setErrorHandler(errorHandler)
 
 import jwt from './utils/plugins/jwt.js'
 
@@ -62,7 +51,9 @@ app.register(chat, { prefix: '/chat' })
 app.register(user, { prefix: '/user' })
 
 app.listen({ port: process.env.PORT || 3000, host: '0.0.0.0' }, (error) => {
-	if (error) throw error
+	if (error) {
+		throw error
+	}
 
 	console.log(`Listening on ${process.env.PORT || 3000}!`)
 })

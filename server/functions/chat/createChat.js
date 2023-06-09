@@ -1,3 +1,5 @@
+import xss from 'xss'
+
 import mixpanel from '../../utils/api/mixpanel.js'
 import { Chat } from '../../utils/initializers/prisma.js'
 
@@ -8,6 +10,8 @@ import { Chat } from '../../utils/initializers/prisma.js'
  */
 const createChat = async (chatQueryObject) => {
 	try {
+		chatQueryObject.chat_history = xss(chatQueryObject.chat_history)
+
 		const createdChat = await Chat.create({
 			data: {
 				profile_id: chatQueryObject.profile_id,

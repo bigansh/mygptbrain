@@ -1,5 +1,6 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
+import xss from 'xss'
 
 import { Document } from '../../utils/initializers/prisma.js'
 
@@ -17,12 +18,16 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 
 		if (file.mimetype === 'application/pdf') {
 			content = (await pdf(await file.toBuffer()))?.text
+
+			content = xss(content)
 		} else if (
 			file.mimetype.includes(
 				'application/vnd.openxmlformats-officedocument'
 			)
 		) {
 			content = officeParser.parseOfficeAsync(await file.toBuffer())
+
+			content = xss(content)
 		} else {
 			throw new Error('File type is currently not supported!')
 		}

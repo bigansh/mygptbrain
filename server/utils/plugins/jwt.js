@@ -1,7 +1,3 @@
-import * as dotenv from 'dotenv'
-
-dotenv.config()
-
 import fastifyPlugin from 'fastify-plugin'
 import fastifyJWT from '@fastify/jwt'
 
