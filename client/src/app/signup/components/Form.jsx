@@ -27,7 +27,7 @@ const SignupScreen = () => {
 	}
 
 	return (
-		<div className='flex flex-col items-center justify-center h-screen'>
+		<div className='flex flex-col w-full px-4 justify-center h-screen'>
 			<form className='flex flex-col gap-4' onSubmit={handleSignupSubmit}>
 				<div>
 					<Input
