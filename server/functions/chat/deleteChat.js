@@ -1,4 +1,5 @@
-import { User, Chat, ChatPreferences } from '../../utils/initializers/prisma.js'
+import mixpanel from '../../utils/api/mixpanel.js'
+import { Chat } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that deletes a chat object in the DB
@@ -15,6 +16,11 @@ const deleteChat = async ({ chat_id }, profile_id) => {
 		}
 
 		await Chat.delete({ where: { chat_id: chat_id } })
+
+		mixpanel.track('delete_chat', {
+			distinct_id: profile_id,
+			chat_id: chat_id,
+		})
 
 		return {
 			chatDeleted: true,

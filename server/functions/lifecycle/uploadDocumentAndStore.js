@@ -1,9 +1,9 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
 
-import documentLoadAndStore from './documentLoadAndStore.js'
-
 import { Document } from '../../utils/initializers/prisma.js'
+
+import documentLoadAndStore from './documentLoadAndStore.js'
 
 /**
  * A function that extracts the content of the uploaded file and create a record in the DB

@@ -40,8 +40,11 @@ const authFinderAndUpdater = async (userObject) => {
 			})
 		}
 
-		if (!foundUser) return await createAuth(userObject)
-		else return await updateAuth(userObject)
+		if (!foundUser) {
+			return await createAuth(userObject)
+		} else {
+			return await updateAuth(userObject)
+		}
 	} catch (error) {
 		throw error
 	}

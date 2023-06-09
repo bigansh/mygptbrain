@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import {
 	Auth,
 	Google,
@@ -25,29 +26,45 @@ const createAuth = async ({
 			where: { profile_id: personalDetails.profile_id },
 		})
 
-		if (authDetails.google_id)
+		if (authDetails.google_id) {
 			await Google.create({
 				data: { google_id: authDetails.google_id, ...googleTokens },
-				include: {auth: true}
-
+				include: { auth: true },
 			})
-		else if (authDetails.twitter_id)
+
+			mixpanel.people.set(personalDetails.profile_id, {
+				google_auth: true,
+			})
+		} else if (authDetails.twitter_id) {
 			await Twitter.create({
 				data: { twitter_id: authDetails.twitter_id, ...twitterTokens },
-				include: {auth: true}
-
+				include: { auth: true },
 			})
-		else if (authDetails.pocket_id)
+
+			mixpanel.people.set(personalDetails.profile_id, {
+				twitter_auth: true,
+			})
+		} else if (authDetails.pocket_id) {
 			await Pocket.create({
 				data: { pocket_id: authDetails.pocket_id, ...pocketTokens },
-				include: {auth: true}
-
+				include: { auth: true },
 			})
-		else if (authDetails.reddit_id)
+
+			mixpanel.people.set(personalDetails.profile_id, {
+				pocket_auth: true,
+			})
+		} else if (authDetails.reddit_id) {
 			await Reddit.create({
 				data: { reddit_id: authDetails.reddit_id, ...redditTokens },
-				include: {auth: true}
+				include: { auth: true },
 			})
+
+			mixpanel.people.set(personalDetails.profile_id, {
+				reddit_auth: true,
+			})
+		}
+
+		return
 	} catch (error) {
 		throw error
 	}

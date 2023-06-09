@@ -2,8 +2,8 @@ import axios from 'axios'
 
 import pocketClient from '../../../utils/api/pocket.js'
 
-import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
 import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
+import findUser from '../../user/findUser.js'
 
 /**
  * A function that handles the callback request for Pocket
@@ -47,7 +47,7 @@ const pocketCallback = async (
 			},
 		}
 
-		const user = await userFinderAndUpdater(userObject)
+		const user = await findUser(userObject)
 
 		await authFinderAndUpdater(userObject)
 

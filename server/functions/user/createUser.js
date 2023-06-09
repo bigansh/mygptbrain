@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import { User } from '../../utils/initializers/prisma.js'
 
 /**
@@ -14,6 +15,12 @@ const createUser = async ({ authDetails, personalDetails }) => {
 				userMetadata: { create: {} },
 			},
 			include: { auth: true },
+		})
+
+		mixpanel.people.set(user.profile_id, {
+			$name: user.name,
+			$email: user.email,
+			subscription_status: false,
 		})
 
 		return user

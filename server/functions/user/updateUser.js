@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import { User } from '../../utils/initializers/prisma.js'
 
 /**
@@ -10,6 +11,11 @@ const updateUser = async ({ personalDetails }) => {
 		const user = await User.update({
 			data: personalDetails,
 			where: { profile_id: personalDetails.profile_id },
+		})
+
+		mixpanel.people.set(user.profile_id, {
+			$name: user.name,
+			$email: user.email,
 		})
 
 		return user

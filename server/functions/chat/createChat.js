@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import { Chat } from '../../utils/initializers/prisma.js'
 
 /**
@@ -15,6 +16,10 @@ const createChat = async (chatQueryObject) => {
 				preferences: { create: {} },
 			},
 			include: { preferences: true },
+		})
+
+		mixpanel.track('create_chat', {
+			distinct_id: chatQueryObject.profile_id,
 		})
 
 		return createdChat

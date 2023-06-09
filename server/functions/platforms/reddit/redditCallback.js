@@ -3,7 +3,7 @@ import snoowrap from 'snoowrap'
 import redditClient from '../../../utils/api/reddit.js'
 
 import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
-import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
+import findUser from '../../user/findUser.js'
 
 /**
  * A function that handles callback request for Reddit
@@ -52,7 +52,7 @@ const redditCallback = async (
 			},
 		}
 
-		const user = await userFinderAndUpdater(userObject)
+		const user = await findUser(userObject)
 
 		await authFinderAndUpdater(userObject)
 

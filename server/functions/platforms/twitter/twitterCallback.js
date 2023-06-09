@@ -1,7 +1,7 @@
 import twitterClient from '../../../utils/api/twitter.js'
 
 import authFinderAndUpdater from '../../lifecycle/authFinderOrUpdater.js'
-import userFinderAndUpdater from '../../lifecycle/userFinderOrUpdater.js'
+import findUser from '../../user/findUser.js'
 
 /**
  * A function that handles callbacks for Twitter
@@ -48,7 +48,7 @@ const twitterCallback = async (
 			},
 		}
 
-		const user = await userFinderAndUpdater(userObject)
+		const user = await findUser(userObject)
 
 		await authFinderAndUpdater(userObject)
 

@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import { User } from '../../utils/initializers/prisma.js'
 
 import createUser from '../user/createUser.js'
@@ -31,9 +32,17 @@ const userFinderAndUpdater = async (userObject) => {
 		user && (userObject.personalDetails.profile_id = user.profile_id)
 
 		if (!user) {
-			return await createUser(userObject)
+			const createdUser = await createUser(userObject)
+
+			mixpanel.track('signup', {
+				distinct_id: createdUser.profile_id,
+			})
+
+			return createdUser
 		} else {
-			return await updateUser(userObject)
+			const updatedUser = await updateUser(userObject)
+
+			return updatedUser
 		}
 	} catch (error) {
 		throw error

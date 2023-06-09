@@ -8,6 +8,7 @@ import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
 import { embeddings, model } from '../../utils/api/openai.js'
 import pineconeIndex from '../../utils/api/pinecone.js'
+import mixpanel from '../../utils/api/mixpanel.js'
 
 /**
  * A function that will query the LLMs based on the user prompt and chat history
@@ -52,6 +53,12 @@ const promptQuery = async (prompt, chat) => {
 		const res = await chain.call({
 			question: prompt,
 			chat_history: chat_history,
+		})
+
+		mixpanel.track('query_chat', {
+			distinct_id: chat.profile_id,
+			user_query: prompt,
+			chat_id: chat.chat_id,
 		})
 
 		const sourceDocumentIds = res.sourceDocuments.map(

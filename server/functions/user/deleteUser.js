@@ -1,3 +1,4 @@
+import mixpanel from '../../utils/api/mixpanel.js'
 import pineconeIndex from '../../utils/api/pinecone.js'
 import { User } from '../../utils/initializers/prisma.js'
 
@@ -15,6 +16,8 @@ const deleteUser = async (profile_id) => {
 				profile_id: profile_id,
 			},
 		})
+
+		mixpanel.people.delete_user(profile_id)
 
 		return {
 			accountDeleted: true,
