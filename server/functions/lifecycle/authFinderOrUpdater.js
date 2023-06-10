@@ -4,6 +4,7 @@ import {
 	Pocket,
 	Twitter,
 	Auth,
+	Notion,
 } from '../../utils/initializers/prisma.js'
 
 import createAuth from '../auth/createAuth.js'
@@ -37,6 +38,10 @@ const authFinderAndUpdater = async (userObject) => {
 		} else if (userObject.authDetails.password) {
 			foundUser = await Auth.findUnique({
 				where: { profile_id: userObject.personalDetails.profile_id },
+			})
+		} else if (userObject.authDetails.notion_id) {
+			foundUser = await Notion.findUnique({
+				where: { notion_id: userObject.authDetails.notion_id },
 			})
 		}
 

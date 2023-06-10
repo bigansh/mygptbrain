@@ -37,6 +37,7 @@ model Auth {
   pocket_id     String?  @unique
   google_id     String?  @unique
   password_salt String?  @unique
+  notion_id     String?  @unique
   profile_id    String   @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -45,8 +46,18 @@ model Auth {
   pocket        Pocket?
   reddit        Reddit?
   twitter       Twitter?
+  notion        Notion?
 
   @@index([profile_id])
+}
+
+model Notion {
+  access_token String   @unique
+  notion_id    String   @id @unique
+  workspace_id String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  auth         Auth     @relation(fields: [notion_id], references: [notion_id], onDelete: Cascade)
 }
 
 model Google {

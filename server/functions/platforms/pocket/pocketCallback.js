@@ -27,9 +27,7 @@ const pocketCallback = async (
 		const authData = await axios.post(
 			'https://getpocket.com/v3/oauth/authorize',
 			data,
-			{
-				headers: headers,
-			}
+			{ headers: headers }
 		)
 
 		/**

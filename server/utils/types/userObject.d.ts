@@ -9,8 +9,13 @@ export interface userObject {
 		reddit_id?: string
 		twitter_id?: string
 		pocket_id?: string
+		notion_id?: string
 		password?: string
 		password_salt?: string
+	}
+	notionTokens?: {
+		access_token: string
+		workspace_id: string
 	}
 	googleTokens?: {
 		access_token: string

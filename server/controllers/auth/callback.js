@@ -3,6 +3,7 @@ import cache from '../../utils/initializers/cache.js'
 import twitterCallback from '../../functions/platforms/twitter/twitterCallback.js'
 import googleCallback from '../../functions/platforms/google/googleCallback.js'
 import pocketCallback from '../../functions/platforms/pocket/pocketCallback.js'
+import notionCallback from '../../functions/platforms/notion/notionCallback.js'
 
 /**
  * A controller to handle the auth callback requests
@@ -40,6 +41,10 @@ const callback = async (req, res) => {
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'pocket') {
 			const { profile_id } = await pocketCallback(state, authObject)
+
+			sessionToken = await res.jwtSign({ profile_id })
+		} else if (platform === 'notion') {
+			const { profile_id } = await notionCallback(state, code, authObject)
 
 			sessionToken = await res.jwtSign({ profile_id })
 		}

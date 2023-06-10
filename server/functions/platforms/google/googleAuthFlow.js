@@ -8,31 +8,27 @@ import googleClient from '../../../utils/api/google.js'
  * @param {String} query_type
  */
 const googleAuthFlow = (query_type) => {
-	try {
-		const state = randomstring.generate(7)
+	const state = randomstring.generate(7)
 
-		let scopes = [
-			'https://www.googleapis.com/auth/userinfo.email',
-			'https://www.googleapis.com/auth/userinfo.profile',
+	let scopes = [
+		'https://www.googleapis.com/auth/userinfo.email',
+		'https://www.googleapis.com/auth/userinfo.profile',
+	]
+
+	if (query_type === 'keep')
+		scopes = [
+			...scopes,
+			'https://www.googleapis.com/auth/keep',
+			'https://www.googleapis.com/auth/keep.readonly',
 		]
 
-		if (query_type === 'keep')
-			scopes = [
-				...scopes,
-				'https://www.googleapis.com/auth/keep',
-				'https://www.googleapis.com/auth/keep.readonly',
-			]
+	const url = googleClient.generateAuthUrl({
+		access_type: 'offline',
+		scope: scopes,
+		state: state,
+	})
 
-		const url = googleClient.generateAuthUrl({
-			access_type: 'offline',
-			scope: scopes,
-			state: state,
-		})
-
-		return { url, state }
-	} catch (error) {
-		throw error
-	}
+	return { url, state }
 }
 
 export default googleAuthFlow

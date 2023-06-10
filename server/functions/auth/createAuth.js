@@ -2,6 +2,7 @@ import mixpanel from '../../utils/api/mixpanel.js'
 import {
 	Auth,
 	Google,
+	Notion,
 	Pocket,
 	Reddit,
 	Twitter,
@@ -19,6 +20,7 @@ const createAuth = async ({
 	twitterTokens,
 	pocketTokens,
 	redditTokens,
+	notionTokens,
 }) => {
 	try {
 		await Auth.update({
@@ -61,6 +63,14 @@ const createAuth = async ({
 
 			mixpanel.people.set(personalDetails.profile_id, {
 				reddit_auth: true,
+			})
+		} else if (authDetails.notion_id) {
+			await Notion.create({
+				data: { notion_id: authDetails.notion_id, ...notionTokens },
+			})
+
+			mixpanel.people.set(personalDetails.profile_id, {
+				notion_auth: true,
 			})
 		}
 

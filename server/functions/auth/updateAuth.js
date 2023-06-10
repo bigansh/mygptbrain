@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import {
 	Auth,
 	Google,
+	Notion,
 	Pocket,
 	Reddit,
 	Twitter,
@@ -20,6 +21,7 @@ const updateAuth = async ({
 	twitterTokens,
 	pocketTokens,
 	redditTokens,
+	notionTokens,
 }) => {
 	try {
 		if (authDetails.google_id) {
@@ -55,6 +57,12 @@ const updateAuth = async ({
 			return await Auth.update({
 				data: authDetails,
 				where: { profile_id: personalDetails.profile_id },
+			})
+		} else if (authDetails.notion_id) {
+			return await Notion.update({
+				data: notionTokens,
+				where: { notion_id: authDetails.notion_id },
+				include: { auth: true },
 			})
 		}
 	} catch (error) {

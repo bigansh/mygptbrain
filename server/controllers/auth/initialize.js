@@ -5,6 +5,7 @@ import googleAuthFlow from '../../functions/platforms/google/googleAuthFlow.js'
 import pocketAuthFlow from '../../functions/platforms/pocket/pocketAuthFlow.js'
 import signupAuthFlow from '../../functions/platforms/login/signupAuthFlow.js'
 import loginAuthFlow from '../../functions/platforms/login/loginAuthFlow.js'
+import notionAuthFlow from '../../functions/platforms/notion/notionAuthFlow.js'
 
 /**
  * A controller to handle the auth initialization requests
@@ -53,6 +54,16 @@ const initialize = async (req, res) => {
 			if (!profile_id) throw new Error('No profile_id param found.')
 
 			const { state, url } = redditAuthFlow()
+
+			authObject = { state, profile_id } || {}
+
+			cache.set(state, authObject, 60 * 2)
+
+			res.status(302).redirect(url)
+		} else if (query_type === 'notion') {
+			if (!profile_id) throw new Error('No profile_id param found.')
+
+			const { state, url } = notionAuthFlow()
 
 			authObject = { state, profile_id } || {}
 
