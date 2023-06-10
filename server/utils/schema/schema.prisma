@@ -55,6 +55,7 @@ model Notion {
   access_token String   @unique
   notion_id    String   @id @unique
   workspace_id String   @unique
+  database_ids String[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   auth         Auth     @relation(fields: [notion_id], references: [notion_id], onDelete: Cascade)

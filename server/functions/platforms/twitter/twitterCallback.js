@@ -37,7 +37,6 @@ const twitterCallback = async (
 		let userObject = {
 			personalDetails: {
 				profile_id: profile_id,
-				name: data.name,
 			},
 			authDetails: {
 				twitter_id: data.id,

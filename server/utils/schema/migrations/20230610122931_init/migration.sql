@@ -27,11 +27,23 @@ CREATE TABLE "Auth" (
     "pocket_id" TEXT,
     "google_id" TEXT,
     "password_salt" TEXT,
+    "notion_id" TEXT,
     "profile_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Auth_pkey" PRIMARY KEY ("auth_id")
+);
+
+-- CreateTable
+CREATE TABLE "Notion" (
+    "access_token" TEXT NOT NULL,
+    "notion_id" TEXT NOT NULL,
+    "workspace_id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notion_pkey" PRIMARY KEY ("notion_id")
 );
 
 -- CreateTable
@@ -159,10 +171,22 @@ CREATE UNIQUE INDEX "Auth_google_id_key" ON "Auth"("google_id");
 CREATE UNIQUE INDEX "Auth_password_salt_key" ON "Auth"("password_salt");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Auth_notion_id_key" ON "Auth"("notion_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Auth_profile_id_key" ON "Auth"("profile_id");
 
 -- CreateIndex
 CREATE INDEX "Auth_profile_id_idx" ON "Auth"("profile_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notion_access_token_key" ON "Notion"("access_token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notion_notion_id_key" ON "Notion"("notion_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notion_workspace_id_key" ON "Notion"("workspace_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Google_access_token_key" ON "Google"("access_token");
@@ -222,6 +246,9 @@ ALTER TABLE "UserMetadata" ADD CONSTRAINT "UserMetadata_profile_id_fkey" FOREIGN
 ALTER TABLE "Auth" ADD CONSTRAINT "Auth_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "User"("profile_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Notion" ADD CONSTRAINT "Notion_notion_id_fkey" FOREIGN KEY ("notion_id") REFERENCES "Auth"("notion_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Google" ADD CONSTRAINT "Google_google_id_fkey" FOREIGN KEY ("google_id") REFERENCES "Auth"("google_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -243,4 +270,4 @@ ALTER TABLE "DocumentMetadata" ADD CONSTRAINT "DocumentMetadata_document_id_fkey
 ALTER TABLE "Chat" ADD CONSTRAINT "Chat_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "User"("profile_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ChatPreferences" ADD CONSTRAINT "ChatPreferences_chat_id_fkey" FOREIGN KEY ("chat_id") REFERENCES "Chat"("chat_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ChatPreferences" ADD CONSTRAINT "ChatPreferences_chat_id_fkey" FOREIGN KEY ("chat_id") REFERENCES "Chat"("chat_id") ON DELETE CASCADE ON UPDATE CASCADE;

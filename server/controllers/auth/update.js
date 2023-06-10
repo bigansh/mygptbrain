@@ -15,6 +15,12 @@ const update = async (req, res) => {
 		if (!userObject && !userObject.authDetails)
 			throw new Error('No userObject found!')
 
+		if (userObject.personalDetails.profile_id !== profile_id) {
+			throw new Error(
+				"profile_id passed doesn't match with the user logged in."
+			)
+		}
+
 		const data = await authFinderAndUpdater(userObject)
 
 		res.status(200).send(data)

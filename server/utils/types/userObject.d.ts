@@ -16,6 +16,7 @@ export interface userObject {
 	notionTokens?: {
 		access_token: string
 		workspace_id: string
+		database_ids?: string[]
 	}
 	googleTokens?: {
 		access_token: string

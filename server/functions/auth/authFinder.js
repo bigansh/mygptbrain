@@ -13,9 +13,7 @@ const authFinder = async (profile_id) => {
 
 		if (!userAuth) throw new Error('No such user exists')
 
-		const { reddit_id, google_id, pocket_id, twitter_id } = userAuth
-
-		return { reddit_id, google_id, pocket_id, twitter_id }
+		return userAuth
 	} catch (error) {
 		throw error
 	}
