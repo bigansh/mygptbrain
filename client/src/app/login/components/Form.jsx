@@ -49,7 +49,7 @@ const LoginScreen = () => {
 	}
 
 	return (
-		<div className='flex flex-col items-center justify-center h-screen'>
+		<div className='flex flex-col justify-center px-4 h-screen w-full'>
 			{!isEmailFocused && !email && (
 				<form
 					className='flex flex-col  gap-4  space-y-2'

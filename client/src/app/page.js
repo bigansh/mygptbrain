@@ -18,17 +18,17 @@ const HomePage = () => {
 
 	return (
 		<ProtectedRoute>
-			<div className='flex w-full h-screen bg-white dark:bg-black text-black'>
-				<OnboardingComponent />
-				{/* <div className='w-1/4'>
+			<div className='flex w-full h-screen bg-white  text-black'>
+				{/* <OnboardingComponent /> */}
+				<div className='w-1/4'>
 					<LeftSidebar />
 				</div>
 				<div className='w-3/4'>
 					<ChatComponent />
-				</div> */}
-				{/* <div className="w-1/4">
-        <RightSidebar />
-      </div> */}
+				</div>
+				<div className='w-1/4'>
+					<RightSidebar />
+				</div>
 			</div>
 		</ProtectedRoute>
 	)

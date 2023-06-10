@@ -9,10 +9,10 @@ const ProtectedRoute = ({ children }) => {
 	const user = useSelector(selectUser)
 
 	// Redirect to login if user is not authenticated
-	if (!user) {
-		router.push('/login')
-		return null
-	}
+	// if (!user) {
+	// 	router.push('/login')
+	// 	return null
+	// }
 
 	// Render the protected route component
 	return <>{children}</>
