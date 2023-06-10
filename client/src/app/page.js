@@ -1,20 +1,20 @@
 'use client'
 
 import { handleSessionToken } from '@/api/googleAuth'
-import OnboardingComponent from '@/components/OnboardingModal'
-import RightSidebar from '@/components/RightSidebar'
+import OnboardingComponent from '@/app/components/OnboardingModal'
+import RightSidebar from '@/app/components/RightSidebar'
 import ProtectedRoute from '@/lib/ProtectedRoute'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import ChatComponent from '../components/ChatComponent'
-import LeftSidebar, { default as Sidebar } from '../components/LeftSidebar'
+import ChatComponent from './components/ChatComponent'
+import LeftSidebar, { default as Sidebar } from './components/LeftSidebar'
 
 const HomePage = () => {
 	const dispatch = useDispatch()
 
-	useEffect(() => {
-		dispatch(handleSessionToken())
-	}, [dispatch])
+	// useEffect(() => {
+	// 	dispatch(handleSessionToken())
+	// }, [dispatch])
 
 	return (
 		<ProtectedRoute>
@@ -26,9 +26,9 @@ const HomePage = () => {
 				<div className='w-3/4'>
 					<ChatComponent />
 				</div>
-				<div className='w-1/4'>
+				{/* <div className='w-1/4'>
 					<RightSidebar />
-				</div>
+				</div> */}
 			</div>
 		</ProtectedRoute>
 	)

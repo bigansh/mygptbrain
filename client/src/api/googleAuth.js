@@ -25,7 +25,7 @@ export const googleLogin = () => async (dispatch) => {
 		const response = await api.get(
 			`https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg`
 		)
-		console.log(response)
+		// console.log(response)
 
 		// Redirect the user to the Google login page
 		window.location.href = '/api/auth/google/redirect'

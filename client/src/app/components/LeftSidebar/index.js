@@ -1,30 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import ThemeSwitcherButton from '../../lib/ThemeSwitcher'
+import useChatSearch from '@/hooks/useChatSearch'
+import {
+	addNewMessage,
+	createNewChatContext,
+	setChatContext,
+} from '@/store/reducers/chatReducer'
+import { useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
+import ThemeSwitcherButton from '../../../lib/ThemeSwitcher'
 import Modal from '../Settings'
 import AddChatButton from './AddThread'
 import Search from './Search'
 import SingleThread from './Thread'
 
 const LeftSidebar = () => {
-	const divItems = [
-		'What is internet',
-		'Item 2',
-		'Item 3',
-		'Item 4',
-		'Item 5',
-		'Item 1',
-		'Item 2',
-		'Item 3',
-		'Item 4',
-		'Item 5',
-		'Item 1',
-		'Item 2',
-		'Item 3',
-		'Item 4',
-		'Item 5',
-	]
+	const chatState = useSelector((state) => state.chat.chatContexts)
+	const chatTitles = chatState.map((context) => context?.title || [])
+
 	const [collapsed, setCollapsed] = useState(false)
 
 	const handleToggleCollapse = () => {
@@ -38,8 +31,10 @@ const LeftSidebar = () => {
 
 	const closeModal = () => {
 		setIsOpen(false)
-		console.log('Hello')
 	}
+
+	const { searchTerm, handleSearch, debouncedSearch, filteredChats } =
+		useChatSearch(chatTitles)
 
 	return (
 		<div
@@ -59,11 +54,15 @@ const LeftSidebar = () => {
 
 				<div className='text-4xl'>threads</div>
 				<hr className='border-t-2 border-black ' />
-				<Search chats={divItems} />
+				<Search
+					chats={chatTitles}
+					searchTerm={searchTerm}
+					debouncedSearch={debouncedSearch}
+				/>
 				<AddChatButton />
 				<hr className='border-t-2 border-black ' />
 				<div className='overscroll-y-contain h-80 overflow-auto mx-auto'>
-					<SingleThread items={divItems} maxHeight={64} />
+					<SingleThread chatState={chatState} maxHeight={64} />
 				</div>
 			</div>
 			<div className='border-t-8 w-full border-black px-12 space-y-4 pt-8'>

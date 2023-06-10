@@ -21,7 +21,7 @@ export const registerUser = async (userData, platform) => {
 		`${BASE_URL}/auth/query_type={platform}`,
 		userData
 	)
-	console.log(response.data.token)
+	// console.log(response.data.token)
 	return response.data.token
 }
 

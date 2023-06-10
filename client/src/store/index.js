@@ -1,10 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./reducers/authSlice";
+import { configureStore } from '@reduxjs/toolkit'
+
+import thunk from 'redux-thunk'
+import authReducer from './reducers/authReducer'
+import chatReducer from './reducers/chatReducer'
+import googleAuthReducer from './reducers/googleAuthReducer'
 
 const store = configureStore({
-  reducer: {
-    auth: authReducer,
-  },
-});
+	reducer: {
+		auth: authReducer,
+		chat: chatReducer,
+		googleAuth: googleAuthReducer,
+	},
+})
 
-export default store;
+export default store

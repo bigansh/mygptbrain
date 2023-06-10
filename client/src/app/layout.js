@@ -4,13 +4,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import { ThemeProvider } from 'next-themes'
 import { Poppins } from 'next/font/google'
 import { Provider } from 'react-redux'
-import rootReducer from '../store/reducers'
+import store from '../store'
 
 import './globals.css'
-
-const store = configureStore({
-	reducer: rootReducer,
-})
 
 const poppins = Poppins({
 	subsets: ['latin'],
