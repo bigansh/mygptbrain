@@ -1,7 +1,9 @@
 'use client'
 
 import { googleLogin } from '@/api/googleAuth'
+import axios from 'axios'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import GoogleLogo from '../assets/GoogleLogo'
@@ -18,8 +20,32 @@ const LoginScreen = () => {
 	const dispatch = useDispatch()
 
 	const handleGoogleLogin = () => {
+		// Redirect the user to the Google login page with the callback URL
+		window.location.href = `https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg`
 		dispatch(googleLogin())
 	}
+
+	// const handleGoogleLogin = async () => {
+	// 	try {
+	// 		const response = await axios.get(
+	// 			'https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg'
+	// 			// ,
+	// 			// {
+	// 			// 	params: {
+	// 			// 		query_type: 'google',
+	// 			// 		authorization:
+	// 			// 			'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg',
+	// 			// 	},
+	// 			// }
+	// 		)
+
+	// 		// Handle the response data here
+	// 		console.log(response.data)
+	// 	} catch (error) {
+	// 		// Handle error if the request fails
+	// 		console.error(error)
+	// 	}
+	// }
 
 	const handleEmailChange = (e) => {
 		setEmail(e.target.value)

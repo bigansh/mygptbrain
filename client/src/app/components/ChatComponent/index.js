@@ -16,7 +16,7 @@ const ChatUI = () => {
 
 	const messageContainerRef = useRef(null)
 	return (
-		<div className='flex flex-col h-full px-6'>
+		<div className='flex flex-col h-full'>
 			<MessagesContainer messageContainerRef={messageContainerRef} />
 			<Input messageContainerRef={messageContainerRef} />
 		</div>

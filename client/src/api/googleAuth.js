@@ -22,14 +22,18 @@ const api = axios.create({
 export const googleLogin = () => async (dispatch) => {
 	try {
 		// Make a request to your backend API to initiate the Google login process
-		const response = await api.get(
+		const response = await axios.get(
 			`https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg`
 		)
-		// console.log(response)
+
+		const urlParams = new URLSearchParams(window.location.search)
+		const state = urlParams.get('state')
+
+		console.log(state)
 
 		// Redirect the user to the Google login page
-		window.location.href = '/api/auth/google/redirect'
-		return response.data.token
+		window.location.href = '/login'
+		// return response.data.token
 	} catch (error) {
 		console.error('Google login failed:', error)
 	}

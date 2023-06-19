@@ -16,6 +16,7 @@ const Login = () => {
 					src={OnboardingBanner}
 					alt='Onboarding Banner'
 					fill={true}
+
 				/>
 			</div>
 		</div>

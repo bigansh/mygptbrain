@@ -1,60 +1,47 @@
-"use client";
+'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { LeftArrowSvg, RightArrowSvg } from '@/app/assets'
+import React, { useState } from 'react'
 
-const Sidebar = ({ position }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const SlidableRightSidebar = ({
+	isSidebarOpen,
+	setIsSidebarOpen,
+	handleToggleSidebar,
+}) => {
+	return (
+		<div
+			className={`relative z-50 shadow-xl ${
+				isSidebarOpen ? 'w-full' : 'w-0'
+			}`}
+		>
+			<button
+				onClick={handleToggleSidebar}
+				className={`fixed bottom-0 z-10 shadow-xl px-4 py-2 rounded-md ${
+					isSidebarOpen
+						? 'right-1/4 bg-[#F4F7FF]'
+						: 'right-0 bg-white'
+				}`}
+			>
+				{isSidebarOpen ? <LeftArrowSvg /> : <RightArrowSvg />}
+			</button>
 
-  const handleToggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+			<div
+				className={`sidebar bg-[#F4F7FF] w-1/4 h-screen  fixed top-0 right-0 transform transition-transform duration-300 ${
+					isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+				}`}
+			>
+				{/* Sidebar content */}
+			</div>
 
-  return (
-    <div>
-      <motion.div
-        className={`fixed z-50 ${
-          isSidebarOpen ? "bottom-4 left-4" : "bottom-4 right-4"
-        }`}
-        initial={false}
-        animate={{
-          x: isSidebarOpen ? 0 : 100,
-          y: isSidebarOpen ? 0 : 100,
-          transition: { duration: 0.3 },
-        }}>
-        <button
-          className={`bg-gray-500 text-white p-2 rounded-full hover:bg-gray-600 focus:outline-none`}
-          onClick={handleToggleSidebar}>
-          {isSidebarOpen ? (
-            <ChevronLeftIcon className="h-5 w-5" />
-          ) : (
-            <ChevronRightIcon className="h-5 w-5" />
-          )}
-        </button>
-      </motion.div>
+			<div
+				className={`content pr-64 transition-pr duration-300 ${
+					isSidebarOpen ? 'pr-0' : 'pr-64'
+				}`}
+			>
+				{/* Main content */}
+			</div>
+		</div>
+	)
+}
 
-      <motion.div
-        initial={{ x: position === "left" ? "-100%" : "100%" }}
-        animate={{
-          x: isSidebarOpen ? 0 : position === "left" ? "-100%" : "100%",
-        }}
-        transition={{ duration: 0.3 }}
-        className={`fixed bottom-0 h-screen ${
-          position === "left" ? "left-0" : "right-0"
-        } w-64 bg-white shadow-lg`}>
-        {/* Sidebar content goes here */}
-        <div className="p-4">Sidebar Content</div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`fixed top-0 left-0 right-0 bottom-0 ${
-          isSidebarOpen ? "block" : "hidden"
-        } bg-black`}></motion.div>
-    </div>
-  );
-};
-
-export default Sidebar;
+export default SlidableRightSidebar
