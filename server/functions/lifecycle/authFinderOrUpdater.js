@@ -23,6 +23,14 @@ const authFinderAndUpdater = async (userObject) => {
 			foundUser = await Google.findUnique({
 				where: { google_id: userObject.authDetails.google_id },
 			})
+
+			foundUser &&
+				(userObject.googleTokens.scope_authenticated = [
+					...new Set([
+						...foundUser?.scope_authenticated,
+						...userObject.googleTokens.scope_authenticated,
+					]),
+				])
 		} else if (userObject.authDetails.pocket_id) {
 			foundUser = await Pocket.findUnique({
 				where: { pocket_id: userObject.authDetails.pocket_id },

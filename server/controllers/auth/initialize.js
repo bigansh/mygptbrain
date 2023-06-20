@@ -32,10 +32,15 @@ const initialize = async (req, res) => {
 			cache.set(state, authObject, 60 * 2)
 
 			res.status(302).redirect(url)
-		} else if (query_type === 'google') {
-			const { state, url } = googleAuthFlow(query_type)
+		} else if (
+			query_type === 'google' ||
+			query_type === 'keep' ||
+			query_type === 'drive'
+		) {
+			const { state, url, authenticatedScopes } =
+				googleAuthFlow(query_type)
 
-			authObject = { state, profile_id } || {}
+			authObject = { state, profile_id, authenticatedScopes } || {}
 
 			cache.set(state, authObject, 60 * 2)
 

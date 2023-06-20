@@ -40,6 +40,7 @@ CREATE TABLE "Notion" (
     "access_token" TEXT NOT NULL,
     "notion_id" TEXT NOT NULL,
     "workspace_id" TEXT NOT NULL,
+    "database_ids" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -51,6 +52,7 @@ CREATE TABLE "Google" (
     "access_token" TEXT NOT NULL,
     "refresh_token" TEXT NOT NULL,
     "google_id" TEXT NOT NULL,
+    "scope_authenticated" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -109,6 +111,8 @@ CREATE TABLE "DocumentMetadata" (
     "reddit_post_id" TEXT,
     "pocket_article_id" TEXT,
     "document_file_type" TEXT,
+    "drive_document_id" TEXT,
+    "keep_id" TEXT,
     "url" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

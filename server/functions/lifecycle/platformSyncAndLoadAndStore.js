@@ -23,6 +23,9 @@ const platformSyncAndLoadAndStore = async (profile_id) => {
 		if (userAuth.twitter_id) {
 			platforms.push(twitterSync(profile_id))
 		}
+		if (userAuth.google.scope_authenticated.includes('keep' || 'drive')) {
+			platforms.push(googleSync(profile_id))
+		}
 
 		return (await Promise.all(platforms)).flat()
 	} catch (error) {

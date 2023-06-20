@@ -62,12 +62,13 @@ model Notion {
 }
 
 model Google {
-  access_token  String   @unique
-  refresh_token String   @unique
-  google_id     String   @id @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  auth          Auth     @relation(fields: [google_id], references: [google_id], onDelete: Cascade)
+  access_token        String   @unique
+  refresh_token       String   @unique
+  google_id           String   @id @unique
+  scope_authenticated String[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  auth                Auth     @relation(fields: [google_id], references: [google_id], onDelete: Cascade)
 }
 
 model Reddit {
@@ -116,6 +117,8 @@ model DocumentMetadata {
   reddit_post_id     String?
   pocket_article_id  String?
   document_file_type String?
+  drive_document_id String?
+  keep_id     String?
   url                String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

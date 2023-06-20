@@ -15,12 +15,22 @@ const googleAuthFlow = (query_type) => {
 		'https://www.googleapis.com/auth/userinfo.profile',
 	]
 
-	if (query_type === 'keep')
+	let authenticatedScopes = ['basic']
+
+	if (query_type === 'keep') {
+		scopes = [...scopes, 'https://www.googleapis.com/auth/keep.readonly']
+
+		authenticatedScopes = [...authenticatedScopes, 'keep']
+	}
+	if (query_type === 'drive') {
 		scopes = [
 			...scopes,
-			'https://www.googleapis.com/auth/keep',
-			'https://www.googleapis.com/auth/keep.readonly',
+			'https://www.googleapis.com/auth/drive.readonly',
+			'https://www.googleapis.com/auth/drive.metadata.readonly',
 		]
+
+		authenticatedScopes = [...authenticatedScopes, 'drive']
+	}
 
 	const url = googleClient.generateAuthUrl({
 		access_type: 'offline',
@@ -28,7 +38,7 @@ const googleAuthFlow = (query_type) => {
 		state: state,
 	})
 
-	return { url, state }
+	return { url, state, authenticatedScopes }
 }
 
 export default googleAuthFlow

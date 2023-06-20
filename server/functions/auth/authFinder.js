@@ -9,6 +9,7 @@ const authFinder = async (profile_id) => {
 	try {
 		const userAuth = await Auth.findUnique({
 			where: { profile_id: profile_id },
+			include: { google: true },
 		})
 
 		if (!userAuth) throw new Error('No such user exists')

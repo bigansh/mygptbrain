@@ -21,6 +21,7 @@ export interface userObject {
 	googleTokens?: {
 		access_token: string
 		refresh_token: string
+		scope_authenticated: string[]
 	}
 	redditTokens?: {
 		access_token: string

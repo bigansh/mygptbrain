@@ -3,4 +3,5 @@ export interface authObject {
 	profile_id?: string
 	state: string
 	code?: string
+	authenticatedScopes?: string[]
 }
