@@ -1,10 +1,7 @@
 import useChatSearch from '@/hooks/useChatSearch'
 import React from 'react'
 
-const Search = ({ chats }) => {
-	const { searchTerm, handleSearch, debouncedSearch, filteredChats } =
-		useChatSearch(chats)
-
+const Search = ({ chats, searchTerm, debouncedSearch }) => {
 	return (
 		<div>
 			<div className='flex items-start '>
@@ -15,17 +12,7 @@ const Search = ({ chats }) => {
 					placeholder='search threads'
 					className='py-2 px-4 rounded-l-lg text-xl bg-[#DFE8FF80] bg-opacity-50 w-4/5'
 				/>
-				{/* <ul className='space-y-4'>
-					{filteredChats.map((chat) => (
-						<li
-							key={chat.id}
-							className='bg-white p-4 shadow rounded-md'
-						>
-							<h3 className='text-lg font-semibold'>{chat}</h3>
-							<p className='text-gray-500'>{chat.lastMessage}</p>
-						</li>
-					))}
-				</ul> */}
+
 				<button className='bg-[#DFE8FF80] bg-opacity-50 fill-black  py-2 px-4 rounded-r-lg focus:outline-none '>
 					<svg
 						xmlns='http://www.w3.org/2000/svg'

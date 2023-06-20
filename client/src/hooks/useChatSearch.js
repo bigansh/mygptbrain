@@ -1,9 +1,8 @@
 import { debounce } from 'lodash'
 import { useMemo, useState } from 'react'
 
-const useChatSearch = (chats) => {
+const useChatSearch = ({ chatTitles }) => {
 	const [searchTerm, setSearchTerm] = useState('')
-
 	const handleSearch = (value) => {
 		setSearchTerm(value)
 	}
@@ -18,10 +17,10 @@ const useChatSearch = (chats) => {
 
 	const filteredChats = useMemo(() => {
 		const lowerCaseSearchTerm = searchTerm.toLowerCase()
-		return chats.filter((chat) =>
-			chat.toLowerCase().includes(lowerCaseSearchTerm)
-		)
-	}, [chats, searchTerm])
+		// return chatTitles.filter((chat) =>
+		// 	chat.toLowerCase().includes(lowerCaseSearchTerm)
+		// )
+	}, [chatTitles, searchTerm])
 
 	return {
 		searchTerm,
