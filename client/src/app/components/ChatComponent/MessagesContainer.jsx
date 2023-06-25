@@ -1,16 +1,15 @@
 import useCurrentContextIndex from '@/hooks/useCurrentContextIndex'
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
 import SingleChatComponent from './SingleChatComponent'
 
 const MessagesContainer = ({ messageContainerRef }) => {
 	const currentChatContextIndex = useCurrentContextIndex()
 
-	const messages = useSelector(
-		(state) =>
-			state.chat.chatContexts[currentChatContextIndex]?.messages || []
-	)
+	// const messages = useSelector(
+	// 	(state) =>
+	// 		state.chat.chatContexts[currentChatContextIndex]?.messages || []
+	// )
 
 	useEffect(() => {
 		messageContainerRef.current.scrollTop =

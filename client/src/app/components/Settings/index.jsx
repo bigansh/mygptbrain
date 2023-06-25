@@ -1,3 +1,4 @@
+'use client'
 import { XIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import AccountComponent from "./AccountComponent";
@@ -42,14 +43,14 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-10 ">
-      <div className="fixed inset-0 bg-black opacity-40"></div>
+      <div className="fixed inset-0 bg-black opacity-50"></div>
       <div
-        className={`bg-white rounded-lg shadow-xl transform transition-all duration-300 h-[90vh] w-[90vw] ${
+        className={`bg-white rounded-lg overflow-hidden shadow-xl transform transition-all duration-300 h-[90vh] w-[80vw] ${
           isClosing ? "scale-95 opacity-0" : "scale-100 opacity-100"
         }`}>
         <div className="flex items-start justify-center  h-full">
-          <div className="p-4 flex flex-col items-start justify-start bg-[#F4F7FF] h-full mx-4">
-            <div>settings</div>
+          <div className="p-6 flex flex-col items-start justify-start bg-[#F4F7FF] h-full">
+            <div className="pb-4">settings</div>
             <Sidebar
               activeButton={activeButton}
               handleButtonClick={handleButtonClick}

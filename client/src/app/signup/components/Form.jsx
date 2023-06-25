@@ -1,29 +1,54 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import Button from './Button'
 import Input from './Input'
-
+import { authenticateUser } from '@/api'
 const SignupScreen = () => {
-	const [name, setName] = useState('')
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
+	const [userDetails, setUserDetails] = useState({
+		name: '',
+		email: '',
+		password: '',
+	})
 
-	const handleNameChange = (e) => {
-		setName(e.target.value)
+	// const mutation = useMutation({
+	// 	mutationFn: authenticateUser,
+	// 	onSuccess: () => {
+	// 		// Invalidate and refetch
+	// 		// queryClient.invalidateQueries({ queryKey: ['todos'] })
+	// 	},
+	// })
+
+	const handleChange = (e) => {
+		console.log(userDetails, e.target.type)
+		setUserDetails({
+			...userDetails,
+			[e.target.id]: e.target.value,
+		})
 	}
 
-	const handleEmailChange = (e) => {
-		setEmail(e.target.value)
-	}
-
-	const handlePasswordChange = (e) => {
-		setPassword(e.target.value)
-	}
-
-	const handleSignupSubmit = (e) => {
+	const handleSignupSubmit = async (e) => {
 		e.preventDefault()
-		// Perform signup logic using name, email, and password
-		// ...
+		try {
+			const res = await authenticateUser({
+				queryType: 'signup',
+				userData: {
+					userObject: {
+						personalDetails: {
+							email: userDetails.email,
+							name: userDetails.name,
+						},
+						authDetails: {
+							password: userDetails.password,
+						},
+					},
+				},
+			})
+			// TODO : err 500 user already there
+			localStorage.setItem('x-session-token', res.data.sessionToken)
+			console.log(res.data.sessionToken, 'signp')
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	return (
@@ -33,8 +58,8 @@ const SignupScreen = () => {
 					<Input
 						label='name'
 						type='name'
-						value={name}
-						onChange={handleNameChange}
+						value={userDetails.name}
+						onChange={handleChange}
 						placeholder='barun'
 					/>
 				</div>
@@ -43,8 +68,8 @@ const SignupScreen = () => {
 					<Input
 						label='email'
 						type='email'
-						value={email}
-						onChange={handleEmailChange}
+						value={userDetails.email}
+						onChange={handleChange}
 						placeholder='barundebnath91@gmail.com'
 					/>
 				</div>
@@ -53,8 +78,8 @@ const SignupScreen = () => {
 					<Input
 						label='password'
 						type='password'
-						value={password}
-						onChange={handlePasswordChange}
+						value={userDetails.password}
+						onChange={handleChange}
 						placeholder='***'
 					/>
 				</div>

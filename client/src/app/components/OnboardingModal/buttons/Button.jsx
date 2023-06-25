@@ -5,8 +5,10 @@ import PocketSvg from '../assets/PocketSvg'
 import RedditSvg from '../assets/RedditSvg'
 import TwitterSvg from '../assets/TwitterSvg'
 import WhatsAppSvg from '../assets/WhatsApp'
+import { connectPlatform, getUser } from '@/api'
+import { useQuery } from '@tanstack/react-query'
 
-const Twitter = ({ title, classes = '' }) => {
+const Buttons = ({ title, classes = '' }) => {
 	let SvgComponentName
 
 	switch (title) {
@@ -34,9 +36,15 @@ const Twitter = ({ title, classes = '' }) => {
 
 	return (
 		<div className='space-y-2'>
-			<div className='text-2xl text-center md:text-start'>{title}</div>
+			<div className='text-xl text-center md:text-start'>{title}</div>
 			<button
-				className={`flex items-center gap-2 text-white text-xl py-2 px-4 rounded space-x-6 ${classes}`}
+				className={`flex items-center gap-12 text-white text-md py-2 px-4 rounded space-x-6 ${classes}`}
+				onClick={() =>
+					connectPlatform({
+						platform: title,
+						profileId: '02088239-b2cf-4bad-b265-9ddb965a9c54',
+					})
+				}
 			>
 				<div>connect</div>
 				<SvgComponentName />
@@ -45,4 +53,4 @@ const Twitter = ({ title, classes = '' }) => {
 	)
 }
 
-export default Twitter
+export default Buttons

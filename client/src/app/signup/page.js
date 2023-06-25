@@ -1,6 +1,6 @@
 'use client'
 
-import { OnboardingBanner } from '@/assets'
+import { OnboardingBanner } from '../assets'
 import Image from 'next/image'
 import React from 'react'
 import SignupScreen from './components/Form'

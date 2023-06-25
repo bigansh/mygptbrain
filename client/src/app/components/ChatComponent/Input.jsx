@@ -1,9 +1,7 @@
 import { SendArrow } from '@/app/assets'
 import useCurrentContextIndex from '@/hooks/useCurrentContextIndex'
-import { addNewMessage } from '@/store/reducers/chatReducer'
 import { nanoid } from '@reduxjs/toolkit'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 const Input = ({ messageContainerRef }) => {
 	const currentChatContextIndex = useCurrentContextIndex()
@@ -12,9 +10,9 @@ const Input = ({ messageContainerRef }) => {
 	const [inputValue, setInputValue] = useState('')
 	const [newMessage, setNewMessage] = useState(null)
 
-	const dispatch = useDispatch()
+	 
 
-	const messages = useSelector((state) => state.chat)
+	//const messages = useSelector((state) => state.chat)
 
 	const handleInputChange = (e) => {
 		setInputValue(e.target.value)
