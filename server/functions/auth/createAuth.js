@@ -23,6 +23,8 @@ const createAuth = async ({
 	notionTokens,
 }) => {
 	try {
+		console.log(authDetails)
+
 		await Auth.update({
 			data: authDetails,
 			where: { profile_id: personalDetails.profile_id },

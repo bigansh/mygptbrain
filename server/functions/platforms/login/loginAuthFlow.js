@@ -17,6 +17,12 @@ const loginAuthFlow = async (userObject) => {
 			throw new Error('No such user exists.')
 		}
 
+		if (!foundUser.auth.password_salt) {
+			throw new Error(
+				"You didn't signup with a password. Please use Google to login."
+			)
+		}
+
 		const result = await bcrypt.compare(
 			userObject.authDetails.password,
 			foundUser.auth.password_salt
