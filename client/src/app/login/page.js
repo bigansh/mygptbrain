@@ -1,9 +1,9 @@
 'use client'
 
-import { OnboardingBanner } from '@/assets'
 import Image from 'next/image'
 import React from 'react'
 import LoginScreen from './components/Form'
+import { OnboardingBanner } from '../assets'
 
 const Login = () => {
 	return (
@@ -16,7 +16,6 @@ const Login = () => {
 					src={OnboardingBanner}
 					alt='Onboarding Banner'
 					fill={true}
-
 				/>
 			</div>
 		</div>

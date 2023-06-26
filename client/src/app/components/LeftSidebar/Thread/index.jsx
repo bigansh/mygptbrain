@@ -1,44 +1,21 @@
 import { ChatIconSvg } from '@/app/assets'
-import {
-	setCurrentChatContext,
-	setCurrentChats,
-} from '@/store/reducers/chatReducer'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SingleThread = ({ chatState, maxHeight }) => {
-	const dispatch = useDispatch()
+import { PiChatsThin } from 'react-icons/pi'
 
-	const [contextID, setContextID] = useState(null)
-	const handleClick = (itemID) => {
-		setContextID(itemID)
-	}
-
-	const currentChatContext = useSelector(
-		(state) => state.chat.currentChatContext
-	)
-
-	useEffect(() => {
-		if (contextID) {
-			dispatch(setCurrentChatContext(contextID))
-		}
-	}, [dispatch, contextID])
-
+const SingleThread = ({ chatState , icon }) => {
 	return (
-		<div className={`max-h-${maxHeight} overflow-y-scroll w-full`}>
+		<div>
 			{chatState.map((item, index) => (
 				<button
 					key={item.id}
-					className={`flex items-center justify-start space-x-6 w-full hover:bg-[#DFE8FF] px-2 py-2 rounded-lg cursor-pointer max-w-xs text-xl truncate ${
-						currentChatContext === item.id ? 'bg-[#DFE8FF]' : ''
-					}`}
-					onClick={() => handleClick(item.id)}
+					className={`grid grid-cols-[24px_1fr] items-center justify-start  space-x-4 w-full hover:bg-[#DFE8FF] p-4 rounded-lg cursor-pointer`}
 				>
-					<div>
-						<ChatIconSvg />
-					</div>
-					<div className='max-w-xs text-xl truncate'>
-						{item.title}
+					{icon}
+
+					<div className='text-xl truncate text-left'>
+						{item.name}
 					</div>
 				</button>
 			))}
@@ -47,3 +24,5 @@ const SingleThread = ({ chatState, maxHeight }) => {
 }
 
 export default SingleThread
+
+// currentChatContext === item.id ? 'bg-[#DFE8FF]' : ''

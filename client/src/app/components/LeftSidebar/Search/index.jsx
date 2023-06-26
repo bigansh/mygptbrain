@@ -1,33 +1,21 @@
 import useChatSearch from '@/hooks/useChatSearch'
 import React from 'react'
-
-const Search = ({ chats, searchTerm, debouncedSearch }) => {
+import { GoSearch } from 'react-icons/go'
+const Search = ({ searchTerm, setSearchTerm }) => {
+	console.log(searchTerm, 'search')
 	return (
 		<div>
-			<div className='flex items-start '>
+			<div className='flex items-start p-4 bg-[#DFE8FF80] rounded-lg justify-between'>
 				<input
 					type='text'
 					value={searchTerm}
-					onChange={(e) => debouncedSearch(e.target.value)}
+					onChange={(e) => setSearchTerm(e.target.value)}
 					placeholder='search threads'
-					className='py-2 px-4 rounded-l-lg text-xl bg-[#DFE8FF80] bg-opacity-50 w-4/5'
+					className='border-0 py-0 text-xl bg-opacity-50 w-4/5 bg-transparent focus:shadow-none focus-within:shadow-none'
 				/>
 
-				<button className='bg-[#DFE8FF80] bg-opacity-50 fill-black  py-2 px-4 rounded-r-lg focus:outline-none '>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						fill='none'
-						viewBox='0 0 24 24'
-						strokeWidth={1.5}
-						stroke='currentColor'
-						className='w-8 h-8 '
-					>
-						<path
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
-						/>
-					</svg>
+				<button className='bg-[#DFE8FF80] bg-opacity-50 fill-black h-full focus:outline-none '>
+					<GoSearch fontSize={30}/>
 				</button>
 			</div>
 		</div>
