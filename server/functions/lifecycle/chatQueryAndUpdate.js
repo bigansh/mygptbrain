@@ -1,6 +1,5 @@
 import findChats from '../chat/findChats.js'
 import updateChat from '../chat/updateChat.js'
-import findDocuments from '../document/findDocuments.js'
 import promptQuery from '../processing/promptQuery.js'
 
 /**
@@ -27,14 +26,12 @@ const chatQueryAndUpdate = async (chatQueryObject) => {
 			...foundChat[0].chat_array,
 			{ user: chatQueryObject.prompt, llm: promptResult.response },
 		]
+		chatQueryObject.source_documents = [
+			...new Set(promptResult.sourceDocumentIds),
+		]
 		chatQueryObject.prompt = undefined
 
-		return {
-			chat: await updateChat(chatQueryObject),
-			sourceDocuments: await findDocuments({
-				document_id: { in: promptResult.sourceDocumentIds },
-			}),
-		}
+		return await updateChat(chatQueryObject)
 	} catch (error) {
 		throw error
 	}

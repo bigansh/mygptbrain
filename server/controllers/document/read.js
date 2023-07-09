@@ -13,7 +13,15 @@ const read = async (req, res) => {
 		 */
 		const { documentQueryObject } = req.body
 
-		if (!documentQueryObject) throw new Error('Document object not found.')
+		const { profile_id } = req.user
+
+		if (!documentQueryObject) {
+			throw new Error('Document object not found.')
+		}
+
+		if (profile_id !== documentQueryObject.profile_id) {
+			throw new Error("You aren't authorized to read this document.")
+		}
 
 		const data = await findDocuments(documentQueryObject)
 

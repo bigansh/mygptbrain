@@ -13,7 +13,15 @@ const read = async (req, res) => {
 		 */
 		const { chatQueryObject } = req.body
 
-		if (!chatQueryObject) throw new Error("Chat query doesn't exist.")
+		const { profile_id } = req.user
+
+		if (!chatQueryObject) {
+			throw new Error("Chat query doesn't exist.")
+		}
+
+		if (profile_id !== documentQueryObject.profile_id) {
+			throw new Error("You aren't authorized to read this document.")
+		}
 
 		const data = await findChats(chatQueryObject)
 

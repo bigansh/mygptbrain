@@ -1,6 +1,5 @@
 import createChat from '../chat/createChat.js'
 import updateChat from '../chat/updateChat.js'
-import findDocuments from '../document/findDocuments.js'
 import promptQuery from '../processing/promptQuery.js'
 
 /**
@@ -27,18 +26,16 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 		chatQueryObject.chat_array = [
 			{ user: chatQueryObject.prompt, llm: promptResult.response },
 		]
+		chatQueryObject.source_documents = [
+			...new Set(promptResult.sourceDocumentIds),
+		]
 		chatQueryObject.prompt = undefined
 
-		return {
-			chat: await updateChat({
-				...chatQueryObject,
-				profile_id: profile_id,
-				chat_id: createdChat.chat_id,
-			}),
-			sourceDocuments: await findDocuments({
-				document_id: { in: promptResult.sourceDocumentIds },
-			}),
-		}
+		return await updateChat({
+			...chatQueryObject,
+			profile_id: profile_id,
+			chat_id: createdChat.chat_id,
+		})
 	} catch (error) {
 		throw error
 	}

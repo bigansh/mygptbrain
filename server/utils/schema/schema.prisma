@@ -130,6 +130,7 @@ model Chat {
   chat_name    String
   profile_id   String
   chat_array   Json[]
+  source_documents String[]
   chat_history String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
