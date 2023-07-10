@@ -19,7 +19,7 @@ const read = async (req, res) => {
 			throw new Error("Chat query doesn't exist.")
 		}
 
-		if (profile_id !== documentQueryObject.profile_id) {
+		if (profile_id !== chatQueryObject.profile_id) {
 			throw new Error("You aren't authorized to read this document.")
 		}
 

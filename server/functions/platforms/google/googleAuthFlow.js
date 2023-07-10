@@ -25,8 +25,9 @@ const googleAuthFlow = (query_type) => {
 	if (query_type === 'drive') {
 		scopes = [
 			...scopes,
-			'https://www.googleapis.com/auth/drive.readonly',
 			'https://www.googleapis.com/auth/drive.metadata.readonly',
+			'https://www.googleapis.com/auth/drive.readonly.metadata',
+			'https://www.googleapis.com/auth/drive.readonly',
 		]
 
 		authenticatedScopes = [...authenticatedScopes, 'drive']
