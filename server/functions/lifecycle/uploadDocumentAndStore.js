@@ -25,7 +25,7 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 				'application/vnd.openxmlformats-officedocument'
 			)
 		) {
-			content = officeParser.parseOfficeAsync(await file.toBuffer())
+			content = await officeParser.parseOfficeAsync(await file.toBuffer())
 
 			content = xss(content)
 		} else {
