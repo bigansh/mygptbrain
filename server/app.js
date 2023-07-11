@@ -4,13 +4,22 @@ dotenv.config()
 
 import fastify from 'fastify'
 import pino from 'pino'
+import logtail from '@logtail/pino'
 
 const app = fastify({
 	logger: pino({
 		level: 'trace',
 		transport: {
-			target: 'pino-pretty',
-			options: { colorize: true },
+			targets: [
+				{
+					target: '@logtail/pino',
+					options: { sourceToken: process.env.LOGTAIL_TOKEN },
+				},
+				{
+					target: 'pino-pretty',
+					options: { colorize: true },
+				},
+			],
 		},
 	}),
 })

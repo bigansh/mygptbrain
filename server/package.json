@@ -23,6 +23,7 @@
     "@fastify/helmet": "^10.1.0",
     "@fastify/jwt": "^6.7.1",
     "@fastify/multipart": "^7.6.0",
+    "@logtail/pino": "^0.4.2",
     "@notionhq/client": "^2.2.4",
     "@pinecone-database/pinecone": "^0.1.6",
     "@prisma/client": "^4.14.0",
