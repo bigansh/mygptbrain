@@ -1,8 +1,0 @@
-export { default as AddThreadIcon } from './AddThreadIcon'
-export { default as ChatIconSvg } from './ChatIcon'
-export { default as GPTBrain } from './GPTBranin.png'
-export { default as LeftArrowSvg } from './LeftArrow'
-export { default as RightArrowSvg } from './RightArrow'
-export { default as SendArrow } from './SendArrow'
-export { default as UserSvg } from './UserSvg'
-export { default as OnboardingBanner } from './OnboardingBanner.png'
