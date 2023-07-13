@@ -1,6 +1,8 @@
 // api/index.js
 import axios from "axios";
 
+export const runtime = 'edge';
+
 const apiClient = axios.create({
   baseURL: `https://api-testing.mygptbrain.com`,
   withCredentials: true,
