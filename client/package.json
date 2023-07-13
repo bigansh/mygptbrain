@@ -5,6 +5,9 @@
 	"private": "true",
 	"author": "myGPTBrain",
 	"license": "UNLICENSED",
+	"engines": {
+		"node": ">=18"
+	  },
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
