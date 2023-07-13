@@ -12,7 +12,7 @@ import {
 	Grid,
 	Button,
 	Text,
-  useToast,
+	useToast,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -21,7 +21,7 @@ import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 const Signup = () => {
 	const router = useRouter()
-  const toast = useToast()
+	const toast = useToast()
 	const [userDetails, setUserDetails] = useState({
 		name: '',
 		email: '',
@@ -36,10 +36,6 @@ const Signup = () => {
 	}
 
 	const [isEmailFocused, setIsEmailFocused] = useState(false)
-
-	const handleEmailFocus = () => {
-		setIsEmailFocused(true)
-	}
 
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault()
@@ -110,32 +106,72 @@ const Signup = () => {
 					type='email'
 					value={userDetails.email}
 					onChange={handleChange}
+					onFocus={(e) => setIsEmailFocused(true)}
 					placeholder='barundebnath91@gmail.com'
 				/>
-				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
-					password
-				</FormLabel>
-				<Input
-					id='password'
-					type='password'
-					value={userDetails.password}
-					onChange={handleChange}
-					placeholder='***'
-				/>
+				{isEmailFocused || userDetails.email !== '' ? (
+					<>
+						<FormLabel
+							fontSize={'2xl'}
+							fontWeight={'400'}
+							mb={0}
+							mt={2}
+						>
+							password
+						</FormLabel>
+						<Input
+							id='password'
+							type='password'
+							value={userDetails.password}
+							onChange={handleChange}
+							placeholder='***'
+						/>
+						<Button
+							title='login'
+							fontWeight={'400'}
+							bg={'#DFE8FF'}
+							_hover={{
+								bg: '#DFE8FF',
+							}}
+							color={'black'}
+							onClick={handleLoginSubmit}
+							mt={2}
+						>
+							signup
+						</Button>
+						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
+							<Link href='/login'>or login</Link>
+						</Text>
+					</>
+				) : (
+					<>
+						<Box position='relative' py='10' fontSize={'18px'}>
+							<Divider
+								bg={'black'}
+								borderColor={'black'}
+								rounded={'md'}
+								borderWidth={'1px'}
+							/>
+							<AbsoluteCenter px='4' bg={'white'}>
+								or
+							</AbsoluteCenter>
+						</Box>
 
-				<Button
-					title='login'
-					fontWeight={'400'}
-					bg={'#DFE8FF'}
-					_hover={{
-						bg: '#DFE8FF',
-					}}
-					color={'black'}
-					onClick={handleLoginSubmit}
-					mt={2}
-				>
-					login
-				</Button>
+						<Button
+							bg='#CA504080'
+							p={2.5}
+							w={'100%'}
+							color={'white'}
+							gap={2.5}
+							fontSize={'18px'}
+							_hover={{ opacity: '80%' }}
+							onClick={() => authenticateUserByGoogle()}
+						>
+							<div>Continue with Google</div>
+							<FaGoogle />
+						</Button>
+					</>
+				)}
 			</Flex>
 			<Flex flexDir={'column'} p={5} gap={5} justifyContent={'center'}>
 				<Heading fontSize={'2xl'} fontWeight={'400'}>
