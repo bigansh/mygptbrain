@@ -7,7 +7,7 @@
 	"license": "UNLICENSED",
 	"engines": {
 		"node": ">=18"
-	  },
+	},
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
@@ -25,7 +25,6 @@
 		"react-dom": "18.2.0",
 		"react-icons": "^4.10.1",
 		"react-textarea-autosize": "^8.5.1",
-		"react-typing-sequence": "^1.1.2",
 		"react-typist": "^2.0.5",
 		"uuid": "^9.0.0"
 	},

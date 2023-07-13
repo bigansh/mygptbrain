@@ -170,3 +170,10 @@ export const deleteChat = async (id) => {
   });
   return response.data;
 };
+
+export const verifyEmail = async (email) => {
+	const res = await axios.get(
+		`https://disposable.debounce.io/?email=${email}`
+	)
+	return res.data.disposable
+}
