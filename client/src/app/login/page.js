@@ -14,8 +14,6 @@ import {
 	Text,
 	useToast,
 } from '@chakra-ui/react'
-import axios from 'axios'
-import { set } from 'mongoose'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
