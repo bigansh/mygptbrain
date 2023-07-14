@@ -41,13 +41,12 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         ? true
         : false,
     onSuccess: (data) => {
-      console.log(data, "read chat data 1");
+      console.log(data, "read chat data 1" , currentThread);
     },
     onError: (error) => {
-      console.log(data, "read chat data 1");
+      console.log(data, "error chat data 1");
     },
   });
-  console.log(threadData, "threadDataaaaye");
   return (
     <Flex
       transition={"all 0.5s ease-in"}

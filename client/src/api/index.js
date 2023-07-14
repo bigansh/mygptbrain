@@ -32,9 +32,7 @@ const authToken =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg'
 
 export const authenticateUserByGoogle = async () => {
-	console.log(
-		`https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=${authToken}`
-	)
+
 	window.location.href = `https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=${authToken}`
 }
 

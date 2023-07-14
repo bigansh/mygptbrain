@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import { ChatMessagesContainer, ChatInput } from "@/app/dashboard/components";
 import { Button, Flex } from "@chakra-ui/react";
 const ChatWrapper = ({isSidebarOpen}) => {
-  console.log(isSidebarOpen, "isSidebarOpen");
   const { base, base800, base700, text } = useColors();
   const [inputValue, setInputValue] = useState("");
   const divRef = useRef();
