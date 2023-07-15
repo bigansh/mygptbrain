@@ -4,6 +4,7 @@ import twitterCallback from '../../functions/platforms/twitter/twitterCallback.j
 import googleCallback from '../../functions/platforms/google/googleCallback.js'
 import pocketCallback from '../../functions/platforms/pocket/pocketCallback.js'
 import notionCallback from '../../functions/platforms/notion/notionCallback.js'
+import redditCallback from '../../functions/platforms/reddit/redditCallback.js'
 
 /**
  * A controller to handle the auth callback requests
@@ -24,8 +25,9 @@ const callback = async (req, res) => {
 		 */
 		let authObject = cache.get(state)
 
-		if (!authObject)
+		if (!authObject) {
 			throw new Error('Authorization token expired. Please try again.')
+		}
 
 		if (platform === 'twitter') {
 			const { profile_id } = await twitterCallback(
@@ -45,6 +47,10 @@ const callback = async (req, res) => {
 			sessionToken = await res.jwtSign({ profile_id })
 		} else if (platform === 'notion') {
 			const { profile_id } = await notionCallback(state, code, authObject)
+
+			sessionToken = await res.jwtSign({ profile_id })
+		} else if (platform === 'reddit') {
+			const { profile_id } = await redditCallback(state, code, authObject)
 
 			sessionToken = await res.jwtSign({ profile_id })
 		}
