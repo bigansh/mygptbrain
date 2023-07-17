@@ -24,7 +24,9 @@ const initialize = async (req, res) => {
 		let authObject
 
 		if (query_type === 'twitter') {
-			if (!profile_id) throw new Error('No profile_id param found.')
+			if (!profile_id) {
+				throw new Error('No profile_id param found.')
+			}
 
 			const { url, state, codeVerifier } = twitterAuthFlow()
 
@@ -47,7 +49,9 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'pocket') {
-			if (!profile_id) throw new Error('No profile_id param found.')
+			if (!profile_id) {
+				throw new Error('No profile_id param found.')
+			}
 
 			const { state, url, code } = await pocketAuthFlow()
 
@@ -57,7 +61,9 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'reddit') {
-			if (!profile_id) throw new Error('No profile_id param found.')
+			if (!profile_id) {
+				throw new Error('No profile_id param found.')
+			}
 
 			const { state, url } = redditAuthFlow()
 
@@ -67,7 +73,9 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'notion') {
-			if (!profile_id) throw new Error('No profile_id param found.')
+			if (!profile_id) {
+				throw new Error('No profile_id param found.')
+			}
 
 			const { state, url } = notionAuthFlow()
 
@@ -77,7 +85,9 @@ const initialize = async (req, res) => {
 
 			res.status(302).redirect(url)
 		} else if (query_type === 'signup') {
-			if (!req.body.userObject) throw new Error('User object missing.')
+			if (!req.body.userObject) {
+				throw new Error('User object missing.')
+			}
 
 			const { profile_id } = await signupAuthFlow(req.body.userObject)
 
@@ -85,7 +95,9 @@ const initialize = async (req, res) => {
 
 			res.status(200).send({ sessionToken: sessionToken })
 		} else if (query_type === 'login') {
-			if (!req.body.userObject) throw new Error('User object missing.')
+			if (!req.body.userObject) {
+				throw new Error('User object missing.')
+			}
 
 			const { profile_id } = await loginAuthFlow(req.body.userObject)
 

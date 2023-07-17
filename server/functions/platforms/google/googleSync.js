@@ -1,4 +1,5 @@
 import { google } from 'googleapis'
+import pdf from 'pdf-parse/lib/pdf-parse.js'
 
 import client from './client.js'
 
@@ -13,16 +14,19 @@ const googleSync = async (profile_id) => {
 		// const res = await services.files.list({
 		// 	fields: 'nextPageToken, files(id, name, mimeType)',
 		// 	spaces: 'drive',
+		// 	q: "name='Resume.pdf'",
 		// })
 
 		// console.log(res.data.files)
 
 		const file = await services.files.get({
-			fileId: '1Y5v_-AIhdZwt8Ux50Q0sKOOHL27-Plgr',
+			fileId: '1HuoHllcKn9qefd-18lZ-PoMQjChR6cmW',
 			alt: 'media',
 		})
 
-		console.log(atob(file.data))
+		const blob = new Blob(file.data)
+
+		console.log(blob)
 
 		// const foundKeepIds = []
 		// const foundDriveIds = await findDocuments({
