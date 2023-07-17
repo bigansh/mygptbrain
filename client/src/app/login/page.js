@@ -140,7 +140,7 @@ const Login = () => {
 					</Flex>
 				) : (
 					<>
-						<Box position='relative' py='10' fontSize={'18px'}>
+						<Box position='relative' py='4' fontSize={'18px'}>
 							<Divider
 								bg={'black'}
 								borderColor={'black'}
