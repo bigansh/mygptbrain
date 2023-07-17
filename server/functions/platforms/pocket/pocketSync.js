@@ -36,8 +36,6 @@ const pocketSync = async (profile_id) => {
 
 		const promiseArray = []
 
-		console.log(foundArticleIds)
-
 		for (const article of pocketArticles) {
 			console.log(article.item_id)
 
@@ -46,7 +44,6 @@ const pocketSync = async (profile_id) => {
 					(pocket_article_id) => pocket_article_id === article.item_id
 				)
 			) {
-				console.log('hi')
 				continue
 			}
 

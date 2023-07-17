@@ -6,6 +6,7 @@ import pocketAuthFlow from '../../functions/platforms/pocket/pocketAuthFlow.js'
 import signupAuthFlow from '../../functions/platforms/login/signupAuthFlow.js'
 import loginAuthFlow from '../../functions/platforms/login/loginAuthFlow.js'
 import notionAuthFlow from '../../functions/platforms/notion/notionAuthFlow.js'
+import redditAuthFlow from '../../functions/platforms/reddit/redditAuthFlow.js'
 
 /**
  * A controller to handle the auth initialization requests

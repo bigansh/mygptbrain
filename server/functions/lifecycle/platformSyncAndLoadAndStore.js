@@ -15,15 +15,15 @@ const platformSyncAndLoadAndStore = async (profile_id) => {
 
 		const platforms = []
 
-		// if (userAuth.pocket_id) {
-		// 	platforms.push(pocketSync(profile_id))
-		// }
-		// if (userAuth.reddit_id) {
-		// 	platforms.push(redditSync(profile_id))
-		// }
-		// if (userAuth.twitter_id) {
-		// 	platforms.push(twitterSync(profile_id))
-		// }
+		if (userAuth.pocket_id) {
+			platforms.push(pocketSync(profile_id))
+		}
+		if (userAuth.reddit_id) {
+			platforms.push(redditSync(profile_id))
+		}
+		if (userAuth.twitter_id) {
+			platforms.push(twitterSync(profile_id))
+		}
 		if (
 			userAuth.google.scope_authenticated.some((scope) =>
 				['keep', 'drive'].includes(scope)

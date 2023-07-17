@@ -2,7 +2,7 @@ import { OpenAI } from 'langchain/llms/openai'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 
 export const model = new OpenAI({
-	modelName: 'gpt-3.5-turbo',
+	modelName: 'gpt-3.5-turbo-16k-0613',
 	openAIApiKey: process.env.OPENAI_ID,
 })
 
