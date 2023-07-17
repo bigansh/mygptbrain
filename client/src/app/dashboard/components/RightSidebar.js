@@ -9,7 +9,14 @@ import { SlCloudUpload } from 'react-icons/sl'
 import { IoDocumentTextOutline } from 'react-icons/io5'
 import { useThreads } from '@/context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createChat, getDoc, getUser, readChat, uploadDoc } from '@/api'
+import {
+	createChat,
+	getDoc,
+	getUser,
+	readChat,
+	syncDoc,
+	uploadDoc,
+} from '@/api'
 import {
 	Flex,
 	Heading,
@@ -90,6 +97,26 @@ const RightSideBar = () => {
 
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(['documents'])
+			// queryClient.setQueryData(['documents'], (oldData) => [
+			// 	...oldData,
+			// 	data.chat,
+			// ])
+		},
+		onError: (error) => {
+			console.log(error)
+		},
+	})
+
+	const {
+		data: syncDocData,
+		mutate: syncDocMutate,
+		isLoading: syncDocIsLoading,
+	} = useMutation({
+		mutationFn: () => syncDoc(),
+
+		onSuccess: (data) => {
+			console.log(data, 'sync doc')
+			//queryClient.invalidateQueries(['documents'])
 			// queryClient.setQueryData(['documents'], (oldData) => [
 			// 	...oldData,
 			// 	data.chat,
@@ -206,7 +233,17 @@ const RightSideBar = () => {
 
 					<FunctionalBtn
 						title='sync documents'
-						icon={<IoIosSync fontSize={30} />}
+						onClick={() => {
+							console.log('trigger')
+							syncDocMutate()
+						}}
+						icon={
+							syncDocIsLoading ? (
+								<Spinner />
+							) : (
+								<IoIosSync fontSize={30} />
+							)
+						}
 					/>
 					<Input
 						type='file'
