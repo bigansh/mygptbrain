@@ -39,7 +39,7 @@ const Signup = () => {
 
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault()
-		if (verifyEmail(userDetails.email)) {
+		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
 			toast({
 				title: 'Email not valid. Please use a valid email address',
@@ -134,7 +134,7 @@ const Signup = () => {
 								bg: '#DFE8FF',
 							}}
 							color={'black'}
-							onClick={handleLoginSubmit}
+							cursor={'pointer'} onClick={handleLoginSubmit}
 							mt={2}
 						>
 							signup
@@ -165,7 +165,7 @@ const Signup = () => {
 							gap={2.5}
 							fontSize={'18px'}
 							_hover={{ opacity: '80%' }}
-							onClick={() => authenticateUserByGoogle()}
+							cursor={'pointer'} onClick={() => authenticateUserByGoogle()}
 						>
 							<div>Continue with Google</div>
 							<FaGoogle />

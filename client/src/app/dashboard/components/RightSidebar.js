@@ -164,6 +164,7 @@ const RightSideBar = () => {
 					/>
 					<FunctionalBtn
 						title='new thread'
+						cursor={'pointer'}
 						onClick={() => {
 							console.log('chat clicked')
 							setCurrentThread('new')
@@ -176,44 +177,49 @@ const RightSideBar = () => {
 						borderColor='black.900'
 						w={'100%'}
 					></Box>
-					{threadsIsLoading ? (
-						<Spinner m={'auto'} mt={4} />
-					) : (
-						<Flex
-							flexDir={'column'}
-							gap={2}
-							maxH={'400px'}
-							overflow={'scroll'}
-						>
-							{filteredThreads?.map((item, index) => (
-								<Button
-									display={'flex'}
-									justifyContent={'flex-start'}
-									key={item.chat_id}
-									background={
-										currentThread === item.chat_id
-											? base700
-											: base800
-									}
-									_hover={{ background: base700 }}
-									onClick={() => {
-										setCurrentThread(item.chat_id)
-										setCurrentView('chat')
-									}}
-									py={4}
-									px='10px'
-									gap={2}
-									fontWeight={'400'}
-								>
-									<PiChatsThin fontSize={24} />
-									<Text isTruncated>{item.chat_name}</Text>
-								</Button>
-							))}
-						</Flex>
-					)}
 				</Flex>
 			)}
 
+			{sidebarTopic == 'threads' &&
+				(threadsIsLoading ? (
+					<Spinner m={'auto'} mt={4} />
+				) : (
+					<Flex
+						flexDir={'column'}
+						gap={2}
+						px={6}
+						//maxH={'400px'}
+						overflow={'scroll'}
+					>
+						{filteredThreads?.map((item, index) => (
+							<Button
+								display={'flex'}
+								justifyContent={'flex-start'}
+								key={item.chat_id}
+								gridTemplateColumns={'24px 1fr'}
+								background={
+									currentThread === item.chat_id
+										? base700
+										: base800
+								}
+								_hover={{ background: base700 }}
+								cursor={'pointer'}
+								onClick={() => {
+									setCurrentThread(item.chat_id)
+									setCurrentView('chat')
+								}}
+								py={4}
+								px='10px'
+								gap={2}
+								fontWeight={'400'}
+								alignContent={'center'}
+							>
+								<PiChatsThin minW={24} fontSize={24} />
+								<Text textAlign={'initial'} isTruncated>{item.chat_name}</Text>
+							</Button>
+						))}
+					</Flex>
+				))}
 			{sidebarTopic == 'documents' && (
 				<Flex flexDir={'column'} gap={2} p={6}>
 					<Heading fontSize={'2xl'} fontWeight={'400'}>
@@ -233,6 +239,7 @@ const RightSideBar = () => {
 
 					<FunctionalBtn
 						title='sync documents'
+						cursor={'pointer'}
 						onClick={() => {
 							console.log('trigger')
 							syncDocMutate()
@@ -254,6 +261,7 @@ const RightSideBar = () => {
 
 					<FunctionalBtn
 						title={'upload document'}
+						cursor={'pointer'}
 						onClick={() => uploadRef.current.click()}
 						icon={
 							uploadDocIsLoading ? (
@@ -268,43 +276,51 @@ const RightSideBar = () => {
 						borderColor='black.900'
 						w={'100%'}
 					></Box>
-					{docsIsLoading ? (
-						<Spinner m={'auto'} mt={4} />
-					) : (
-						<Flex
-							flexDir={'column'}
-							gap={2}
-							maxH={'400px'}
-							overflow={'scroll'}
-						>
-							{filteredDocuments?.map((item, index) => (
-								<Button
-									display={'flex'}
-									justifyContent={'flex-start'}
-									key={item.document_id}
-									background={
-										currentDocument === item.document_id
-											? base700
-											: base800
-									}
-									_hover={{ background: base700 }}
-									onClick={() => {
-										setCurrentDocument(item.document_id)
-										setCurrentView('document')
-									}}
-									py={4}
-									px='10px'
-									gap={2}
-									fontWeight={'400'}
-								>
-									<IoDocumentTextOutline fontSize={24} />
-									<Text isTruncated>{item.heading}</Text>
-								</Button>
-							))}
-						</Flex>
-					)}
 				</Flex>
 			)}
+			{sidebarTopic == 'documents' &&
+				(docsIsLoading ? (
+					<Spinner m={'auto'} mt={4} />
+				) : (
+					<Flex
+						flexDir={'column'}
+						gap={2}
+						px={6}
+						//maxH={'400px'}
+						overflow={'scroll'}
+					>
+						{filteredDocuments?.map((item, index) => (
+							<Button
+								display={'grid'}
+								gridTemplateColumns={'24px 1fr'}
+								justifyContent={'flex-start'}
+								key={item.document_id}
+								background={
+									currentDocument === item.document_id
+										? base700
+										: base800
+								}
+								_hover={{ background: base700 }}
+								cursor={'pointer'}
+								onClick={() => {
+									setCurrentDocument(item.document_id)
+									setCurrentView('document')
+								}}
+								py={4}
+								px='10px'
+								gap={2}
+								fontWeight={'400'}
+								alignContent={'center'}
+							>
+								<IoDocumentTextOutline
+									minW={24}
+									fontSize={24}
+								/>
+								<Text textAlign={'initial'} isTruncated>{item.heading}</Text>
+							</Button>
+						))}
+					</Flex>
+				))}
 			<Box
 				borderTop='2px'
 				borderColor='black.900'
@@ -320,6 +336,7 @@ const RightSideBar = () => {
 					</Heading>
 					<Button
 						h={'auto'}
+						cursor={'pointer'}
 						onClick={toggleColorMode}
 						bg={'transparent'}
 						ml={'auto'}
@@ -335,6 +352,7 @@ const RightSideBar = () => {
 				<Heading
 					fontSize={'2xl'}
 					fontWeight={'400'}
+					cursor={'pointer'}
 					onClick={() => {
 						setSidebarTopic(
 							sidebarTopic !== 'documents'
@@ -351,6 +369,7 @@ const RightSideBar = () => {
 				<Heading
 					fontSize={'2xl'}
 					fontWeight={'400'}
+					cursor={'pointer'}
 					onClick={onOpenSetting}
 				>
 					settings

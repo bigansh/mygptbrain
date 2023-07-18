@@ -19,7 +19,7 @@ export default function Home() {
       <Box bg="blue.500" opacity="50%" height={20} w={20}></Box>
 
       <Text>3frgthyju4hntbgrvfd</Text>
-      <Button onClick={toggleColorMode}>Toggle Theme</Button>
+      <Button cursor={'pointer'} onClick={toggleColorMode}>Toggle Theme</Button>
     </Flex>
   );
 }

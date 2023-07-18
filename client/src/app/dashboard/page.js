@@ -22,9 +22,9 @@ import {
 	InputGroup,
 	InputLeftElement,
 	InputRightElement,
-  useToast,
+	useToast,
 } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BsLayoutSidebarInsetReverse } from 'react-icons/bs'
 import {
 	ChatWrapper,
@@ -64,7 +64,13 @@ const Dashboard = () => {
 		isOpen: isOpenOnboarding,
 		onOpen: onOpenOnboarding,
 		onClose: onCloseOnboarding,
-	} = useDisclosure({ defaultIsOpen: true })
+	} = useDisclosure({ defaultIsOpen: !localStorage.getItem('modal-display') })
+
+	useEffect(() => {
+		if (currentView == 'document') {
+			setIsSidebarOpen(false)
+		}
+	}, [currentView])
 
 	return (
 		<Flex
@@ -74,7 +80,7 @@ const Dashboard = () => {
 			color={text}
 			pos={'relative'}
 		>
-			{/* <button onClick={onOpenOnboarding}>close open modal</button> */}
+			{/* <button cursor={'pointer'} onClick={onOpenOnboarding}>close open modal</button> */}
 			<RightSideBar />
 			{currentView == 'chat' ? (
 				<ChatWrapper isSidebarOpen={isSidebarOpen} />
@@ -85,20 +91,23 @@ const Dashboard = () => {
 				isSidebarOpen={isSidebarOpen}
 				setIsSidebarOpen={setIsSidebarOpen}
 			/>
-			<Button
-				p={'10px'}
-				onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-				position={'absolute'}
-				right={'0'}
-				bottom={0}
-				borderLeftRadius={4}
-				borderRightRadius={0}
-				background={base700}
-				display={isSidebarOpen ? 'none' : 'flex'}
-			>
-				{' '}
-				<BsLayoutSidebarInsetReverse fontSize={24} />
-			</Button>
+			{currentView == 'chat' && (
+				<Button
+					cursor={'pointer'}
+					p={'10px'}
+					onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+					position={'absolute'}
+					right={'0'}
+					bottom={0}
+					borderLeftRadius={4}
+					borderRightRadius={0}
+					background={base700}
+					display={isSidebarOpen ? 'none' : 'flex'}
+				>
+					{' '}
+					<BsLayoutSidebarInsetReverse fontSize={24} />
+				</Button>
+			)}
 			<OnboardingModal
 				isOpenOnboarding={isOpenOnboarding}
 				onOpenOnboarding={onOpenOnboarding}
@@ -117,15 +126,19 @@ const OnboardingModal = ({
 }) => {
 	const [link, setLink] = useState('')
 	const uploadRef = useRef(null)
-  const toast = useToast()
+	const toast = useToast()
 	const queryClient = useQueryClient()
 	const { data, isLoading } = useQuery({
 		queryKey: ['user'],
 		queryFn: getUser,
 	})
+
 	const handleLinkChange = (e) => {
 		setLink(e.target.value)
 	}
+	useEffect(() => {
+		localStorage.setItem('modal-display', true)
+	}, [])
 
 	const {
 		data: uploadDocData,
@@ -136,14 +149,14 @@ const OnboardingModal = ({
 
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(['documents'])
-      onCloseOnboarding()
-      toast({
-        title: 'Document uploaded successfully',
-        position: 'top',
-        variant: 'left-accent',
-        status: 'success',
-        duration: 3000,
-      })
+			onCloseOnboarding()
+			toast({
+				title: 'Document uploaded successfully',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 			// queryClient.setQueryData(['documents'], (oldData) => [
 			// 	...oldData,
 			// 	data.chat,
@@ -164,7 +177,10 @@ const OnboardingModal = ({
 		>
 			<ModalOverlay />
 			<ModalContent h={'80vh'}>
-				<ModalCloseButton onClick={onCloseOnboarding} />
+				<ModalCloseButton
+					cursor={'pointer'}
+					onClick={onCloseOnboarding}
+				/>
 				<ModalBody
 					w={'60%'}
 					m={'auto'}
@@ -276,6 +292,7 @@ const OnboardingModal = ({
 									px='10px'
 									gap={2}
 									fontWeight={'400'}
+									cursor={'pointer'}
 									onClick={() => uploadRef.current.click()}
 								>
 									upload document
@@ -326,6 +343,7 @@ const PlatformCard = ({ title, color, icon }) => {
 		<Flex
 			flexDir={'column'}
 			gap={2}
+			cursor={'pointer'}
 			onClick={() =>
 				connectPlatform({
 					platform: title,

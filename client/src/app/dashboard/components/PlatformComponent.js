@@ -74,7 +74,7 @@ const PlatformCard = ({ name, color, icon, state }) => {
 		<Flex
 			flexDir={'column'}
 			gap={2}
-			onClick={() =>
+			cursor={'pointer'} onClick={() =>
 				connectPlatform({
 					platform: name,
 					profileId: data?.profile_id,

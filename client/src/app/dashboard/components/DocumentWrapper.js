@@ -1,9 +1,11 @@
 import { useColors } from '@/utils/colors'
 import React, { useRef, useState } from 'react'
-import { Button, Flex, Heading ,Text } from '@chakra-ui/react'
+import { Button, Flex, Heading, Text } from '@chakra-ui/react'
 import { useThreads } from '@/context'
 import { getDoc, getUser } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { BsLink } from 'react-icons/bs'
+import { LuDelete } from 'react-icons/lu'
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const { base, base800, base700, text } = useColors()
 	const {
@@ -50,15 +52,25 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			h={'100vh'}
 			overflow={'scroll'}
 			gap={4}
-			p={5}
+			p={6}
 			w={isSidebarOpen ? '60vw' : '80vw'}
 			maxW={isSidebarOpen ? '60vw' : '80vw'}
 			margin={'auto'}
 		>
-			<Heading>{documentData[0]?.heading}</Heading>
-
-			{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}
-			<Text whiteSpace={'break-spaces'}>{documentData[0]?.body}</Text>
+			<Flex flexDir={'column'} w={'65vw'} minW={'55vw'} maxW={'65vw'} mx={'auto'}>
+				{' '}
+				<Flex justifyContent={'space-between'}>
+					<Heading fontSize={'2xl'} fontWeight={600}>
+						{documentData[0]?.heading}
+					</Heading>
+					<Flex gap={2}>
+						<BsLink fontSize={20} />
+						<LuDelete fontSize={20} />
+					</Flex>
+				</Flex>
+				{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}
+				<Text whiteSpace={'break-spaces'}>{documentData[0]?.body}</Text>
+			</Flex>
 		</Flex>
 	) : (
 		<Flex

@@ -13,6 +13,7 @@ import {
 	Button,
 	Text,
 	useToast,
+	Spinner,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -20,13 +21,12 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
-
-
 const Login = () => {
 	const [userDetails, setUserDetails] = useState({
 		email: '',
 		password: '',
 	})
+	const [loading, setLoading] = useState(false)
 
 	const toast = useToast()
 	const router = useRouter()
@@ -45,8 +45,9 @@ const Login = () => {
 	}
 
 	const handleLoginSubmit = async (e) => {
+		setLoading(true)
 		e.preventDefault()
-		if (verifyEmail(userDetails.email)) {
+		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
 			toast({
 				title: 'Email not valid. Please use a valid email address',
@@ -55,6 +56,7 @@ const Login = () => {
 				status: 'error',
 				duration: 3000,
 			})
+			setLoading(false)
 			return
 		}
 
@@ -74,7 +76,7 @@ const Login = () => {
 				})
 			}
 			localStorage.setItem('x-session-token', res.data.sessionToken)
-			router.router('/dashboard')
+			router.push('/dashboard')
 		} catch (error) {
 			console.log(error)
 			toast({
@@ -86,6 +88,7 @@ const Login = () => {
 			})
 			localStorage.removeItem('x-session-token')
 		}
+		setLoading(false)
 	}
 
 	return (
@@ -128,10 +131,10 @@ const Login = () => {
 								bg: '#DFE8FF',
 							}}
 							color={'black'}
-							onClick={handleLoginSubmit}
+							cursor={'pointer'} onClick={handleLoginSubmit}
 							mt={2}
 						>
-							login
+							{loading ? <Spinner /> : 'login'}
 						</Button>
 
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
@@ -160,7 +163,7 @@ const Login = () => {
 							gap={2.5}
 							fontSize={'18px'}
 							_hover={{ opacity: '80%' }}
-							onClick={() => authenticateUserByGoogle()}
+							cursor={'pointer'} onClick={() => authenticateUserByGoogle()}
 						>
 							<div>Continue with Google</div>
 							<FaGoogle />

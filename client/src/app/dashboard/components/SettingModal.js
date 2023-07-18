@@ -71,19 +71,19 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
               </Heading>
               <SidebarItem
                 activeButton={activeButton}
-                onClick={() => handleButtonClick("account")}
+                cursor={'pointer'} onClick={() => handleButtonClick("account")}
                 title="account"
                 icon={<AiOutlineUser />}
               />
               <SidebarItem
                 activeButton={activeButton}
-                onClick={() => handleButtonClick("platform")}
+                cursor={'pointer'} onClick={() => handleButtonClick("platform")}
                 title="platform"
                 icon={<PiPuzzlePiece />}
               />
               <SidebarItem
                 activeButton={activeButton}
-                onClick={() => handleButtonClick("billing")}
+                cursor={'pointer'} onClick={() => handleButtonClick("billing")}
                 title="billing"
                 icon={<GoCreditCard />}
               />
@@ -104,7 +104,7 @@ const SidebarItem = ({ title, icon, onClick, activeButton }) => {
   const { base, base800, base700, text } = useColors();
   return (
     <Button
-      onClick={onClick}
+      cursor={'pointer'} onClick={onClick}
       bg={activeButton == title ? base700 : base800}
       w={"100%"}
       // _active={{ background: base800 }}

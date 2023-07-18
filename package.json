@@ -4,5 +4,8 @@
     "description": "QnA over your personal data and bookmarks",
     "private": "true",
     "author": "myGPTBrain",
-    "license": "UNLICENSED"
-  }
+    "license": "UNLICENSED",
+    "dependencies": {
+        "typewriter-effect": "^2.20.1"
+    }
+}

@@ -98,7 +98,7 @@ const AccountComponent = () => {
       />
       <Flex gap={5} mt={5}>
         <Button
-          //onClick={onClick}
+          //cursor={'pointer'} onClick={cursor={'pointer'} onClick}
           bg={base700}
           justifyContent={"space-between"}
           fontWeight={"400"}
@@ -106,7 +106,7 @@ const AccountComponent = () => {
           update account
         </Button>
         <Button
-          onClick={onOpenDelete}
+          cursor={'pointer'} onClick={onOpenDelete}
           bg={"#FFDFDF"}
           justifyContent={"space-between"}
           fontWeight={"400"}
@@ -136,7 +136,7 @@ const AccountComponent = () => {
               <Button bg={"#FFDFDF"} mr={3}>
                 Delete
               </Button>
-              <Button onClick={onCloseDelete}>Cancel</Button>
+              <Button cursor={'pointer'} onClick={onCloseDelete}>Cancel</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -254,7 +254,7 @@ const AccountComponent = () => {
     // 				<button
     // 					type='button'
     // 					className='mr-2 px-2 py-2 bg-[#DFE8FF80] bg-opacity-50 text-black rounded-lg focus:outline-none text-lg w-full'
-    // 					onClick={handleUpdatePassword}
+    // 					cursor={'pointer'} onClick={handleUpdatePassword}
     // 				>
     // 					Update Password
     // 				</button>
@@ -264,7 +264,7 @@ const AccountComponent = () => {
     // 				<button
     // 					type='button'
     // 					className='mr-2 px-2 py-2 bg-[#FFDFDF80] bg-opacity-50 text-black rounded-lg focus:outline-none text-lg w-full'
-    // 					onClick={handleDeleteAccount}
+    // 					cursor={'pointer'} onClick={handleDeleteAccount}
     // 				>
     // 					Delete Account
     // 				</button>
@@ -274,7 +274,7 @@ const AccountComponent = () => {
     // 				<button
     // 					type='button'
     // 					className='mr-2 px-2 py-2 bg-[#DFE8FF80] bg-opacity-50 text-black rounded-lg focus:outline-none text-lg w-full'
-    // 					onClick={handleDeleteAccount}
+    // 					cursor={'pointer'} onClick={handleDeleteAccount}
     // 				>
     // 					confirm password
     // 				</button>
@@ -284,7 +284,7 @@ const AccountComponent = () => {
     // 				<button
     // 					type='button'
     // 					className='mr-2 px-2 py-2 bg-[#FFDFDF80] bg-opacity-50 text-black rounded-lg focus:outline-none text-lg w-full'
-    // 					onClick={handleDeleteAccount}
+    // 					cursor={'pointer'} onClick={handleDeleteAccount}
     // 				>
     // 					Delete Account
     // 				</button>

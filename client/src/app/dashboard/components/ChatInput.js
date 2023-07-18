@@ -102,7 +102,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
-			console.log('send')
+			currentThread == 'new' ? addMutate() : updateMutate()
 		}
 	}
 
@@ -127,7 +127,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				rounded={'md'}
 			>
 				<Textarea
-					placeholder='Type your message...'
+					placeholder='go ahead! ask your second brain, a question!'
 					value={inputValue}
 					onChange={(e) => setInputValue(e.target.value)}
 					border={'transparent'}
@@ -157,6 +157,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					transition='height none'
 				/>
 				<Box
+					cursor={'pointer'}
 					onClick={() => {
 						currentThread == 'new' ? addMutate() : updateMutate()
 					}}
