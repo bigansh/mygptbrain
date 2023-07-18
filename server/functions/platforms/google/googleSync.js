@@ -1,51 +1,118 @@
-import { google } from 'googleapis'
+import { drive_v3, google } from 'googleapis'
 import pdf from 'pdf-parse/lib/pdf-parse.js'
+import xss from 'xss'
+import officeParser from 'officeparser'
+import toArray from 'stream-to-array'
 
 import client from './client.js'
 
 import findDocuments from '../../document/findDocuments.js'
+import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
 
+import { Document } from '../../../utils/initializers/prisma.js'
+
+/**
+ * A function that syncs Google Drive and Keep files
+ *
+ * @param {String} profile_id
+ */
 const googleSync = async (profile_id) => {
 	try {
+		const foundDriveIds = await findDocuments({
+			profile_id: profile_id,
+			documentMetadata: {
+				drive_document_id: { not: null },
+			},
+		}).then((documents) =>
+			documents.map(
+				(document) => document.documentMetadata.drive_document_id
+			)
+		)
+
 		const googleClient = await client(profile_id)
 
-		const services = google.drive({ version: 'v3', auth: googleClient })
+		const drive = google.drive({ version: 'v3', auth: googleClient })
 
-		// const res = await services.files.list({
-		// 	fields: 'nextPageToken, files(id, name, mimeType)',
-		// 	spaces: 'drive',
-		// 	q: "name='Resume.pdf'",
-		// })
+		/**
+		 * @type {drive_v3.Schema$File[]}
+		 */
+		let driveFiles = [],
+			pageToken
 
-		// console.log(res.data.files)
+		do {
+			const response = await drive.files.list({
+				fields: 'nextPageToken, files(id, name, mimeType)',
+				spaces: 'drive',
+				pageToken: pageToken,
+			})
 
-		const file = await services.files.get({
-			fileId: '1HuoHllcKn9qefd-18lZ-PoMQjChR6cmW',
-			alt: 'media',
-		})
+			if (response.data.files) {
+				response.data.files.forEach((file) => {
+					if (
+						['application/pdf'].some(
+							(fileType) => fileType === file.mimeType
+						) &&
+						!foundDriveIds.includes(file.id)
+					) {
+						driveFiles.push(file)
+					}
+				})
+			}
 
-		const blob = new Blob(file.data)
+			pageToken = response.data.nextPageToken
+		} while (pageToken)
 
-		console.log(blob)
+		const promiseArray = []
 
-		// const foundKeepIds = []
-		// const foundDriveIds = await findDocuments({
-		// 	profile_id: profile_id,
-		// 	documentMetadata: {
-		// 		drive_document_id: { not: null },
-		// 		keep_id: { not: null },
-		// 	},
-		// }).then((documents) =>
-		// 	documents.map((document) => {
-		// 		foundKeepIds.push(document.documentMetadata?.keep_id)
+		for (const file of driveFiles) {
+			const saveAndLoadPromise = new Promise(async (resolve) => {
+				const fileData = await drive.files.get(
+					{ fileId: file.id, alt: 'media' },
+					{ responseType: 'stream' }
+				)
 
-		// 		return document.documentMetadata?.drive_document_id
-		// 	})
-		// )
+				let content
 
-		// const promiseArray = []
+				const fileBuffer = await toArray(fileData.data).then((chunks) =>
+					Buffer.concat(chunks)
+				)
 
-		// return await Promise.all(promiseArray)
+				if (!fileBuffer) {
+					throw new Error('Unable to get the document Buffer.')
+				}
+
+				if (file.mimeType === 'application/pdf') {
+					content = (await pdf(fileBuffer))?.text
+
+					content = xss(content)
+				}
+
+				const createdDocument = await Document.create({
+					data: {
+						body: content,
+						heading: file.name,
+						profile_id: profile_id,
+						documentMetadata: {
+							create: {
+								source: 'drive',
+								document_file_type: file.mimeType,
+								url: `https://drive.google.com/file/d/${file.id}`,
+								drive_document_id: file.id,
+							},
+						},
+					},
+					include: { documentMetadata: true },
+				})
+
+				await documentLoadAndStore(profile_id, createdDocument)
+
+				resolve(createdDocument)
+			})
+
+			promiseArray.push(saveAndLoadPromise)
+		}
+
+		return await Promise.all(promiseArray)
 	} catch (error) {
 		throw error
 	}

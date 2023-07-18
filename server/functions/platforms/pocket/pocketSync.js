@@ -37,8 +37,6 @@ const pocketSync = async (profile_id) => {
 		const promiseArray = []
 
 		for (const article of pocketArticles) {
-			console.log(article.item_id)
-
 			if (
 				foundArticleIds.some(
 					(pocket_article_id) => pocket_article_id === article.item_id
