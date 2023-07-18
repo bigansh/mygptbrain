@@ -19,9 +19,9 @@ const callbackAuth = fastifyPlugin(
 			 */
 			(req, res, done) => {
 				try {
-					if (!req.params.platform)
+					if (!req.params.platform) {
 						throw new Error('Undefined callback platform.')
-					else if (
+					} else if (
 						![
 							'twitter',
 							'reddit',
@@ -30,8 +30,9 @@ const callbackAuth = fastifyPlugin(
 							'pocket',
 							'microsoft',
 						].some((platform) => platform === req.params.platform)
-					)
+					) {
 						throw new Error('Unsupported auth platform.')
+					}
 
 					done()
 				} catch (error) {

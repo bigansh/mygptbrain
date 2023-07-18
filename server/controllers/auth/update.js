@@ -12,8 +12,9 @@ const update = async (req, res) => {
 
 		const { userObject } = req.body
 
-		if (!userObject && !userObject.authDetails)
+		if (!userObject && !userObject.authDetails) {
 			throw new Error('No userObject found!')
+		}
 
 		if (userObject.personalDetails.profile_id !== profile_id) {
 			throw new Error(
