@@ -1,3 +1,4 @@
+import { SearchIcon } from '@/icons'
 import { useColors } from '@/utils/colors'
 import {
 	InputGroup,
@@ -21,8 +22,8 @@ const Search = ({ title, searchTerm, setSearchTerm }) => {
 				placeholder={title}
 			/>
 			<InputRightElement width='4.5rem'>
-				<Button h='1.75rem' size='sm' bg={'transparent'}>
-					<GoSearch fontSize={24} />
+				<Button pr='0' h='1.75rem' size='sm' bg={'transparent'}>
+					<SearchIcon fill={text} />
 				</Button>
 			</InputRightElement>
 		</InputGroup>

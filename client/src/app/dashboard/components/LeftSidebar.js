@@ -13,7 +13,7 @@ import {
 	InputRightElement,
 	CheckboxIcon,
 	Spinner,
-	Box
+	Box,
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
@@ -23,6 +23,7 @@ import FunctionalBtn from './FunctionalBtn'
 import { HiOutlineFilter, HiOutlinePencil } from 'react-icons/hi'
 import { BsChevronDown } from 'react-icons/bs'
 import { set } from 'mongoose'
+import { ChevIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { text, base, base800, base700 } = useColors()
 
@@ -210,21 +211,21 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 					) : (
 						<FunctionalBtn
 							title={editName}
-							icon={<HiOutlinePencil fontSize={20} />}
+							icon={<EditIcon fill={text} />}
 							onClick={() => setNameEditing(true)}
 						/>
 					)}
 					<FunctionalBtn
 						title='llm model'
-						icon={<BsChevronDown fontSize={20} />}
+						icon={<ChevIcon fill={text} />}
 					/>
 					<FunctionalBtn
 						title='send type'
-						icon={<BsChevronDown fontSize={20} />}
+						icon={<ChevIcon fill={text} />}
 					/>
 					<FunctionalBtn
 						title='filter documents'
-						icon={<HiOutlineFilter fontSize={20} />}
+						icon={<FilterIcon fill={text} />}
 					/>
 				</Flex>
 			</Flex>

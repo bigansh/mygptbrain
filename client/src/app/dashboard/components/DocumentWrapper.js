@@ -6,6 +6,7 @@ import { getDoc, getUser } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { BsLink } from 'react-icons/bs'
 import { LuDelete } from 'react-icons/lu'
+import { DeleteIcon, LinkIcon } from '@/icons'
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const { base, base800, base700, text } = useColors()
 	const {
@@ -64,8 +65,8 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 						{documentData[0]?.heading}
 					</Heading>
 					<Flex gap={2}>
-						<BsLink fontSize={20} />
-						<LuDelete fontSize={20} />
+						<LinkIcon fill={text} />
+						<DeleteIcon fill="rgba(255, 0, 0, 1)" />
 					</Flex>
 				</Flex>
 				{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}

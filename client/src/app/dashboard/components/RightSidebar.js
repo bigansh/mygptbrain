@@ -1,16 +1,9 @@
 import { useRef, useState } from 'react'
-//import ThemeSwitcherButton from "../../../lib/ThemeSwitcher";
-//import Modal from "../Settings";
-import { IoIosSync } from 'react-icons/io'
-import { BsFillMoonStarsFill, BsPlusLg } from 'react-icons/bs'
+import { BsFillMoonStarsFill } from 'react-icons/bs'
 import { HiOutlineSun } from 'react-icons/hi'
-import { PiChatsThin } from 'react-icons/pi'
-import { SlCloudUpload } from 'react-icons/sl'
-import { IoDocumentTextOutline } from 'react-icons/io5'
 import { useThreads } from '@/context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-	createChat,
 	getDoc,
 	getUser,
 	readChat,
@@ -24,13 +17,6 @@ import {
 	useColorMode,
 	Button,
 	useDisclosure,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
 	Text,
 	Input,
 	Spinner,
@@ -39,6 +25,7 @@ import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
 import SettingModal from './SettingModal'
 import { useColors } from '@/utils/colors'
+import { AddIcon, CloudUploadIcon, RotateIcon, ThreadIcon , DocumentIcon } from '@/icons'
 
 const RightSideBar = () => {
 	const queryClient = useQueryClient()
@@ -170,7 +157,7 @@ const RightSideBar = () => {
 							setCurrentThread('new')
 							setCurrentView('chat')
 						}}
-						icon={<BsPlusLg fontSize={24} />}
+						icon={<AddIcon fill={text} />}
 					/>
 					<Box
 						borderTop='2px'
@@ -214,8 +201,10 @@ const RightSideBar = () => {
 								fontWeight={'400'}
 								alignContent={'center'}
 							>
-								<PiChatsThin minW={24} fontSize={24} />
-								<Text textAlign={'initial'} isTruncated>{item.chat_name}</Text>
+								<ThreadIcon fill={text} />
+								<Text textAlign={'initial'} isTruncated>
+									{item.chat_name}
+								</Text>
 							</Button>
 						))}
 					</Flex>
@@ -248,7 +237,7 @@ const RightSideBar = () => {
 							syncDocIsLoading ? (
 								<Spinner />
 							) : (
-								<IoIosSync fontSize={30} />
+								<RotateIcon fill={text} />
 							)
 						}
 					/>
@@ -267,7 +256,7 @@ const RightSideBar = () => {
 							uploadDocIsLoading ? (
 								<Spinner />
 							) : (
-								<SlCloudUpload fontSize={30} />
+								<CloudUploadIcon fill={text} />
 							)
 						}
 					/>
@@ -312,11 +301,10 @@ const RightSideBar = () => {
 								fontWeight={'400'}
 								alignContent={'center'}
 							>
-								<IoDocumentTextOutline
-									minW={24}
-									fontSize={24}
-								/>
-								<Text textAlign={'initial'} isTruncated>{item.heading}</Text>
+								<DocumentIcon fill={text} />
+								<Text textAlign={'initial'} isTruncated>
+									{item.heading}
+								</Text>
 							</Button>
 						))}
 					</Flex>
