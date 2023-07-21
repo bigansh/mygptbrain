@@ -20,10 +20,12 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 			Document.delete({ where: { document_id: document_id } }),
 
 			pineconeIndex._delete({
-				filter: {
-					document_id: document_id,
-					profile_id: profile_id,
-				},
+				deleteRequest: {
+					filter: {
+						document_id: document_id,
+						profile_id: profile_id,
+					},
+				}
 			}),
 		])
 
