@@ -22,7 +22,6 @@ import { PiChatsThin } from 'react-icons/pi'
 import FunctionalBtn from './FunctionalBtn'
 import { HiOutlineFilter, HiOutlinePencil } from 'react-icons/hi'
 import { BsChevronDown } from 'react-icons/bs'
-import { set } from 'mongoose'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base, base800, base700, base600, text } = useColors()
