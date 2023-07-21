@@ -1,6 +1,7 @@
 import { Document, User } from '../../utils/initializers/prisma.js'
 
 import scrapeArticle from '../processing/scrapeArticle.js'
+import scrapeThread from '../processing/scrapeThread.js'
 import documentLoadAndStore from './documentLoadAndStore.js'
 
 /**
@@ -11,12 +12,18 @@ import documentLoadAndStore from './documentLoadAndStore.js'
  */
 const scrapeAndLoadAndStore = async (url, profile_id) => {
 	try {
-		const articleData = await scrapeArticle(url)
+		let data
+
+		if (url.includes('https://twitter.com')) {
+			data = await scrapeThread(url)
+		} else {
+			data = await scrapeArticle(url)
+		}
 
 		const createdDocument = await Document.create({
 			data: {
-				body: articleData.content,
-				heading: articleData.title,
+				body: data.content,
+				heading: data.title,
 				profile_id: profile_id,
 				documentMetadata: {
 					create: {
@@ -27,8 +34,6 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			},
 			include: { documentMetadata: true },
 		})
-
-		console.log(createdDocument)
 
 		await documentLoadAndStore(profile_id, createdDocument)
 
