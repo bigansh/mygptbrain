@@ -43,7 +43,7 @@ import { LuPocket } from 'react-icons/lu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 import mixpanel from 'mixpanel-browser'
-mixpanel.init('7a66e2869d1d96ca1ecb0ac5cd114f56', {
+mixpanel.init(process.env.MIXPANEL, {
 	track_pageview: true,
 	persistence: 'localStorage',
 })
@@ -68,10 +68,9 @@ const Dashboard = () => {
 		queryFn: getUser,
 		onSuccess: (data) => {
 			mixpanel.identify(data?.profile_id)
-		}
+		},
 	})
 
-	
 	const { base, base800, base700, text } = useColors()
 	const {
 		isOpen: isOpenOnboarding,
