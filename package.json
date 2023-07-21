@@ -1,11 +1,8 @@
 {
     "name": "mygptbrain",
     "version": "1.0.0",
-    "description": "QnA over your personal data and bookmarks",
+    "description": "QnA over your personal data and bookmarks.",
     "private": "true",
     "author": "myGPTBrain",
-    "license": "UNLICENSED",
-    "dependencies": {
-        "typewriter-effect": "^2.20.1"
-    }
+    "license": "UNLICENSED"
 }

@@ -7,7 +7,9 @@ import { Chat } from '../../utils/initializers/prisma.js'
  */
 const updateChat = async (chatQueryObject) => {
 	try {
-		if (!chatQueryObject.chat_id) throw new Error('No chat ID found.')
+		if (!chatQueryObject.chat_id) {
+			throw new Error('No such chat found.')
+		}
 
 		return await Chat.update({
 			where: { chat_id: chatQueryObject.chat_id },

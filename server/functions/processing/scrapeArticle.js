@@ -9,7 +9,7 @@ import xss from 'xss'
  */
 const scrapeArticle = async (url) => {
 	try {
-		let { title, content } = await extract(
+		const data = await extract(
 			url,
 			{},
 			{
@@ -26,8 +26,8 @@ const scrapeArticle = async (url) => {
 			}
 		)
 
-		content = xss(content)
-		title = xss(title)
+		const content = xss(data?.content)
+		const title = xss(data?.title)
 
 		if (!content || !title)
 			throw new Error(

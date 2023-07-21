@@ -17,14 +17,13 @@ const update = async (req, res) => {
 
 		if (query_type === 'preferences') {
 			/**
-			 * @type {{chatPreferences: import('../../utils/types/chatPreferencesObject.js').chatPreferencesObject}}
+			 * @type {{chatPreferencesObject: import('../../utils/types/chatPreferencesObject.js').chatPreferencesObject}}
 			 */
-			const { chat_id, chatPreferences } = req.body
+			const { chatPreferencesObject } = req.body
 
 			data = await updateChatPreferences(
-				chat_id,
 				profile_id,
-				chatPreferences
+				chatPreferencesObject
 			)
 		} else if (query_type === 'chat') {
 			/**
