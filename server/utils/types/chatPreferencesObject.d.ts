@@ -1,4 +1,5 @@
 export interface chatPreferencesObject {
-	data_sources: string[]
-	llm_model: string
+	data_sources?: string[]
+	llm_model?: string
+	chat_id: string
 }
