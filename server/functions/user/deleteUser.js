@@ -13,7 +13,7 @@ const deleteUser = async (profile_id) => {
 
 		await pineconeIndex._delete({
 			filter: {
-				profile_id: profile_id,
+				profile_id: { $eq: `${profile_id}` },
 			},
 		})
 
