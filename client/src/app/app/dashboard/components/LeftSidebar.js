@@ -17,15 +17,15 @@ import {
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { getDoc, getUser, readChat, updateChat } from '@/api'
+import { deleteChat, getDoc, getUser, readChat, updateChat } from '@/api'
 import { PiChatsThin } from 'react-icons/pi'
 import FunctionalBtn from './FunctionalBtn'
 import { HiOutlineFilter, HiOutlinePencil } from 'react-icons/hi'
 import { BsChevronDown } from 'react-icons/bs'
 import { set } from 'mongoose'
-import { ChevIcon, EditIcon, FilterIcon } from '@/icons'
+import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-	const { text, base, base800, base700 } = useColors()
+	const { base, base800, base700, base600, text } = useColors()
 
 	const queryClient = useQueryClient()
 	const {
@@ -103,6 +103,22 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			queryClient.setQueryData(['threads', currentThread], (prev) => {
 				return [data]
 			})
+		},
+
+		onError: (error) => {
+			console.log(error)
+		},
+	})
+
+	const {
+		data: deleteThreadData,
+		isLoading: deleteThreadIsLoading,
+		mutate: deleteThreadMutate,
+	} = useMutation({
+		mutationFn: () => deleteChat(currentThread),
+		onSuccess: (data) => {
+			console.log(data, 'update chat name data')
+			queryClient.invalidateQueries(['threads'])
 		},
 
 		onError: (error) => {
@@ -227,6 +243,26 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 						title='filter documents'
 						icon={<FilterIcon fill={text} />}
 					/>
+					<Button
+						cursor={'pointer'}
+						onClick={() => {
+							deleteThreadMutate()
+							setCurrentThread('new')
+							setCurrentView('chat')
+						}}
+						_hover={{ bg: base600 }}
+						bg={base700}
+						w={'100%'}
+						justifyContent={'space-between'}
+						fontWeight={'400'}
+					>
+						delete chat
+						{deleteThreadIsLoading ? (
+							<Spinner />
+						) : (
+							<DeleteIcon fill={'rgba(255, 0, 0, 1)'} />
+						)}
+					</Button>
 				</Flex>
 			</Flex>
 			<Button

@@ -23,7 +23,7 @@ import {
 	AccountComponent,
 	PlatformComponent,
 	BillingComponent,
-} from '@/app/dashboard/components'
+} from '@/app/app/dashboard/components'
 import { BillingIcon, PlatformIcon, UserIcon } from '@/icons'
 const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	const { base, base800, base700, text } = useColors()

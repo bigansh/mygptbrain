@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import SingleChatComponent from './SingleChatComponent'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useThreads } from '@/context'
@@ -6,7 +6,12 @@ import { getUser, readChat } from '@/api'
 import uuid from 'uuid'
 import { Flex } from '@chakra-ui/react'
 
-const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
+const ChatMessagesContainer = ({
+	inputValue,
+	setInputValue,
+	divRef,
+	isUpdated,
+}) => {
 	const queryClient = useQueryClient()
 	const { currentThread } = useThreads()
 	const { data: userData } = useQuery({
@@ -28,7 +33,6 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
-			
 			divRef?.current.scrollIntoView({ behavior: 'smooth' })
 		},
 		onError: (error) => {
@@ -62,6 +66,7 @@ feel free to customize your experience by changing the thread's name, the model 
 								index + 1 == placeholderData?.chat_array.length
 							}
 							isPlaceholder={true}
+							divRef={divRef}
 						/>
 				  ))
 				: threadData &&
@@ -69,11 +74,15 @@ feel free to customize your experience by changing the thread's name, the model 
 						<SingleChatComponent
 							message={message}
 							isLast={
-								index + 1 == threadData[0]?.chat_array.length
+								isUpdated
+								//index + 1 == threadData[0]?.chat_array.length
 							}
 							isPlaceholder={false}
+							divRef={divRef}
 						/>
 				  ))}
+			<Flex></Flex>
+			<Flex></Flex>
 			<Flex ref={divRef}></Flex>
 		</Flex>
 	)

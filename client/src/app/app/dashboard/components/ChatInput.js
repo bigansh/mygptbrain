@@ -14,7 +14,7 @@ import {
 	CircularProgress,
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
-const ChatInput = ({ inputValue, setInputValue, divRef }) => {
+const ChatInput = ({ inputValue, setInputValue, divRef, setUpdated }) => {
 	const queryClient = useQueryClient()
 
 	const ref = useRef()
@@ -41,6 +41,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				...oldData,
 				data,
 			])
+			setUpdated(true)
 			queryClient.setQueryData(['threads', 'new'], (prev) => {
 				return []
 			})
@@ -107,8 +108,10 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	}
 
 	if (updateIsLoading || addIsLoading) {
+		console.log('loading')
 		setInputValue('')
 		divRef?.current.scrollIntoView({ behavior: 'smooth' })
+		divRef.current.scrollIntoView({ behavior: 'smooth' })
 	}
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>

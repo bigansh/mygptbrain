@@ -7,17 +7,94 @@ label,
 select,
 option,
 textarea {
-  font-family: "Poppins";
+	font-family: 'Poppins';
 }
 
 @keyframes typing {
-  from {
-    width: 0;
-  }
+	from {
+		width: 0;
+	}
 }
 
 @keyframes blink {
-  50% {
-    border-color: transparent;
-  }
+	50% {
+		border-color: transparent;
+	}
+}
+
+/* css */
+
+.wf-section .w-layout-blockcontainer {
+	max-width: 940px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+@media screen and (max-width: 991px) {
+	.wf-section .w-layout-blockcontainer {
+		max-width: 728px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.wf-section .w-layout-blockcontainer {
+		max-width: none;
+	}
+}
+
+.section {
+	height: 300vh;
+	border: 1px #ef2929;
+	position: relative;
+}
+
+.wf-section .div-block {
+	height: 100vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0%;
+	bottom: auto;
+	left: 0%;
+	right: 0%;
+}
+
+.wf-section .div-block-2 {
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+
+.wf-section .text {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	font-family: Lato, sans-serif;
+	font-size: 30px;
+	font-weight: 300;
+	position: absolute;
+}
+
+.wf-section .text._2,
+.wf-section .text._3 {
+	opacity: 0;
+	transform: translate(0, 100px);
+}
+
+.wf-section .container {
+	width: 100%;
+	height: 100%;
+}
+
+.wf-section .section-2 {
+	height: 80vh;
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }

@@ -1,6 +1,6 @@
 import { useColors } from '@/utils/colors'
 import React, { useRef, useState } from 'react'
-import { Button, Flex, Heading, Text } from '@chakra-ui/react'
+import { Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react'
 import { useThreads } from '@/context'
 import { getDoc, getUser } from '@/api'
 import { useQuery } from '@tanstack/react-query'
@@ -58,15 +58,25 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			maxW={isSidebarOpen ? '60vw' : '80vw'}
 			margin={'auto'}
 		>
-			<Flex flexDir={'column'} w={'65vw'} minW={'55vw'} maxW={'65vw'} mx={'auto'}>
+			<Flex
+				flexDir={'column'}
+				w={'65vw'}
+				minW={'55vw'}
+				maxW={'65vw'}
+				mx={'auto'}
+			>
 				{' '}
 				<Flex justifyContent={'space-between'}>
 					<Heading fontSize={'2xl'} fontWeight={600}>
 						{documentData[0]?.heading}
 					</Heading>
 					<Flex gap={2}>
-						<LinkIcon fill={text} />
-						<DeleteIcon fill="rgba(255, 0, 0, 1)" />
+						<Flex cursor={'pointer'} onClick={console.log(documentData)}>
+							<LinkIcon fill={text} />
+						</Flex>
+						<Flex cursor={'pointer'}>
+							<DeleteIcon fill='rgba(255, 0, 0, 1)' />
+						</Flex>
 					</Flex>
 				</Flex>
 				{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}
@@ -75,18 +85,19 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 		</Flex>
 	) : (
 		<Flex
-			lex
 			flexDir={'column'}
 			transition={'all 0.5s ease-in'}
 			background={base}
 			h={'100vh'}
 			overflow={'scroll'}
 			gap={4}
-			p={5}
+			p={6}
 			w={isSidebarOpen ? '60vw' : '80vw'}
 			maxW={isSidebarOpen ? '60vw' : '80vw'}
 			margin={'auto'}
-		></Flex>
+		>
+			<Spinner margin={'auto'} />
+		</Flex>
 	)
 }
 

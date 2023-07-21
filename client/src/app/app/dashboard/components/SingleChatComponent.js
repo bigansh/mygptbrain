@@ -1,4 +1,5 @@
 //import { GPTBrain, UserSvg } from '@/app/assets'
+import { ChatLogoIcon, ChatUserIcon } from '@/icons'
 import { useColors } from '@/utils/colors'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -7,7 +8,7 @@ import { LuBrainCircuit } from 'react-icons/lu'
 import { PiUserCircleLight } from 'react-icons/pi'
 import Typewriter from 'typewriter-effect'
 
-const SingleChatComponent = ({ message, isLast, isPlaceholder }) => {
+const SingleChatComponent = ({ message, isLast, isPlaceholder, divRef }) => {
 	const { base, base800, base700, text } = useColors()
 	return (
 		<>
@@ -21,7 +22,7 @@ const SingleChatComponent = ({ message, isLast, isPlaceholder }) => {
 						margin={'auto'}
 					>
 						<Box>
-							<PiUserCircleLight fontSize={40} strokeWidth={1} />
+							<ChatUserIcon fill={text} />
 						</Box>
 						<Text marginBlock={'auto'}>{message.user}</Text>
 					</Flex>
@@ -35,7 +36,7 @@ const SingleChatComponent = ({ message, isLast, isPlaceholder }) => {
 						margin={'auto'}
 					>
 						<Box>
-							<LuBrainCircuit fontSize={40} strokeWidth={1} />
+							<ChatLogoIcon fill={text} />
 						</Box>
 
 						<Text whiteSpace={'break-spaces'} marginBlock={'auto'}>
@@ -44,22 +45,18 @@ const SingleChatComponent = ({ message, isLast, isPlaceholder }) => {
 								//   {message.llm}
 								// </Typist>
 								<Typewriter
+									
 									onInit={(typewriter) => {
 										typewriter
-											.typeString("message?.llm")
-
+											.typeString(message?.llm)
+											.start()
 											.callFunction(() => {
-												console.log('String typed out!')
+												divRef?.current.scrollIntoView({
+													behavior: 'smooth',
+												})
 											})
-										 .pauseFor(500)
-										// .deleteAll()
-										// .callFunction(() => {
-										// 	console.log(
-										// 		'All strings were deleted'
-										// 	)
-										// })
-										// .start()
 									}}
+									options={{ delay: 0.0001  , cursor: ''}}
 								/>
 							) : (
 								message.llm

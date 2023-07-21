@@ -1,11 +1,8 @@
-import { Button, Flex, Text } from '@chakra-ui/react'
-import { useState } from 'react'
-import { FaReddit, FaTwitter } from 'react-icons/fa'
-import { IoIosArrowRoundForward } from 'react-icons/io'
-import { PiNotionLogoLight } from 'react-icons/pi'
-import { AiOutlineRedo } from 'react-icons/ai'
+import { Flex, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/api'
+import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
+
 
 const PlatformComponent = () => {
 	const { isLoading, isError, data, error } = useQuery({
@@ -16,39 +13,32 @@ const PlatformComponent = () => {
 		<Flex flexDir={'column'} mt={2} p={4} gap={5}>
 			<Flex gap={5}>
 				<PlatformCard
-					name='twitter'
-					state={data?.auth?.twitter_id ? 'connect' : 'reauthorize'}
-					color={'#00ACEE'}
-					icon={<FaTwitter />}
-				/>
-				<PlatformCard
 					name='reddit'
 					state={data?.auth?.reddit_id ? 'connect' : 'reauthorize'}
-					color={'#FF4300'}
-					icon={<FaReddit />}
+					color='rgba(255, 67, 0, 1)'
+					icon={<RedditIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
-				{/* {!data?.auth?.twitter_id && ( */}
 
 				<PlatformCard
 					name='notion'
 					state={data?.auth?.notion_id ? 'connect' : 'reauthorize'}
-					color={'#373530'}
-					icon={<PiNotionLogoLight />}
+					color='rgba(55, 53, 48, 1)'
+					icon={<NotionIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 			</Flex>
 			<Flex gap={5}>
 				<PlatformCard
 					title='ondrive'
-					color='#0078D4'
 					state={data?.auth?.google_id ? 'connect' : 'reauthorize'}
-					icon={<TbBrandOnedrive />}
+					color='rgba(255, 208, 75, 1)'
+					icon={<DriveIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 
 				<PlatformCard
 					title='pocket'
-					color='#D54D57'
 					state={data?.auth?.pocket_id ? 'connect' : 'reauthorize'}
-					icon={<LuPocket />}
+					color='rgba(213, 77, 87, 1)'
+					icon={<PockketIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 			</Flex>
 		</Flex>
@@ -74,7 +64,8 @@ const PlatformCard = ({ name, color, icon, state }) => {
 		<Flex
 			flexDir={'column'}
 			gap={2}
-			cursor={'pointer'} onClick={() =>
+			cursor={'pointer'}
+			onClick={() =>
 				connectPlatform({
 					platform: name,
 					profileId: data?.profile_id,

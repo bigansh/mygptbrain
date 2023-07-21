@@ -1,7 +1,7 @@
-"use client";
-import { ColorModeScript } from "@chakra-ui/react";
-import "./globals.css";
-import { Providers, theme } from "./providers";
+'use client'
+import { ColorModeScript } from '@chakra-ui/react'
+import './globals.css'
+import { Providers, theme } from './providers'
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -9,12 +9,12 @@ import { Providers, theme } from "./providers";
 // };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        <Providers> {children}</Providers>
-        <ColorModeScript initialColorMode={"light"} />
-      </body>
-    </html>
-  );
+	return (
+		<html lang='en'>
+			<body>
+				<Providers> {children}</Providers>
+				<ColorModeScript initialColorMode={'light'} />
+			</body>
+		</html>
+	)
 }

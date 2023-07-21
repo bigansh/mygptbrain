@@ -35,13 +35,18 @@ import {
 import { useColors } from '@/utils/colors'
 import { useThreads } from '@/context'
 import { AiOutlineCloudUpload, AiOutlineLink } from 'react-icons/ai'
-import { connectPlatform, getUser, uploadDoc } from '@/api'
+import { connectPlatform, getUser, scrapeLink, uploadDoc } from '@/api'
 import { FaReddit, FaTwitter } from 'react-icons/fa'
 import { PiNotionLogoLight } from 'react-icons/pi'
 import { TbBrandOnedrive } from 'react-icons/tb'
 import { LuPocket } from 'react-icons/lu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-
+import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
+import mixpanel from 'mixpanel-browser'
+mixpanel.init('7a66e2869d1d96ca1ecb0ac5cd114f56', {
+	track_pageview: true,
+	persistence: 'localStorage',
+})
 const Dashboard = () => {
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -58,13 +63,25 @@ const Dashboard = () => {
 		currentView,
 		setCurrentView,
 	} = useThreads()
+	const { data, isLoading } = useQuery({
+		queryKey: ['user'],
+		queryFn: getUser,
+		onSuccess: (data) => {
+			mixpanel.identify(data?.profile_id)
+		}
+	})
 
+	
 	const { base, base800, base700, text } = useColors()
 	const {
 		isOpen: isOpenOnboarding,
 		onOpen: onOpenOnboarding,
 		onClose: onCloseOnboarding,
-	} = useDisclosure({ defaultIsOpen: !localStorage.getItem('modal-display') })
+	} = useDisclosure({
+		defaultIsOpen: localStorage
+			? !localStorage.getItem('modal-display')
+			: false,
+	})
 
 	useEffect(() => {
 		if (currentView == 'document') {
@@ -91,7 +108,7 @@ const Dashboard = () => {
 				isSidebarOpen={isSidebarOpen}
 				setIsSidebarOpen={setIsSidebarOpen}
 			/>
-			{currentView == 'chat' && (
+			{currentView == 'chat' && currentThread !== 'new' && (
 				<Button
 					cursor={'pointer'}
 					p={'10px'}
@@ -133,12 +150,10 @@ const OnboardingModal = ({
 		queryFn: getUser,
 	})
 
-	const handleLinkChange = (e) => {
-		setLink(e.target.value)
-	}
 	useEffect(() => {
+		if (!localStorage) return
 		localStorage.setItem('modal-display', true)
-	}, [])
+	}, [localStorage])
 
 	const {
 		data: uploadDocData,
@@ -167,6 +182,29 @@ const OnboardingModal = ({
 		},
 	})
 
+	const {
+		data: scrapeLinkData,
+		mutate: scrapeLinkMutate,
+		isLoading: scrapeLinkIsLoading,
+	} = useMutation({
+		mutationFn: () => scrapeLink(link),
+
+		onSuccess: (data) => {
+			queryClient.invalidateQueries(['documents'])
+			onCloseOnboarding()
+			toast({
+				title: 'Link scraped successfully',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
+		},
+		onError: (error) => {
+			console.log(error)
+		},
+	})
+
 	const { base, base800, base700, text } = useColors()
 	return (
 		<Modal
@@ -175,7 +213,10 @@ const OnboardingModal = ({
 			isOpen={isOpenOnboarding}
 			isCentered
 		>
-			<ModalOverlay />
+			<ModalOverlay
+				backdropFilter='blur(2px)'
+				bg='rgba(123, 130, 148, 0.2)'
+			/>
 			<ModalContent h={'80vh'}>
 				<ModalCloseButton
 					cursor={'pointer'}
@@ -200,11 +241,7 @@ const OnboardingModal = ({
 							gap={4}
 							w={'100%'}
 						>
-							<Heading
-								fontSize={'2xl'}
-								fontWeight={'400'}
-								textAlign={'center'}
-							>
+							<Heading fontSize={'2xl'} fontWeight={'400'}>
 								welcome to mygptbrain! please...
 							</Heading>
 							<Box
@@ -214,45 +251,54 @@ const OnboardingModal = ({
 								my={2}
 							></Box>
 
-							<Grid gridTemplateColumns={'1fr 1fr 1fr'} gap={5}>
+							<Grid
+								gridTemplateColumns={'1fr 1fr'}
+								gridTemplateRows={'1fr 1fr'}
+								gap={5}
+							>
 								{' '}
-								{!data?.auth?.twitter_id && (
-									<PlatformCard
-										title='twitter'
-										color='#00ACEE'
-										icon={<FaTwitter />}
-									/>
-								)}
 								{!data?.auth?.reddit_id && (
 									<PlatformCard
 										title='reddit'
-										color='#FF4300'
-										icon={<FaReddit />}
-									/>
-								)}
-								{!data?.auth?.notion_id && (
-									<PlatformCard
-										title='notion'
-										color='#373530'
-										icon={<PiNotionLogoLight />}
+										color='rgba(255, 67, 0, 1)'
+										icon={
+											<RedditIcon
+												fill={'rgba(255, 255, 255, 1)'}
+											/>
+										}
 									/>
 								)}
 								{!data?.auth?.google_id && (
 									<PlatformCard
 										title='ondrive'
-										color='#0078D4'
-										icon={<TbBrandOnedrive />}
+										color='rgba(255, 208, 75, 1)'
+										icon={
+											<DriveIcon
+												fill={'rgba(255, 255, 255, 1)'}
+											/>
+										}
 									/>
 								)}
-								{/* <Button
-							title='whatsapp'
-							classes='bg-yellow-500 hover:bg-yellow-600'
-						/> */}
+								{!data?.auth?.notion_id && (
+									<PlatformCard
+										title='notion'
+										color='rgba(55, 53, 48, 1)'
+										icon={
+											<NotionIcon
+												fill={'rgba(255, 255, 255, 1)'}
+											/>
+										}
+									/>
+								)}
 								{!data?.auth?.pocket_id && (
 									<PlatformCard
 										title='pocket'
-										color='#D54D57'
-										icon={<LuPocket />}
+										color='rgba(213, 77, 87, 1)'
+										icon={
+											<PockketIcon
+												fill={'rgba(255, 255, 255, 1)'}
+											/>
+										}
 									/>
 								)}
 							</Grid>
@@ -311,7 +357,29 @@ const OnboardingModal = ({
 										type='text'
 										value={link}
 										placeholder='paste a link'
-										onChange={handleLinkChange}
+										onChange={(e) =>
+											setLink(e.target.value)
+										}
+										borderColor={
+											isValidHttpUrl(link)
+												? 'green'
+												: 'red'
+										}
+										//onChange={e => e.target.val}
+										onKeyDown={(e) =>
+											e.key === 'Enter'
+												? isValidHttpUrl(e.target.value)
+													? scrapeLinkMutate()
+													: toast({
+															title: 'Invalid Link',
+															position: 'top',
+															variant:
+																'left-accent',
+															status: 'error',
+															duration: 3000,
+													  })
+												: console.log('')
+										}
 										background={base700}
 										_hover={{ background: base700 }}
 									/>
@@ -321,7 +389,11 @@ const OnboardingModal = ({
 										justifyContent={'center'}
 										alignItems={'center'}
 									>
-										<AiOutlineLink />
+										{scrapeLinkIsLoading ? (
+											<Spinner />
+										) : (
+											<AiOutlineLink />
+										)}
 									</InputRightElement>
 								</InputGroup>
 							</Grid>
@@ -368,4 +440,17 @@ const PlatformCard = ({ title, color, icon }) => {
 			</Flex>
 		</Flex>
 	)
+}
+
+function isValidHttpUrl(str) {
+	const pattern = new RegExp(
+		'^(https?:\\/\\/)?' + // protocol
+			'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+			'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+			'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+			'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+			'(\\#[-a-z\\d_]*)?$', // fragment locator
+		'i'
+	)
+	return pattern.test(str)
 }

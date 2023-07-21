@@ -13,20 +13,23 @@ import {
 	Button,
 	Text,
 	useToast,
+	Spinner,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
-const Signup = () => {
-	const router = useRouter()
-	const toast = useToast()
+
+const Login = () => {
 	const [userDetails, setUserDetails] = useState({
-		name: '',
 		email: '',
 		password: '',
 	})
+	const [loading, setLoading] = useState(false)
+
+	const toast = useToast()
+	const router = useRouter()
 
 	const handleChange = (e) => {
 		setUserDetails({
@@ -37,7 +40,12 @@ const Signup = () => {
 
 	const [isEmailFocused, setIsEmailFocused] = useState(false)
 
+	const handleEmailFocus = () => {
+		setIsEmailFocused(true)
+	}
+
 	const handleLoginSubmit = async (e) => {
+		setLoading(true)
 		e.preventDefault()
 		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
@@ -48,36 +56,39 @@ const Signup = () => {
 				status: 'error',
 				duration: 3000,
 			})
+			setLoading(false)
 			return
 		}
+
 		try {
 			const res = await authenticateUser({
-				queryType: 'signup',
+				queryType: 'login',
 				data: userDetails,
 			})
+			console.log(res)
 			if (res.status == 200) {
 				toast({
-					title: 'Signed up successfully',
+					title: 'Logged in successfully',
 					position: 'top',
 					variant: 'left-accent',
 					status: 'success',
 					duration: 3000,
 				})
 			}
-			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
-			router.push('/dashboard')
+			router.push('/app/dashboard')
 		} catch (error) {
+			console.log(error)
 			toast({
-				title: 'Error while signing up',
+				title: 'Error while logging in',
 				position: 'top',
 				variant: 'left-accent',
 				status: 'error',
 				duration: 3000,
 			})
-			console.log(error)
 			localStorage.removeItem('x-session-token')
 		}
+		setLoading(false)
 	}
 
 	return (
@@ -89,16 +100,6 @@ const Signup = () => {
 		>
 			<Flex flexDir={'column'} p={5} justifyContent={'center'} gap={2.5}>
 				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
-					name
-				</FormLabel>
-				<Input
-					id='name'
-					type='name'
-					value={userDetails.name}
-					onChange={handleChange}
-					placeholder='barun'
-				/>
-				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
 					email
 				</FormLabel>
 				<Input
@@ -106,17 +107,12 @@ const Signup = () => {
 					type='email'
 					value={userDetails.email}
 					onChange={handleChange}
-					onFocus={(e) => setIsEmailFocused(true)}
+					onFocus={handleEmailFocus}
 					placeholder='barundebnath91@gmail.com'
 				/>
-				{isEmailFocused || userDetails.email !== '' ? (
-					<>
-						<FormLabel
-							fontSize={'2xl'}
-							fontWeight={'400'}
-							mb={0}
-							mt={2}
-						>
+				{isEmailFocused ? (
+					<Flex flexDir={'column'} gap={2.5}>
+						<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0}>
 							password
 						</FormLabel>
 						<Input
@@ -126,6 +122,7 @@ const Signup = () => {
 							onChange={handleChange}
 							placeholder='***'
 						/>
+
 						<Button
 							title='login'
 							fontWeight={'400'}
@@ -137,15 +134,16 @@ const Signup = () => {
 							cursor={'pointer'} onClick={handleLoginSubmit}
 							mt={2}
 						>
-							signup
+							{loading ? <Spinner /> : 'login'}
 						</Button>
+
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/login'>or login</Link>
+							<Link href='/signup'>or sign up</Link>
 						</Text>
-					</>
+					</Flex>
 				) : (
 					<>
-						<Box position='relative' py='10' fontSize={'18px'}>
+						<Box position='relative' py='4' fontSize={'18px'}>
 							<Divider
 								bg={'black'}
 								borderColor={'black'}
@@ -188,4 +186,4 @@ const Signup = () => {
 	)
 }
 
-export default Signup
+export default Login

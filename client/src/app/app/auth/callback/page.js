@@ -12,7 +12,7 @@ const Callback = () => {
 
 	useEffect(() => {
 		localStorage.setItem('x-session-token', sessionToken)
-		router.push('/dashboard')
+		router.push('/app/dashboard')
 	}, [])
 
 	return (
