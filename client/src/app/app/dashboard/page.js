@@ -77,9 +77,7 @@ const Dashboard = () => {
 		onOpen: onOpenOnboarding,
 		onClose: onCloseOnboarding,
 	} = useDisclosure({
-		defaultIsOpen: localStorage
-			? !localStorage.getItem('modal-display')
-			: false,
+		defaultIsOpen: false,
 	})
 
 	useEffect(() => {
@@ -150,9 +148,13 @@ const OnboardingModal = ({
 	})
 
 	useEffect(() => {
-		if (!localStorage) return
-		localStorage.setItem('modal-display', true)
-	}, [localStorage])
+		if (!localStorage) {
+			if (localStorage.getItem('modal-display') == 'true') {
+				onOpenOnboarding()
+			}
+			localStorage.setItem('modal-display', true)
+		}
+	}, [])
 
 	const {
 		data: uploadDocData,
