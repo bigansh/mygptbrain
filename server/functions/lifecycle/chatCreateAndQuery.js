@@ -21,7 +21,7 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 			createdChat
 		)
 
-		chatQueryObject.chat_name = promptResult.response.substring(0, 10)
+		chatQueryObject.chat_name = chatQueryObject.prompt
 		chatQueryObject.chat_history = `user input: ${chatQueryObject.prompt}\ngenerated result: ${promptResult.response}`
 		chatQueryObject.chat_array = [
 			{ user: chatQueryObject.prompt, llm: promptResult.response },
