@@ -24,7 +24,7 @@ const document = (fastify, _options, done) => {
 		},
 		read
 	)
-	fastify.delete(
+	fastify.patch(
 		'/delete',
 		{
 			onRequest: [fastify.userAuth],

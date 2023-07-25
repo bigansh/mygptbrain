@@ -32,7 +32,7 @@ const chat = (fastify, _options, done) => {
 		},
 		update
 	)
-	fastify.delete(
+	fastify.patch(
 		'/delete',
 		{
 			onRequest: [fastify.userAuth],
