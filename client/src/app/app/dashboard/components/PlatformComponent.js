@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/api'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 
-
 const PlatformComponent = () => {
 	const { isLoading, isError, data, error } = useQuery({
 		queryKey: ['user'],
@@ -14,14 +13,14 @@ const PlatformComponent = () => {
 			<Flex gap={5}>
 				<PlatformCard
 					name='reddit'
-					state={data?.auth?.reddit_id ? 'connect' : 'reauthorize'}
+					state={data?.auth?.reddit_id ? 'reauthorize' : 'connect'}
 					color='rgba(255, 67, 0, 1)'
 					icon={<RedditIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 
 				<PlatformCard
 					name='notion'
-					state={data?.auth?.notion_id ? 'connect' : 'reauthorize'}
+					state={data?.auth?.notion_id ? 'reauthorize' : 'connect'}
 					color='rgba(55, 53, 48, 1)'
 					icon={<NotionIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
@@ -29,14 +28,14 @@ const PlatformComponent = () => {
 			<Flex gap={5}>
 				<PlatformCard
 					title='ondrive'
-					state={data?.auth?.google_id ? 'connect' : 'reauthorize'}
+					state={data?.auth?.google_id ? 'reauthorize' : 'connect'}
 					color='rgba(255, 208, 75, 1)'
 					icon={<DriveIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 
 				<PlatformCard
 					title='pocket'
-					state={data?.auth?.pocket_id ? 'connect' : 'reauthorize'}
+					state={data?.auth?.pocket_id ? 'reauthorize' : 'connect'}
 					color='rgba(213, 77, 87, 1)'
 					icon={<PockketIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
