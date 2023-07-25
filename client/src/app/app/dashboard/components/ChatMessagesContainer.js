@@ -3,14 +3,9 @@ import SingleChatComponent from './SingleChatComponent'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useThreads } from '@/context'
 import { getUser, readChat } from '@/api'
-import uuid from 'uuid'
 import { Flex } from '@chakra-ui/react'
 
-const ChatMessagesContainer = ({
-	inputValue,
-	setInputValue,
-	divRef,
-}) => {
+const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
 	const { currentThread } = useThreads()
 	const { data: userData } = useQuery({
