@@ -43,7 +43,8 @@ import { LuPocket } from 'react-icons/lu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 import mixpanel from 'mixpanel-browser'
-mixpanel.init(process.env.MIXPANEL, {
+
+mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
 	persistence: 'localStorage',
 })

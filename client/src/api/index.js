@@ -4,7 +4,7 @@ import axios from 'axios'
 export const runtime = 'edge'
 
 const apiClient = axios.create({
-	baseURL: `https://api-testing.mygptbrain.com`,
+	baseURL: process.env.NEXT_PUBLIC_API_URL,
 	withCredentials: true,
 	headers: {
 		Accept: 'application/json',
@@ -28,11 +28,10 @@ apiClient.interceptors.request.use(
  ** Auth EndPoints
  **/
 
-const authToken =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg'
+const authToken = process.env.NEXT_PUBLIC_API_AUTH_TOKEN
 
 export const authenticateUserByGoogle = async () => {
-	window.location.href = `https://api-testing.mygptbrain.com/auth/initialize?query_type=google&authorization=${authToken}`
+	window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/initialize?query_type=google&authorization=${authToken}`
 }
 
 export const authenticateUser = async ({ queryType, data }) => {
@@ -55,7 +54,7 @@ export const authenticateUser = async ({ queryType, data }) => {
 }
 
 export const connectPlatform = async ({ platform, profileId }) => {
-	window.location.href = `https://api-testing.mygptbrain.com/auth/initialize?query_type=${platform}&authorization=${authToken}&profile_id=${profileId}`
+	window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/initialize?query_type=${platform}&authorization=${authToken}&profile_id=${profileId}`
 }
 
 /**
