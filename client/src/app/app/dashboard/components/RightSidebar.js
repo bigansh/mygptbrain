@@ -1,15 +1,9 @@
 import { useRef, useState } from 'react'
 import { BsFillMoonStarsFill } from 'react-icons/bs'
-import { HiOutlineSun } from 'react-icons/hi'
+import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 import { useThreads } from '@/context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-	getDoc,
-	getUser,
-	readChat,
-	syncDoc,
-	uploadDoc,
-} from '@/api'
+import { getDoc, getUser, readChat, syncDoc, uploadDoc } from '@/api'
 import {
 	Flex,
 	Heading,
@@ -25,7 +19,13 @@ import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
 import SettingModal from './SettingModal'
 import { useColors } from '@/utils/colors'
-import { AddIcon, CloudUploadIcon, RotateIcon, ThreadIcon , DocumentIcon } from '@/icons'
+import {
+	AddIcon,
+	CloudUploadIcon,
+	RotateIcon,
+	ThreadIcon,
+	DocumentIcon,
+} from '@/icons'
 
 const RightSideBar = () => {
 	const queryClient = useQueryClient()
@@ -119,12 +119,16 @@ const RightSideBar = () => {
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
-	const filteredThreads = threadsData?.filter((e) =>
-		e.chat_name.toLowerCase().includes(threadInput.toLowerCase())
-	)
-	const filteredDocuments = docData?.filter((e) =>
-		e.heading.toLowerCase().includes(documentInput.toLowerCase())
-	)
+	const filteredThreads = threadsData
+		?.filter((e) =>
+			e.chat_name.toLowerCase().includes(threadInput.toLowerCase())
+		)
+		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+	const filteredDocuments = docData
+		?.filter((e) =>
+			e.heading.toLowerCase().includes(documentInput.toLowerCase())
+		)
+		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	return (
 		<Flex
 			flexDir={'column'}
@@ -331,9 +335,9 @@ const RightSideBar = () => {
 						_hover={{ bg: 'transparent' }}
 					>
 						{colorMode === 'light' ? (
-							<BsFillMoonStarsFill />
+							<HiOutlineMoon fontSize={24} />
 						) : (
-							<HiOutlineSun />
+							<HiOutlineSun fontSize={24} />
 						)}
 					</Button>
 				</Flex>

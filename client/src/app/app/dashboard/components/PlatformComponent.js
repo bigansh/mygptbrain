@@ -14,29 +14,45 @@ const PlatformComponent = () => {
 				<PlatformCard
 					name='reddit'
 					state={data?.auth?.reddit_id ? 'reauthorize' : 'connect'}
-					color='rgba(255, 67, 0, 1)'
+					color={
+						data?.auth?.reddit_id
+							? '#58DD58'
+							: 'rgba(255, 67, 0, 1)'
+					}
 					icon={<RedditIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 
 				<PlatformCard
 					name='notion'
 					state={data?.auth?.notion_id ? 'reauthorize' : 'connect'}
-					color='rgba(55, 53, 48, 1)'
+					color={
+						data?.auth?.notion_id
+							? '#58DD58'
+							: 'rgba(55, 53, 48, 1)'
+					}
 					icon={<NotionIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 			</Flex>
 			<Flex gap={5}>
 				<PlatformCard
-					title='ondrive'
+					name='ondrive'
 					state={data?.auth?.google_id ? 'reauthorize' : 'connect'}
-					color='rgba(255, 208, 75, 1)'
+					color={
+						data?.auth?.google_id
+							? '#58DD58'
+							: 'rgba(255, 208, 75, 1)'
+					}
 					icon={<DriveIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 
 				<PlatformCard
-					title='pocket'
+					name='pocket'
 					state={data?.auth?.pocket_id ? 'reauthorize' : 'connect'}
-					color='rgba(213, 77, 87, 1)'
+					color={
+						data?.auth?.pocket_id
+							? '#58DD58'
+							: 'rgba(213, 77, 87, 1)'
+					}
 					icon={<PockketIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
 			</Flex>

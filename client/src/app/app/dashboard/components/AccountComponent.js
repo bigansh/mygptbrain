@@ -24,7 +24,7 @@ import { useState } from 'react'
 const AccountComponent = () => {
 	const router = useRouter()
 	const toast = useToast()
-	const { base, base800, base700, text } = useColors()
+	const { base, base800, base700, text , redbg } = useColors()
 	const {
 		isOpen: isOpenDelete,
 		onOpen: onOpenDelete,
@@ -185,7 +185,7 @@ const AccountComponent = () => {
 				<Button
 					cursor={'pointer'}
 					onClick={onOpenDelete}
-					bg={'#FFDFDF'}
+					bg={redbg}
 					justifyContent={'space-between'}
 					fontWeight={'400'}
 				>

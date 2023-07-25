@@ -10,7 +10,6 @@ const ChatMessagesContainer = ({
 	inputValue,
 	setInputValue,
 	divRef,
-	isUpdated,
 }) => {
 	const queryClient = useQueryClient()
 	const { currentThread } = useThreads()
@@ -60,26 +59,11 @@ feel free to customize your experience by changing the thread's name, the model 
 			{currentThread == 'new' &&
 			(threadData == undefined || threadData.length == 0)
 				? placeholderData?.chat_array?.map((message, index) => (
-						<SingleChatComponent
-							message={message}
-							isLast={
-								index + 1 == placeholderData?.chat_array.length
-							}
-							isPlaceholder={true}
-							divRef={divRef}
-						/>
+						<SingleChatComponent message={message} />
 				  ))
 				: threadData &&
 				  threadData[0]?.chat_array?.map((message, index) => (
-						<SingleChatComponent
-							message={message}
-							isLast={
-								isUpdated
-								//index + 1 == threadData[0]?.chat_array.length
-							}
-							isPlaceholder={false}
-							divRef={divRef}
-						/>
+						<SingleChatComponent message={message} />
 				  ))}
 			<Flex></Flex>
 			<Flex></Flex>

@@ -1,6 +1,6 @@
 import { useColors } from '@/utils/colors'
 import React, { useRef, useState } from 'react'
-import { Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react'
+import { Button, Flex, Heading, Spinner, Text, Tooltip } from '@chakra-ui/react'
 import { useThreads } from '@/context'
 import { getDoc, getUser } from '@/api'
 import { useQuery } from '@tanstack/react-query'
@@ -8,7 +8,7 @@ import { BsLink } from 'react-icons/bs'
 import { LuDelete } from 'react-icons/lu'
 import { DeleteIcon, LinkIcon } from '@/icons'
 const DocumentWrapper = ({ isSidebarOpen }) => {
-	const { base, base800, base700, text } = useColors()
+	const { base, base800, base700, base600, text } = useColors()
 	const {
 		threads,
 		setThreads,
@@ -71,12 +71,22 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 						{documentData[0]?.heading}
 					</Heading>
 					<Flex gap={2}>
-						<Flex cursor={'pointer'} onClick={console.log(documentData)}>
-							<LinkIcon fill={text} />
-						</Flex>
-						<Flex cursor={'pointer'}>
-							<DeleteIcon fill='rgba(255, 0, 0, 1)' />
-						</Flex>
+						<Tooltip
+							label='Link to document'
+							aria-label='A tooltip'
+						>
+							<Flex
+								cursor={'pointer'}
+								onClick={console.log(documentData)}
+							>
+								<LinkIcon fill={text} />
+							</Flex>
+						</Tooltip>
+						<Tooltip label='Delete document' aria-label='A tooltip'>
+							<Flex cursor={'pointer'}>
+								<DeleteIcon fill='rgba(255, 0, 0, 1)' />
+							</Flex>
+						</Tooltip>
 					</Flex>
 				</Flex>
 				{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}

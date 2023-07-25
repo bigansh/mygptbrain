@@ -24,7 +24,7 @@ import { HiOutlineFilter, HiOutlinePencil } from 'react-icons/hi'
 import { BsChevronDown } from 'react-icons/bs'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-	const { base, base800, base700, base600, text } = useColors()
+	const { base, base800, base700, base600, text, redbg } = useColors()
 
 	const queryClient = useQueryClient()
 	const {
@@ -232,14 +232,17 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 					)}
 					<FunctionalBtn
 						title='llm model'
+						disabled={true}
 						icon={<ChevIcon fill={text} />}
 					/>
 					<FunctionalBtn
 						title='send type'
+						disabled={true}
 						icon={<ChevIcon fill={text} />}
 					/>
 					<FunctionalBtn
 						title='filter documents'
+						disabled={true}
 						icon={<FilterIcon fill={text} />}
 					/>
 					<Button
@@ -249,13 +252,14 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 							setCurrentThread('new')
 							setCurrentView('chat')
 						}}
-						_hover={{ bg: base600 }}
-						bg={base700}
+						bg={redbg}
+						_hover={{ opacity: '80%' }}
+						ho
 						w={'100%'}
 						justifyContent={'space-between'}
 						fontWeight={'400'}
 					>
-						delete chat
+						delete thread
 						{deleteThreadIsLoading ? (
 							<Spinner />
 						) : (

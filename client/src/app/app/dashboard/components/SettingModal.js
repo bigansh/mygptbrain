@@ -26,7 +26,7 @@ import {
 } from '@/app/app/dashboard/components'
 import { BillingIcon, PlatformIcon, UserIcon } from '@/icons'
 const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
-	const { base, base800, base700, text } = useColors()
+	const { base, base800, base700, base600, text } = useColors()
 	const [activeButton, setActiveButton] = useState('account')
 
 	const handleButtonClick = (button) => {
@@ -49,7 +49,10 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	}
 	return (
 		<Modal size={'6xl'} isOpen={isOpenSetting} onClose={onCloseSetting}>
-			<ModalOverlay />
+			<ModalOverlay
+				backdropFilter='blur(2px)'
+				//bg='rgba(123, 130, 148, 0.2)'
+			/>
 			<ModalContent>
 				<ModalCloseButton />
 				<ModalBody p={0}>
@@ -92,7 +95,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 								icon={<BillingIcon fill={text} />}
 							/>
 						</Flex>
-						<Flex>{childComponent}</Flex>
+						<Flex bg={base}>{childComponent}</Flex>
 					</Grid>
 				</ModalBody>
 			</ModalContent>

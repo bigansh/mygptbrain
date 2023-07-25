@@ -1,6 +1,7 @@
 'use client'
 import { authenticateUser, authenticateUserByGoogle, verifyEmail } from '@/api'
 import { OnboardingBanner } from '@/assets'
+import { useColors } from '@/utils/colors'
 import {
 	Heading,
 	Box,
@@ -13,23 +14,22 @@ import {
 	Button,
 	Text,
 	useToast,
-	Spinner,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
-
-const Login = () => {
+const Signup = () => {
+	const router = useRouter()
+	const toast = useToast()
+	const { base, base800, base700,base600, text } = useColors()
+	
 	const [userDetails, setUserDetails] = useState({
+		name: '',
 		email: '',
 		password: '',
 	})
-	const [loading, setLoading] = useState(false)
-
-	const toast = useToast()
-	const router = useRouter()
 
 	const handleChange = (e) => {
 		setUserDetails({
@@ -40,12 +40,7 @@ const Login = () => {
 
 	const [isEmailFocused, setIsEmailFocused] = useState(false)
 
-	const handleEmailFocus = () => {
-		setIsEmailFocused(true)
-	}
-
 	const handleLoginSubmit = async (e) => {
-		setLoading(true)
 		e.preventDefault()
 		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
@@ -56,49 +51,56 @@ const Login = () => {
 				status: 'error',
 				duration: 3000,
 			})
-			setLoading(false)
 			return
 		}
-
 		try {
 			const res = await authenticateUser({
-				queryType: 'login',
+				queryType: 'signup',
 				data: userDetails,
 			})
-			console.log(res)
 			if (res.status == 200) {
 				toast({
-					title: 'Logged in successfully',
+					title: 'Signed up successfully',
 					position: 'top',
 					variant: 'left-accent',
 					status: 'success',
 					duration: 3000,
 				})
 			}
+			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
 			router.push('/app/dashboard')
 		} catch (error) {
-			console.log(error)
 			toast({
-				title: 'Error while logging in',
+				title: 'Error while signing up',
 				position: 'top',
 				variant: 'left-accent',
 				status: 'error',
 				duration: 3000,
 			})
+			console.log(error)
 			localStorage.removeItem('x-session-token')
 		}
-		setLoading(false)
 	}
 
 	return (
 		<Grid
 			w={'100vw'}
 			h={'100vh'}
-			bg='white'
+			background={base}
 			gridTemplateColumns={'1fr 2fr'}
 		>
 			<Flex flexDir={'column'} p={5} justifyContent={'center'} gap={2.5}>
+				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
+					name
+				</FormLabel>
+				<Input
+					id='name'
+					type='name'
+					value={userDetails.name}
+					onChange={handleChange}
+					placeholder='Ansh Aggarwal'
+				/>
 				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
 					email
 				</FormLabel>
@@ -107,12 +109,17 @@ const Login = () => {
 					type='email'
 					value={userDetails.email}
 					onChange={handleChange}
-					onFocus={handleEmailFocus}
-					placeholder='barundebnath91@gmail.com'
+					onFocus={(e) => setIsEmailFocused(true)}
+					placeholder="hello@bigansh.me"
 				/>
-				{isEmailFocused ? (
-					<Flex flexDir={'column'} gap={2.5}>
-						<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0}>
+				{isEmailFocused || userDetails.email !== '' ? (
+					<>
+						<FormLabel
+							fontSize={'2xl'}
+							fontWeight={'400'}
+							mb={0}
+							mt={2}
+						>
 							password
 						</FormLabel>
 						<Input
@@ -122,41 +129,40 @@ const Login = () => {
 							onChange={handleChange}
 							placeholder='***'
 						/>
-
 						<Button
 							title='login'
 							fontWeight={'400'}
-							bg={'#DFE8FF'}
+							bg={base700}
 							_hover={{
-								bg: '#DFE8FF',
+								bg: base600,
 							}}
-							color={'black'}
+							color={text}
 							cursor={'pointer'} onClick={handleLoginSubmit}
 							mt={2}
 						>
-							{loading ? <Spinner /> : 'login'}
+							signup
 						</Button>
-
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/signup'>or sign up</Link>
+							<Link href='/login'>or login</Link>
 						</Text>
-					</Flex>
+					</>
 				) : (
 					<>
 						<Box position='relative' py='4' fontSize={'18px'}>
 							<Divider
-								bg={'black'}
-								borderColor={'black'}
+								bg={text}
+								
+								borderColor={text}
 								rounded={'md'}
 								borderWidth={'1px'}
 							/>
-							<AbsoluteCenter px='4' bg={'white'}>
+							<AbsoluteCenter px='4' bg={base}>
 								or
 							</AbsoluteCenter>
 						</Box>
 
 						<Button
-							bg='#CA504080'
+							bg='rgba(202, 80, 64, 1)'
 							p={2.5}
 							w={'100%'}
 							color={'white'}
@@ -186,4 +192,4 @@ const Login = () => {
 	)
 }
 
-export default Login
+export default Signup

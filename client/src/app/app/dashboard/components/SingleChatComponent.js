@@ -6,9 +6,8 @@ import Image from 'next/image'
 import React from 'react'
 import { LuBrainCircuit } from 'react-icons/lu'
 import { PiUserCircleLight } from 'react-icons/pi'
-import Typewriter from 'typewriter-effect'
 
-const SingleChatComponent = ({ message, isLast, isPlaceholder, divRef }) => {
+const SingleChatComponent = ({ message }) => {
 	const { base, base800, base700, text } = useColors()
 	return (
 		<>
@@ -40,27 +39,7 @@ const SingleChatComponent = ({ message, isLast, isPlaceholder, divRef }) => {
 						</Box>
 
 						<Text whiteSpace={'break-spaces'} marginBlock={'auto'}>
-							{isLast && !isPlaceholder ? (
-								// <Typist key={message.llm} avgTypingDelay={1} blink={true}>
-								//   {message.llm}
-								// </Typist>
-								<Typewriter
-									
-									onInit={(typewriter) => {
-										typewriter
-											.typeString(message?.llm)
-											.start()
-											.callFunction(() => {
-												divRef?.current.scrollIntoView({
-													behavior: 'smooth',
-												})
-											})
-									}}
-									options={{ delay: 0.0001  , cursor: ''}}
-								/>
-							) : (
-								message.llm
-							)}
+							{message.llm}
 						</Text>
 					</Flex>
 				</Flex>
