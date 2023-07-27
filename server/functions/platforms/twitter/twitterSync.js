@@ -66,7 +66,7 @@ const twitterSync = async (profile_id) => {
 			promiseArray.push(scrapeAndSavePromise)
 		}
 
-		return await Promise.all(promiseArray)
+		return await Promise.allSettled(promiseArray)
 	} catch (error) {
 		throw error
 	}

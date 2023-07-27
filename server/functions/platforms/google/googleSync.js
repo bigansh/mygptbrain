@@ -121,7 +121,7 @@ const googleSync = async (profile_id) => {
 			promiseArray.push(saveAndLoadPromise)
 		}
 
-		return await Promise.all(promiseArray)
+		return await Promise.allSettled(promiseArray)
 	} catch (error) {
 		throw error
 	}

@@ -32,7 +32,7 @@ const platformSyncAndLoadAndStore = async (profile_id) => {
 			platforms.push(googleSync(profile_id))
 		}
 
-		return (await Promise.all(platforms)).flat()
+		return (await Promise.allSettled(platforms)).flat()
 	} catch (error) {
 		throw error
 	}
