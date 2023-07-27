@@ -49,9 +49,10 @@ const googleSync = async (profile_id) => {
 			if (response.data.files) {
 				response.data.files.forEach((file) => {
 					if (
-						['application/pdf'].some(
-							(fileType) => fileType === file.mimeType
-						) &&
+						[
+							'application/pdf',
+							'application/vnd.openxmlformats-officedocument',
+						].some((fileType) => fileType === file.mimeType) &&
 						!foundDriveIds.includes(file.id)
 					) {
 						driveFiles.push(file)
@@ -83,6 +84,14 @@ const googleSync = async (profile_id) => {
 
 				if (file.mimeType === 'application/pdf') {
 					content = (await pdf(fileBuffer))?.text
+
+					content = xss(content)
+				} else if (
+					file.mimeType.includes(
+						'application/vnd.openxmlformats-officedocument'
+					)
+				) {
+					content = await officeParser.parseOfficeAsync(fileBuffer)
 
 					content = xss(content)
 				}
