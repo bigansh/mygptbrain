@@ -39,12 +39,12 @@ const PlatformComponent = () => {
 			<PlatformCard
 				name='drive'
 				state={
-					data?.auth?.google?.scope_authenticated.includes('drive')
+					data?.auth?.google_id
 						? 'reauthorize'
 						: 'connect'
 				}
 				color={
-					data?.auth?.google?.scope_authenticated.includes('drive')
+					data?.auth?.google_id
 						? '#58DD58'
 						: 'rgba(255, 208, 75, 1)'
 				}
