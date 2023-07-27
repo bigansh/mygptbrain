@@ -88,6 +88,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 								icon={<PlatformIcon fill={text} />}
 							/>
 							<SidebarItem
+							disabled={true}
 								activeButton={activeButton}
 								cursor={'pointer'}
 								onClick={() => handleButtonClick('billing')}
@@ -105,17 +106,21 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 
 export default SettingModal
 
-const SidebarItem = ({ title, icon, onClick, activeButton }) => {
-	const { base, base800, base700, text } = useColors()
+const SidebarItem = ({ title, icon, onClick, activeButton , disabled = false }) => {
+	const { base, base800, base700, text, base600 } = useColors()
 	return (
 		<Button
 			cursor={'pointer'}
-			onClick={onClick}
+			onClick={!disabled && onClick}
 			bg={activeButton == title ? base700 : base800}
+			_hover={{ bg: base600 }}
+			opacity={disabled ? 0.5 : 1}
+			cursor={disabled ? 'not-allowed' : 'pointer'}
 			w={'100%'}
 			// _active={{ background: base800 }}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
+			disabled={disabled}
 		>
 			{title}
 			{icon}

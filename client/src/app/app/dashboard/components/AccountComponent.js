@@ -24,7 +24,7 @@ import { useState } from 'react'
 const AccountComponent = () => {
 	const router = useRouter()
 	const toast = useToast()
-	const { base, base800, base700, text , redbg } = useColors()
+	const { base, base800, base700, text, redbg } = useColors()
 	const {
 		isOpen: isOpenDelete,
 		onOpen: onOpenDelete,
@@ -99,16 +99,13 @@ const AccountComponent = () => {
 				id='name'
 				type='name'
 				value={userDetails.name}
-				onChange={(e) =>
-					setUserDetails({
-						...userDetails,
-						name: e.target.value,
-					})
-				}
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
 				w={'400px'}
+				contentEditable={false}
+				disabled
+				opacity={1}
 			/>
 			<FormLabel fontSize={'xl'} fontWeight={'400'} mb={0} mt={4}>
 				email
@@ -117,16 +114,12 @@ const AccountComponent = () => {
 				id='email'
 				type='email'
 				value={userDetails.email}
-				onChange={(e) =>
-					setUserDetails({
-						...userDetails,
-						email: e.target.value,
-					})
-				}
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
 				w={'400px'}
+				contentEditable={false}
+				disabled
 			/>
 
 			{updatePassword && (
@@ -173,7 +166,7 @@ const AccountComponent = () => {
 				</>
 			)}
 			<Flex gap={5} mt={5}>
-				<Button
+				{/* <Button
 					//cursor={'pointer'} onClick={cursor={'pointer'} onClick}
 					bg={base700}
 					justifyContent={'space-between'}
@@ -181,7 +174,7 @@ const AccountComponent = () => {
 					onClick={() => setUpdatePassword(true)}
 				>
 					update password
-				</Button>
+				</Button> */}
 				<Button
 					cursor={'pointer'}
 					onClick={onOpenDelete}

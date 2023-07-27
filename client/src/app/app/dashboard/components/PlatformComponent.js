@@ -1,6 +1,6 @@
-import { Flex, Text } from '@chakra-ui/react'
+import { Flex, Grid, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
-import { getUser } from '@/api'
+import { connectPlatform, getUser } from '@/api'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 
 const PlatformComponent = () => {
@@ -9,8 +9,8 @@ const PlatformComponent = () => {
 		queryFn: getUser,
 	})
 	return (
-		<Flex flexDir={'column'} mt={2} p={4} gap={5}>
-			<Flex gap={5}>
+		<Grid h={'fit-content'} gridTemplateColumns={'1fr 1fr'} gridTemplateRows={'1fr 1fr'} flexDir={'column'} mt={2} p={4} gap={5}>
+			
 				<PlatformCard
 					name='reddit'
 					state={data?.auth?.reddit_id ? 'reauthorize' : 'connect'}
@@ -32,8 +32,7 @@ const PlatformComponent = () => {
 					}
 					icon={<NotionIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
-			</Flex>
-			<Flex gap={5}>
+		
 				<PlatformCard
 					name='ondrive'
 					state={data?.auth?.google_id ? 'reauthorize' : 'connect'}
@@ -55,15 +54,8 @@ const PlatformComponent = () => {
 					}
 					icon={<PockketIcon fill={'rgba(255, 255, 255, 1)'} />}
 				/>
-			</Flex>
-		</Flex>
-		// <div>
-		//   <h1>Connect Accounts</h1>
-		//   <ConnectButtons />
-
-		//   <h1>Reauthorize Accounts</h1>
-		//   <ReauthorizeButtons />
-		// </div>
+		</Grid>
+		
 	)
 }
 
@@ -81,6 +73,7 @@ const PlatformCard = ({ name, color, icon, state }) => {
 			gap={2}
 			cursor={'pointer'}
 			onClick={() =>
+				
 				connectPlatform({
 					platform: name,
 					profileId: data?.profile_id,
