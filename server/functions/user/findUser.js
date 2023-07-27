@@ -9,7 +9,7 @@ const findUser = async ({ personalDetails }) => {
 	try {
 		return await User.findUnique({
 			where: personalDetails,
-			include: { auth: true },
+			include: { auth: { include: { google: true } } },
 		})
 	} catch (error) {
 		throw error

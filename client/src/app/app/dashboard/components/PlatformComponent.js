@@ -34,7 +34,7 @@ const PlatformComponent = () => {
 				/>
 		
 				<PlatformCard
-					name='ondrive'
+					name='drive'
 					state={data?.auth?.google_id ? 'reauthorize' : 'connect'}
 					color={
 						data?.auth?.google_id
