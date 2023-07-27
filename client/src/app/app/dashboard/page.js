@@ -270,9 +270,11 @@ const OnboardingModal = ({
 										}
 									/>
 								)}
-								{!data?.auth?.google_id && (
+								{!data?.auth?.google?.scope_authenticated.includes(
+									'drive'
+								) && (
 									<PlatformCard
-										title='ondrive'
+										title='drive'
 										color='rgba(255, 208, 75, 1)'
 										icon={
 											<DriveIcon
