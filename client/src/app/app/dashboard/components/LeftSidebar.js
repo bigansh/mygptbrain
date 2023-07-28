@@ -124,8 +124,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	} = useMutation({
 		mutationFn: () =>
 			deleteChat({
-				profile_id: userData?.profile_id,
 				chat_id: currentThread,
+				profile_id: userData?.profile_id,
 			}),
 		onSuccess: (data) => {
 			console.log(data, 'update chat name data')
@@ -278,8 +278,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 						cursor={'pointer'}
 						onClick={() => {
 							deleteThreadMutate()
-							setCurrentThread('new')
-							setCurrentView('chat')
 						}}
 						bg={redbg}
 						_hover={{ opacity: '80%' }}
