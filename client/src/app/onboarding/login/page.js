@@ -23,7 +23,7 @@ import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
 const Login = () => {
-	const { base, base800, base700, text , base600 } = useColors()
+	const { base, base800, base700, text, base600 } = useColors()
 
 	const [userDetails, setUserDetails] = useState({
 		email: '',
@@ -112,7 +112,7 @@ const Login = () => {
 					value={userDetails.email}
 					onChange={handleChange}
 					onFocus={handleEmailFocus}
-					placeholder="hello@bigansh.me"
+					placeholder='hello@bigansh.me'
 				/>
 				{isEmailFocused ? (
 					<Flex flexDir={'column'} gap={2.5}>
@@ -135,14 +135,15 @@ const Login = () => {
 								bg: base600,
 							}}
 							color={text}
-							cursor={'pointer'} onClick={handleLoginSubmit}
+							cursor={'pointer'}
+							onClick={handleLoginSubmit}
 							mt={2}
 						>
 							{loading ? <Spinner /> : 'login'}
 						</Button>
 
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/signup'>or sign up</Link>
+							<Link href='/onboarding/signup'>or sign up</Link>
 						</Text>
 					</Flex>
 				) : (
@@ -150,7 +151,6 @@ const Login = () => {
 						<Box position='relative' py='4' fontSize={'18px'}>
 							<Divider
 								bg={text}
-								
 								borderColor={text}
 								rounded={'md'}
 								borderWidth={'1px'}
@@ -161,14 +161,15 @@ const Login = () => {
 						</Box>
 
 						<Button
-							bg="rgba(202, 80, 64, 1)"
+							bg='rgba(202, 80, 64, 1)'
 							p={2.5}
 							w={'100%'}
 							color={'white'}
 							gap={2.5}
 							fontSize={'18px'}
 							_hover={{ opacity: '80%' }}
-							cursor={'pointer'} onClick={() => authenticateUserByGoogle()}
+							cursor={'pointer'}
+							onClick={() => authenticateUserByGoogle()}
 						>
 							<div>Continue with Google</div>
 							<FaGoogle />

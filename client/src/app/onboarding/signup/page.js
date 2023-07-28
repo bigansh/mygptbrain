@@ -143,7 +143,7 @@ const Signup = () => {
 							signup
 						</Button>
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/login'>or login</Link>
+							<Link href='/onboarding/login'>or login</Link>
 						</Text>
 					</>
 				) : (

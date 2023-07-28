@@ -93,7 +93,7 @@ const Dashboard = () => {
 				status: 'success',
 				duration: 3000,
 			})
-			router.push('/signuo')
+			router.push('/onboarding/signup')
 		}
 		if (currentView == 'document') {
 			setIsSidebarOpen(false)
