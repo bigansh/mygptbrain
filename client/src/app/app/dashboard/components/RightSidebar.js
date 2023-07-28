@@ -71,8 +71,7 @@ const RightSideBar = () => {
 	const { data: docData, isLoading: docsIsLoading } = useQuery({
 		queryKey: ['documents'],
 		queryFn: () => getDoc({ profile_id: userData?.profile_id }),
-		enabled:
-			sidebarTopic !== 'threads' && (userData?.profile_id ? true : false),
+		enabled: userData?.profile_id ? true : false,
 		//placeholderData: [{ document_id: 1, heading: 'title 1' }],
 		onError: (error) => {
 			console.log(error, 'current doc check')
