@@ -140,6 +140,7 @@ const OnboardingModal = ({
 	onCloseOnboarding,
 }) => {
 	const [link, setLink] = useState('')
+
 	const uploadRef = useRef(null)
 	const toast = useToast()
 	const queryClient = useQueryClient()
@@ -149,8 +150,11 @@ const OnboardingModal = ({
 	})
 
 	useEffect(() => {
-		if (!localStorage) {
-			if (localStorage.getItem('modal-display') == 'true') {
+		console.log(localStorage)
+		if (localStorage) {
+			console.log(localStorage)
+			if (localStorage.getItem('modal-display') !== true) {
+				console.log(localStorage.getItem('modal-display'))
 				onOpenOnboarding()
 			}
 			localStorage.setItem('modal-display', true)
@@ -214,12 +218,13 @@ const OnboardingModal = ({
 			size={'6xl'}
 			isOpen={isOpenOnboarding}
 			isCentered
+			bg={base800}
 		>
 			<ModalOverlay
 				backdropFilter='blur(2px)'
 				bg='rgba(123, 130, 148, 0.2)'
 			/>
-			<ModalContent h={'80vh'}>
+			<ModalContent h={'80vh'} bg={base800}>
 				<ModalCloseButton
 					cursor={'pointer'}
 					onClick={onCloseOnboarding}
@@ -248,6 +253,8 @@ const OnboardingModal = ({
 							</Heading>
 							<Box
 								border={'1px solid black'}
+								borderColor={text}
+								opacity={0.2}
 								w={'100%'}
 								m={'auto'}
 								my={2}
@@ -307,12 +314,12 @@ const OnboardingModal = ({
 
 							<Box position='relative' py={6} fontSize={'18px'}>
 								<Divider
-									bg={'black'}
-									borderColor={'black'}
+									borderColor={text}
+									opacity={0.2}
 									rounded={'md'}
 									borderWidth={'1px'}
 								/>
-								<AbsoluteCenter px='4' bg={'white'}>
+								<AbsoluteCenter px='4' bg={base800}>
 									or
 								</AbsoluteCenter>
 							</Box>
@@ -362,11 +369,16 @@ const OnboardingModal = ({
 										onChange={(e) =>
 											setLink(e.target.value)
 										}
-										borderColor={
-											isValidHttpUrl(link)
+										_focus={{
+											borderColor: isValidHttpUrl(link)
 												? 'green'
-												: 'red'
-										}
+												: 'red',
+										}}
+										_focusVisible={{
+											borderColor: isValidHttpUrl(link)
+												? 'green'
+												: 'red',
+										}}
 										//onChange={e => e.target.val}
 										onKeyDown={(e) =>
 											e.key === 'Enter'

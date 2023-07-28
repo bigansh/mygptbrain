@@ -114,7 +114,11 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		isLoading: deleteThreadIsLoading,
 		mutate: deleteThreadMutate,
 	} = useMutation({
-		mutationFn: () => deleteChat(currentThread),
+		mutationFn: () =>
+			deleteChat({
+				profile_id: userData?.profile_id,
+				chat_id: currentThread,
+			}),
 		onSuccess: (data) => {
 			console.log(data, 'update chat name data')
 			queryClient.invalidateQueries(['threads'])

@@ -102,6 +102,16 @@ export const uploadDoc = async (url) => {
 	return response.data
 }
 
+export const deleteDoc = async ({ document_id, profile_id }) => {
+	const response = await apiClient.patch(`/document/delete`, {
+		documentQueryObject: {
+			profile_id,
+			document_id,
+		},
+	})
+	return response.data
+}
+
 export const syncDoc = async () => {
 	const response = await apiClient.post(`/document/create?query_type=sync`)
 	return response.data
@@ -166,10 +176,11 @@ export const updateChat = async (data) => {
 	return response.data
 }
 
-export const deleteChat = async (id) => {
-	const response = await apiClient.delete(`/chat/delete`, {
+export const deleteChat = async ({ chat_id, profile_id }) => {
+	const response = await apiClient.patch(`/chat/delete`, {
 		chatQueryObject: {
-			chat_id: id,
+			chat_id,
+			profile_id,
 		},
 	})
 	return response.data

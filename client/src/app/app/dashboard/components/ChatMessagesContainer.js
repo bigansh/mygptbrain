@@ -3,7 +3,7 @@ import SingleChatComponent from './SingleChatComponent'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useThreads } from '@/context'
 import { getUser, readChat } from '@/api'
-import { Flex } from '@chakra-ui/react'
+import { Flex, Spinner } from '@chakra-ui/react'
 
 const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
@@ -13,7 +13,7 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 		queryFn: getUser,
 	})
 
-	const { data: threadData } = useQuery({
+	const { data: threadData, isLoading: threadIsLoading } = useQuery({
 		queryKey: ['threads', currentThread],
 		queryFn: () =>
 			readChat({
@@ -27,14 +27,14 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
-			divRef?.current.scrollIntoView({ behavior: 'smooth' })
+			divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 		},
 		onError: (error) => {
 			console.log(error, 'read chat data 1')
 		},
 	})
 	useEffect(() => {
-		divRef?.current.scrollIntoView({ behavior: 'smooth' })
+		divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 	}, [threadData && threadData[0]?.chat_array?.length])
 	const placeholderData = {
 		chat_array: [
@@ -49,7 +49,16 @@ feel free to customize your experience by changing the thread's name, the model 
 		],
 	}
 
-	return (
+	return threadIsLoading && currentThread !== 'new' ? (
+		<Flex
+			justifyContent={'center'}
+			h={'100%'}
+			w={'100%'}
+			alignItems={'center'}
+		>
+			<Spinner />
+		</Flex>
+	) : (
 		<Flex flexDir={'column'} overflow={'scroll'}>
 			{currentThread == 'new' &&
 			(threadData == undefined || threadData.length == 0)

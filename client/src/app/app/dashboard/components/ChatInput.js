@@ -90,15 +90,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 		},
 	})
 
-	// const { mutate: mutateDelete } = useMutation({
-	// 	mutationFn: () => deleteChat(),
-	// 	onSuccess: (data) => {
-	// 		queryClient.invalidateQueries({
-	// 			queryKey: ['documents'],
-	// 			exact: true,
-	// 		})
-	// 	},
-	// })
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
