@@ -70,6 +70,13 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 		},
 		onError: (error) => {
 			console.log(error)
+			toast({
+				title: 'Error deleting document',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'error',
+				duration: 3000,
+			})
 		},
 	})
 

@@ -44,11 +44,24 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			queryClient.setQueryData(['threads', 'new'], (prev) => {
 				return []
 			})
-			//queryClient.invalidateQueries({ queryKey: ["threads", "new"] });
 			setCurrentThread(data.chat_id)
+			toast({
+				title: 'New chat created',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 		},
 		onError: (error) => {
 			console.log(error)
+			toast({
+				title: 'Error creating chat',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 		},
 	})
 
@@ -89,7 +102,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			console.log(error)
 		},
 	})
-
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {

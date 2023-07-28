@@ -43,12 +43,15 @@ import { LuPocket } from 'react-icons/lu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 import mixpanel from 'mixpanel-browser'
+import { useRouter } from 'next/navigation'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
 	persistence: 'localStorage',
 })
 const Dashboard = () => {
+	const router = useRouter()
+
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -82,6 +85,16 @@ const Dashboard = () => {
 	})
 
 	useEffect(() => {
+		if (!localStorage.getItem('x-session-token')) {
+			toast({
+				title: 'No auth token found',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
+			router.push('/signuo')
+		}
 		if (currentView == 'document') {
 			setIsSidebarOpen(false)
 		}
@@ -150,15 +163,12 @@ const OnboardingModal = ({
 	})
 
 	useEffect(() => {
-		console.log(localStorage)
-		if (localStorage) {
-			console.log(localStorage)
-			if (localStorage.getItem('modal-display') !== true) {
-				console.log(localStorage.getItem('modal-display'))
-				onOpenOnboarding()
-			}
-			localStorage.setItem('modal-display', true)
+		if (localStorage.getItem('modal-display') == 'true') {
+			onCloseOnboarding()
+		} else {
+			onOpenOnboarding()
 		}
+		localStorage.setItem('modal-display', true)
 	}, [])
 
 	const {
@@ -178,13 +188,16 @@ const OnboardingModal = ({
 				status: 'success',
 				duration: 3000,
 			})
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
 		},
 		onError: (error) => {
 			console.log(error)
+			toast({
+				title: 'Error uploading document',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'error',
+				duration: 3000,
+			})
 		},
 	})
 
@@ -207,7 +220,13 @@ const OnboardingModal = ({
 			})
 		},
 		onError: (error) => {
-			console.log(error)
+			toast({
+				title: 'Error uploading link',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'error',
+				duration: 3000,
+			})
 		},
 	})
 

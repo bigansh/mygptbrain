@@ -27,7 +27,7 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
-			divRef?.current?.scrollIntoView({ behavior: 'smooth' })
+			//divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 		},
 		onError: (error) => {
 			console.log(error, 'read chat data 1')
@@ -35,7 +35,7 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	})
 	useEffect(() => {
 		divRef?.current?.scrollIntoView({ behavior: 'smooth' })
-	}, [threadData && threadData[0]?.chat_array?.length])
+	}, [threadData])
 	const placeholderData = {
 		chat_array: [
 			{
@@ -69,8 +69,7 @@ feel free to customize your experience by changing the thread's name, the model 
 				  threadData[0]?.chat_array?.map((message, index) => (
 						<SingleChatComponent message={message} />
 				  ))}
-			<Flex></Flex>
-			<Flex></Flex>
+
 			<Flex ref={divRef}></Flex>
 		</Flex>
 	)

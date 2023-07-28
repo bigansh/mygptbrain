@@ -14,6 +14,7 @@ import {
 	CheckboxIcon,
 	Spinner,
 	Box,
+	useToast,
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
@@ -25,7 +26,7 @@ import { BsChevronDown } from 'react-icons/bs'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base, base800, base700, base600, text, redbg } = useColors()
-
+	const toast = useToast()
 	const queryClient = useQueryClient()
 	const {
 		threads,
@@ -102,6 +103,13 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			queryClient.setQueryData(['threads', currentThread], (prev) => {
 				return [data]
 			})
+			toast({
+				title: 'Name updated successfully',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 		},
 
 		onError: (error) => {
@@ -122,10 +130,27 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		onSuccess: (data) => {
 			console.log(data, 'update chat name data')
 			queryClient.invalidateQueries(['threads'])
+			toast({
+				title: 'Thread deleted',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
+			setCurrentDocument('')
+			setCurrentThread('new')
+			setCurrentView('chat')
 		},
 
 		onError: (error) => {
 			console.log(error)
+			toast({
+				title: 'Error deleting thread',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'error',
+				duration: 3000,
+			})
 		},
 	})
 

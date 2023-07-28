@@ -88,6 +88,13 @@ const RightSideBar = () => {
 
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(['documents'])
+			toast({
+				title: 'Document uploaded successfully',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 			// queryClient.setQueryData(['documents'], (oldData) => [
 			// 	...oldData,
 			// 	data.chat,
@@ -95,6 +102,13 @@ const RightSideBar = () => {
 		},
 		onError: (error) => {
 			console.log(error)
+			toast({
+				title: 'Error uploading document',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'error',
+				duration: 3000,
+			})
 		},
 	})
 
@@ -107,6 +121,13 @@ const RightSideBar = () => {
 
 		onSuccess: (data) => {
 			console.log(data, 'sync doc')
+			toast({
+				title: 'Data synced successfully',
+				position: 'top',
+				variant: 'left-accent',
+				status: 'success',
+				duration: 3000,
+			})
 			//queryClient.invalidateQueries(['documents'])
 			// queryClient.setQueryData(['documents'], (oldData) => [
 			// 	...oldData,
