@@ -20,6 +20,7 @@ import { deleteChat, getDoc, getUser, readChat, updateChat } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
+import { logtail } from '@/app/providers'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base, base800, base700, base600, text, redbg } = useColors()
 	const toast = useToast()
@@ -60,7 +61,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			// console.log(data, 'read chat data 1', currentThread)
 		},
 		onError: (error) => {
-			console.log(data, 'error chat data 1')
+			logtail.info('Error getting thread', error)
+			logtail.flush()
 		},
 	})
 
@@ -79,7 +81,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			// console.log(data, data[0].body, 'read doc data')
 		},
 		onError: (error) => {
-			console.log(error, 'err doc data')
+			logtail.info('Error getting document', error)
+			logtail.flush()
 		},
 	})
 
@@ -109,7 +112,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		},
 
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error editng name', error)
+			logtail.flush()
 		},
 	})
 
@@ -139,7 +143,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		},
 
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error deleting thread', error)
+			logtail.flush()
 			toast({
 				title: 'Error deleting thread',
 				position: 'top',

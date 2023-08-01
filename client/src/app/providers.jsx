@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThreadsProvider, useThreads, UserProvider, useUser } from '@/context'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import '@fontsource/poppins'
+import { Logtail } from '@logtail/browser'
 
 const colors = {
 	brand: {
@@ -31,6 +32,8 @@ const queryClient = new QueryClient({
 		},
 	},
 })
+
+export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL_SOURCE_TOKEN)
 
 export function Providers({ children }) {
 	return (

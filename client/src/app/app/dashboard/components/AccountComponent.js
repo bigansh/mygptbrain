@@ -1,5 +1,6 @@
 'use client'
 import { deleteUser, getUser } from '@/api'
+import { logtail } from '@/app/providers'
 import { useColors } from '@/utils/colors'
 import {
 	Flex,
@@ -60,7 +61,6 @@ const AccountComponent = () => {
 				router.push('/')
 			},
 			onError: (error) => {
-				console.log(error)
 				toast({
 					title: 'Error deleting account!',
 					position: 'top',
@@ -68,8 +68,11 @@ const AccountComponent = () => {
 					status: 'error',
 					duration: 3000,
 				})
+
 				localStorage.removeItem('x-session-token')
 				localStorage.removeItem('modal-display')
+				logtail.info('Error deleting account', error)
+				logtail.flush()
 				router.push('/')
 			},
 		})

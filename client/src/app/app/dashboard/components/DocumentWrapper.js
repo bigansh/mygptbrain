@@ -8,6 +8,7 @@ import { BsLink } from 'react-icons/bs'
 import { LuDelete } from 'react-icons/lu'
 import { DeleteIcon, LinkIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
+import { logtail } from '@/app/providers'
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const { base, base800, base700, base600, text } = useColors()
 	const {
@@ -41,7 +42,9 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			console.log(data, data[0].body, 'read doc data')
 		},
 		onError: (error) => {
-			console.log(error, 'err doc data')
+
+			logtail.info('Error getting document', error)
+			logtail.flush()
 		},
 	})
 
@@ -69,7 +72,8 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			setCurrentView('chat')
 		},
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error deleting document', error)
+			logtail.flush()
 			toast({
 				title: 'Error deleting document',
 				position: 'top',

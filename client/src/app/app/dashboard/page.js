@@ -49,6 +49,7 @@ import {
 import mixpanel from 'mixpanel-browser'
 import { useRouter } from 'next/navigation'
 import RightSideBarDrawer from './components/RightSideBarDrawer'
+import { logtail } from '@/app/providers'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -139,7 +140,9 @@ const Dashboard = () => {
 				{currentThread !== 'new' &&
 					currentView == 'chat' &&
 					threadData && (
-						<Text maxW={'60%'} isTruncated fontSize={'md'}>{threadData[0]?.chat_name}</Text>
+						<Text maxW={'60%'} isTruncated fontSize={'md'}>
+							{threadData[0]?.chat_name}
+						</Text>
 					)}
 				<AiOutlinePlus
 					onClick={() => {
@@ -234,7 +237,6 @@ const OnboardingModal = ({
 			})
 		},
 		onError: (error) => {
-			console.log(error)
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
@@ -242,6 +244,9 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
+
+			logtail.info('Error uploading document', error)
+			logtail.flush()
 		},
 	})
 
@@ -271,6 +276,8 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
+			logtail.info('Error uploading link', error)
+			logtail.flush()
 		},
 	})
 

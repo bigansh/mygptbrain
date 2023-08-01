@@ -73,7 +73,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 		enabled: userData?.profile_id ? true : false,
 		//placeholderData: [{ chat_id: 1, chat_name: 'title 1' }],
 		onError: (error) => {
-			console.log(data, 'read chat data 3')
+			logtail.info('Error getting thread', error)
+			logtail.flush()
 		},
 	})
 
@@ -83,7 +84,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 		enabled: userData?.profile_id ? true : false,
 		//placeholderData: [{ document_id: 1, heading: 'title 1' }],
 		onError: (error) => {
-			console.log(error, 'current doc check')
+			logtail.info('Error getting document', error)
+			logtail.flush()
 		},
 	})
 
@@ -109,7 +111,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 			// ])
 		},
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error uploading document', error)
+			logtail.flush()
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
@@ -143,7 +146,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 			// ])
 		},
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error syncing document', error)
+			logtail.flush()
 		},
 	})
 
