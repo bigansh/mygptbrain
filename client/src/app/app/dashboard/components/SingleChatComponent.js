@@ -15,30 +15,36 @@ const SingleChatComponent = ({ message }) => {
 				<Flex justifyContent={'start'} gap={2} bg={base700} p={5}>
 					<Flex
 						gap={2}
-						w={'65vw'}
-						minW={'55vw'}
-						maxW={'65vw'}
+						w={['100%', '65vw']}
+						minW={['100%', '55vw']}
+						maxW={['100%', '65vw']}
 						margin={'auto'}
 					>
-						<Box>
-							<ChatUserIcon fill={text} />
+						<Box w={['40px', 'auto']}>
+							<ChatUserIcon fill={text} size={30} />
 						</Box>
-						<Text marginBlock={'auto'}>{message.user}</Text>
+						<Text marginBlock={'auto'} fontSize={['sm', 'auto']}>
+							{message.user}
+						</Text>
 					</Flex>
 				</Flex>
 				<Flex justifyContent={'start'} gap={2} p={5}>
 					<Flex
 						gap={2}
-						w={'65vw'}
-						minW={'55vw'}
-						maxW={'65vw'}
+						w={['100%', '65vw']}
+						minW={['100%', '55vw']}
+						maxW={['100%', '65vw']}
 						margin={'auto'}
 					>
 						<Box>
-							<ChatLogoIcon fill={text} />
+							<ChatLogoIcon fill={text} size={30} />
 						</Box>
 
-						<Text whiteSpace={'break-spaces'} marginBlock={'auto'}>
+						<Text
+							whiteSpace={'break-spaces'}
+							marginBlock={'auto'}
+							fontSize={['sm', 'auto']}
+						>
 							{message.llm}
 						</Text>
 					</Flex>

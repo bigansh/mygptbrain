@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import { BsFillMoonStarsFill } from 'react-icons/bs'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 import { useThreads } from '@/context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -157,6 +156,7 @@ const RightSideBar = () => {
 			minW={'20vw'}
 			maxW={'20vw'}
 			maxH={'100vh'}
+			display={['none', 'flex']}
 		>
 			{sidebarTopic == 'threads' && (
 				<Flex flexDir={'column'} gap={2} p={6}>
@@ -178,7 +178,6 @@ const RightSideBar = () => {
 						title='new thread'
 						cursor={'pointer'}
 						onClick={() => {
-							console.log('chat clicked')
 							setCurrentThread('new')
 							setCurrentView('chat')
 						}}
@@ -219,6 +218,7 @@ const RightSideBar = () => {
 								onClick={() => {
 									setCurrentThread(item.chat_id)
 									setCurrentView('chat')
+									onCloseDr
 								}}
 								py={4}
 								px='10px'

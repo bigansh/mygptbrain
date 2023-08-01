@@ -96,6 +96,9 @@ const Login = () => {
 
 	return (
 		<Grid
+			display={['flex', 'grid']}
+			flexDir={['column-reverse', 'row']}
+justifyContent={'center'}
 			w={'100vw'}
 			h={'100vh'}
 			bg='white'

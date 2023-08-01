@@ -51,15 +51,19 @@ feel free to customize your experience by changing the thread's name, the model 
 
 	return threadIsLoading && currentThread !== 'new' ? (
 		<Flex
+			className='wrapper'
+			id='wrapper'
 			justifyContent={'center'}
-			h={'100%'}
-			w={'100%'}
 			alignItems={'center'}
 		>
 			<Spinner />
 		</Flex>
 	) : (
-		<Flex flexDir={'column'} overflow={'scroll'}>
+		<Flex
+			flexDir={'column'}
+			overflow={'scroll'}
+			w={'100%'}
+		>
 			{currentThread == 'new' &&
 			(threadData == undefined || threadData.length == 0)
 				? placeholderData?.chat_array?.map((message, index) => (

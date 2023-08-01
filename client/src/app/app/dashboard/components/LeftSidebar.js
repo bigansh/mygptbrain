@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { BsCheck, BsCheck2, BsLayoutSidebarInsetReverse } from 'react-icons/bs'
+import { BsCheck2, BsLayoutSidebarInsetReverse } from 'react-icons/bs'
 import { useColors } from '@/utils/colors'
 import {
 	Button,
@@ -9,9 +9,7 @@ import {
 	InputGroup,
 	Input,
 	Text,
-	InputLeftElement,
 	InputRightElement,
-	CheckboxIcon,
 	Spinner,
 	Box,
 	useToast,
@@ -19,10 +17,8 @@ import {
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
 import { deleteChat, getDoc, getUser, readChat, updateChat } from '@/api'
-import { PiChatsThin } from 'react-icons/pi'
+import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
-import { HiOutlineFilter, HiOutlinePencil } from 'react-icons/hi'
-import { BsChevronDown } from 'react-icons/bs'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base, base800, base700, base600, text, redbg } = useColors()
@@ -154,20 +150,31 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		},
 	})
 
-	const editNameFunc = () => {}
 	return (
 		<Flex
 			transition={'all 0.5s ease-in'}
-			pos={'relative'}
+			pos={['fixed', 'relative']}
+			top={0}
+			right={0}
 			background={base800}
-			minW={isSidebarOpen ? '20vw' : ''}
-			maxW={isSidebarOpen ? '20vw' : ''}
+			minW={['100vw', isSidebarOpen ? '20vw' : '']}
+			maxW={['100vw', isSidebarOpen ? '20vw' : '']}
+			minH={['100vh', '']}
 			display={isSidebarOpen ? 'flex' : 'none'}
 			maxH={'100vh'}
 			py={6}
 			flexDir={'column'}
 		>
 			<Flex flexDir={'column'} gap={2} w={'100%'} px={6}>
+				<Box
+					display={['block', 'none']}
+					onClick={() => setIsSidebarOpen(false)}
+					position={'absolute'}
+					top={'20px'}
+					right={'20px'}
+				>
+					<IoMdClose />
+				</Box>
 				<Heading fontSize={'2xl'} fontWeight={'400'}>
 					sources
 				</Heading>
@@ -235,10 +242,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 								border={0}
 								placeholder='Enter name'
 							/>
-							<InputRightElement
-								mr={1}
-								onClick={() => editNameFunc()}
-							>
+							<InputRightElement mr={1}>
 								{updateNameIsLoading ? (
 									<Spinner />
 								) : (

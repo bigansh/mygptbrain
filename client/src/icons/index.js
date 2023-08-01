@@ -221,10 +221,10 @@ const SendIcon = ({ fill }) => (
 		/>
 	</svg>
 )
-const ChatUserIcon = ({ fill }) => (
+const ChatUserIcon = ({ fill, size = 51 }) => (
 	<svg
-		width='51'
-		height='51'
+		width={size}
+		height={size}
 		viewBox='0 0 51 51'
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'
@@ -235,10 +235,10 @@ const ChatUserIcon = ({ fill }) => (
 		/>
 	</svg>
 )
-const ChatLogoIcon = ({ fill }) => (
+const ChatLogoIcon = ({ fill, size = 51 }) => (
 	<svg
-		width='51'
-		height='51'
+		width={size}
+		height={size}
 		viewBox='0 0 51 51'
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'

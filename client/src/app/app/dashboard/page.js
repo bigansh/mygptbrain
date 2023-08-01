@@ -8,8 +8,6 @@ import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
-	ModalFooter,
 	ModalBody,
 	ModalCloseButton,
 	useDisclosure,
@@ -20,7 +18,6 @@ import {
 	AbsoluteCenter,
 	Input,
 	InputGroup,
-	InputLeftElement,
 	InputRightElement,
 	useToast,
 } from '@chakra-ui/react'
@@ -34,16 +31,24 @@ import {
 } from './components'
 import { useColors } from '@/utils/colors'
 import { useThreads } from '@/context'
-import { AiOutlineCloudUpload, AiOutlineLink } from 'react-icons/ai'
+import {
+	AiOutlineCloudUpload,
+	AiOutlineLink,
+	AiOutlineMenu,
+	AiOutlinePlus,
+} from 'react-icons/ai'
 import { connectPlatform, getUser, scrapeLink, uploadDoc } from '@/api'
-import { FaReddit, FaTwitter } from 'react-icons/fa'
-import { PiNotionLogoLight } from 'react-icons/pi'
-import { TbBrandOnedrive } from 'react-icons/tb'
-import { LuPocket } from 'react-icons/lu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
+import {
+	AddIcon,
+	DriveIcon,
+	NotionIcon,
+	PockketIcon,
+	RedditIcon,
+} from '@/icons'
 import mixpanel from 'mixpanel-browser'
 import { useRouter } from 'next/navigation'
+import RightSideBarDrawer from './components/RightSideBarDrawer'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -54,6 +59,12 @@ const Dashboard = () => {
 
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+	const {
+		isOpen: isOpenDrawer,
+		onOpen: onOpenDrawer,
+		onClose: onCloseDrawer,
+	} = useDisclosure()
 
 	const {
 		threads,
@@ -84,6 +95,12 @@ const Dashboard = () => {
 		defaultIsOpen: false,
 	})
 
+	const { data: threadData, isLoading: threadIsLoading } = useQuery({
+		queryKey: ['threads', currentThread],
+	})
+
+	console.log('threadData', threadData)
+
 	useEffect(() => {
 		if (!localStorage.getItem('x-session-token')) {
 			toast({
@@ -108,7 +125,31 @@ const Dashboard = () => {
 			color={text}
 			pos={'relative'}
 		>
-			{/* <button cursor={'pointer'} onClick={onOpenOnboarding}>close open modal</button> */}
+			<Box
+				display={['flex', 'none']}
+				w={'100%'}
+				h={'50px'}
+				pos={'absolute'}
+				top={0}
+				left={0}
+				p={'20px'}
+				bg={base}
+				alignItems={'center'}
+				justifyContent={'space-between'}
+			>
+				<AiOutlineMenu onClick={onOpenDrawer} />
+				{currentThread !== 'new' &&
+					currentView == 'chat' &&
+					threadData && (
+						<Text fontSize={'md'}>{threadData[0]?.chat_name}</Text>
+					)}
+				<AiOutlinePlus
+					onClick={() => {
+						setCurrentThread('new')
+						setCurrentView('chat')
+					}}
+				/>
+			</Box>
 			<RightSideBar />
 			{currentView == 'chat' ? (
 				<ChatWrapper isSidebarOpen={isSidebarOpen} />
@@ -120,26 +161,32 @@ const Dashboard = () => {
 				setIsSidebarOpen={setIsSidebarOpen}
 			/>
 			{currentView == 'chat' && currentThread !== 'new' && (
-				<Button
+				<Box
 					cursor={'pointer'}
-					p={'10px'}
+					p={['8px' ,'10px']}
 					onClick={() => setIsSidebarOpen(!isSidebarOpen)}
 					position={'absolute'}
 					right={'0'}
-					bottom={0}
+					bottom={['50px', 0]}
 					borderLeftRadius={4}
 					borderRightRadius={0}
 					background={base700}
+					
 					display={isSidebarOpen ? 'none' : 'flex'}
 				>
 					{' '}
-					<BsLayoutSidebarInsetReverse fontSize={24} />
-				</Button>
+					<BsLayoutSidebarInsetReverse fontSize={[22 , 24]} />
+				</Box>
 			)}
 			<OnboardingModal
 				isOpenOnboarding={isOpenOnboarding}
 				onOpenOnboarding={onOpenOnboarding}
 				onCloseOnboarding={onCloseOnboarding}
+			/>
+			<RightSideBarDrawer
+				isOpenDrawer={isOpenDrawer}
+				onCloseDrawer={onCloseDrawer}
+				onOpenDrawer={onOpenDrawer}
 			/>
 		</Flex>
 	)

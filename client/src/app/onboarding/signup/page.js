@@ -23,8 +23,8 @@ import { FaGoogle } from 'react-icons/fa'
 const Signup = () => {
 	const router = useRouter()
 	const toast = useToast()
-	const { base, base800, base700,base600, text } = useColors()
-	
+	const { base, base800, base700, base600, text } = useColors()
+
 	const [userDetails, setUserDetails] = useState({
 		name: '',
 		email: '',
@@ -85,6 +85,9 @@ const Signup = () => {
 
 	return (
 		<Grid
+			display={['flex', 'grid']}
+			flexDir={['column-reverse', 'row']}
+			justifyContent={'center'}
 			w={'100vw'}
 			h={'100vh'}
 			background={base}
@@ -110,7 +113,7 @@ const Signup = () => {
 					value={userDetails.email}
 					onChange={handleChange}
 					onFocus={(e) => setIsEmailFocused(true)}
-					placeholder="hello@bigansh.me"
+					placeholder='hello@bigansh.me'
 				/>
 				{isEmailFocused || userDetails.email !== '' ? (
 					<>
@@ -137,7 +140,8 @@ const Signup = () => {
 								bg: base600,
 							}}
 							color={text}
-							cursor={'pointer'} onClick={handleLoginSubmit}
+							cursor={'pointer'}
+							onClick={handleLoginSubmit}
 							mt={2}
 						>
 							signup
@@ -151,7 +155,6 @@ const Signup = () => {
 						<Box position='relative' py='4' fontSize={'18px'}>
 							<Divider
 								bg={text}
-								
 								borderColor={text}
 								rounded={'md'}
 								borderWidth={'1px'}
@@ -169,7 +172,8 @@ const Signup = () => {
 							gap={2.5}
 							fontSize={'18px'}
 							_hover={{ opacity: '80%' }}
-							cursor={'pointer'} onClick={() => authenticateUserByGoogle()}
+							cursor={'pointer'}
+							onClick={() => authenticateUserByGoogle()}
 						>
 							<div>Continue with Google</div>
 							<FaGoogle />

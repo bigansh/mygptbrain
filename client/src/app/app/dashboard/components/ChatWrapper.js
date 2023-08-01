@@ -13,8 +13,10 @@ const ChatWrapper = ({ isSidebarOpen }) => {
 	return (
 		<Flex
 			flexDir={'column'}
-			w={isSidebarOpen ? '60vw' : '80vw'}
-			maxW={isSidebarOpen ? '60vw' : '80vw'}
+			w={['100vw', isSidebarOpen ? '60vw' : '80vw']}
+			mt={['50px', 'auto']}
+			h={'100vh'}
+			maxW={['100vw', isSidebarOpen ? '60vw' : '80vw']}
 			transition={'all 0.5s ease-in'}
 			background={base}
 		>

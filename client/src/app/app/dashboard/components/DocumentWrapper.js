@@ -92,15 +92,16 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			overflow={'scroll'}
 			gap={4}
 			p={6}
-			w={isSidebarOpen ? '60vw' : '80vw'}
-			maxW={isSidebarOpen ? '60vw' : '80vw'}
+			w={['100%', isSidebarOpen ? '60vw' : '80vw']}
+			maxW={['100%', isSidebarOpen ? '60vw' : '80vw']}
 			margin={'auto'}
+			mt={['50px', 'auto']}
 		>
 			<Flex
 				flexDir={'column'}
-				w={'65vw'}
-				minW={'55vw'}
-				maxW={'65vw'}
+				w={['100%', '65vw']}
+				minW={['100%', '55vw']}
+				maxW={['100%', '65vw']}
 				mx={'auto'}
 			>
 				{' '}

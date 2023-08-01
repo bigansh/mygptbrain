@@ -125,14 +125,14 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				mt={'auto'}
 				my={1}
 				mx={'auto'}
-				minW={'58vw'}
-				maxW={'58vw'}
+				minW={['100%', '58vw']}
+				maxW={['100%', '58vw']}
 				alignItems={'center'}
 				bg={base700}
 				rounded={'md'}
 			>
 				<Textarea
-					placeholder='go ahead! ask your second brain, a question!'
+					placeholder={['ask your second brain, a question!']}
 					value={inputValue}
 					onChange={(e) => setInputValue(e.target.value)}
 					border={'transparent'}
@@ -160,6 +160,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					maxRows={10}
 					as={ResizeTextarea}
 					transition='height none'
+					fontSize={['sm', 'auto']}
 				/>
 				<Box
 					cursor={'pointer'}
@@ -176,7 +177,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 							isIndeterminate
 						/>
 					) : (
-						<PiPaperPlaneTiltLight size={30} />
+						<PiPaperPlaneTiltLight size={20} />
 					)}
 				</Box>
 			</Flex>
