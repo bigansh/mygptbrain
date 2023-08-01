@@ -98,3 +98,8 @@ textarea {
 	align-items: center;
 	display: flex;
 }
+
+.past-text {
+	transform: scale(0.5);
+	transition: transform 400ms ease-in-out;
+}

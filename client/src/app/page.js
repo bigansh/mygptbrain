@@ -11,9 +11,29 @@ import {
 } from '@chakra-ui/react'
 import { Head } from 'next/document'
 import Script from 'next/script'
+import { useEffect, useState } from 'react'
+import { motion, useAnimationControls } from 'framer-motion'
+
+const scrollingTexts = [
+	'imagine not having to read your bookmarks...',
+	'an assistant that could answer questions, contextual to your bookmarks...',
+	'a service that syncs with notion tables, drive file, pocket articles, & much more.',
+]
 
 export default function Home() {
 	const { toggleColorMode } = useColorMode()
+	const [focusedTextIndex, setFocusedTextIndex] = useState(0)
+	const animationController = useAnimationControls()
+
+	useEffect(() => {
+		function scrollHandler(e) {
+			setFocusedTextIndex(
+				Math.round(e.target.defaultView.scrollY / window.innerHeight)
+			)
+		}
+		window.addEventListener('scroll', scrollHandler)
+		return () => window.removeEventListener('scroll', scrollHandler)
+	}, [])
 
 	return (
 		<>
@@ -22,17 +42,53 @@ export default function Home() {
 				class='section wf-section'
 			>
 				<div class='div-block'>
-					<div class='w-layout-blockcontainer container w-container'>
-						<div class='div-block-2'>
-							<div class='text _1'>
-								imagine not having to read your bookmarks...
-							</div>
+					<div
+						class='w-layout-blockcontainer container w-container'
+						style={{ maxWidth: 'unset' }}
+					>
+						<div
+							class='div-block-2'
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 32,
+							}}
+						>
+							{/* <div class='text _1'></div>
 							<div class='text _2'>
 								imagine not having to read your bookmarks...
 							</div>
 							<div class='text _3'>
 								imagine not having to read your bookmarks...
-							</div>
+							</div> */}
+							{scrollingTexts.map((text, index) => (
+								<motion.p
+									animate={animationController}
+									style={{
+										fontSize:
+											focusedTextIndex - index === 1
+												? 24
+												: focusedTextIndex - index === 2
+												? 20
+												: 26,
+										opacity:
+											focusedTextIndex - index === 1
+												? 0.75
+												: focusedTextIndex - index === 2
+												? 0.5
+												: undefined,
+										display:
+											index > focusedTextIndex
+												? 'none'
+												: undefined,
+										translateY: `-${
+											focusedTextIndex * 100
+										}%`,
+									}}
+								>
+									{text}
+								</motion.p>
+							))}
 						</div>
 					</div>
 				</div>
