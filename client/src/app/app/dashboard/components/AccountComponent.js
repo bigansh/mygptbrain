@@ -111,7 +111,7 @@ const AccountComponent = () => {
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
-				w={'400px'}
+				w={['100%', '400px']}
 				contentEditable={false}
 				disabled
 				opacity={1}
@@ -126,7 +126,7 @@ const AccountComponent = () => {
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
-				w={'400px'}
+				w={['100%', '400px']}
 				contentEditable={false}
 				disabled
 			/>
@@ -150,7 +150,7 @@ const AccountComponent = () => {
 						fontSize={'18px'}
 						bg={base800}
 						p={2.5}
-						w={'400px'}
+						w={['100%', '400px']}
 					/>
 
 					<FormLabel fontSize={'xl'} fontWeight={'400'} mb={0} mt={4}>
@@ -170,7 +170,7 @@ const AccountComponent = () => {
 						fontSize={'18px'}
 						bg={base800}
 						p={2.5}
-						w={'400px'}
+						w={['100%', '400px']}
 					/>
 				</>
 			)}

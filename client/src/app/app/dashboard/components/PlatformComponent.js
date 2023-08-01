@@ -17,6 +17,8 @@ const PlatformComponent = () => {
 			mt={2}
 			p={4}
 			gap={5}
+			display={['flex', 'grid']}
+			flexDirection={['column', 'row']}
 		>
 			<PlatformCard
 				name='reddit'

@@ -15,7 +15,7 @@ const ChatWrapper = ({ isSidebarOpen }) => {
 			flexDir={'column'}
 			w={['100vw', isSidebarOpen ? '60vw' : '80vw']}
 			mt={['50px', 'auto']}
-			h={'100vh'}
+			h={['auto', '100vh']}
 			maxW={['100vw', isSidebarOpen ? '60vw' : '80vw']}
 			transition={'all 0.5s ease-in'}
 			background={base}

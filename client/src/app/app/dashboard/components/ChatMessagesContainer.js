@@ -53,6 +53,7 @@ feel free to customize your experience by changing the thread's name, the model 
 		<Flex
 			className='wrapper'
 			id='wrapper'
+			h={'100vh'}
 			justifyContent={'center'}
 			alignItems={'center'}
 		>
