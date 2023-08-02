@@ -49,6 +49,7 @@ import {
 import mixpanel from 'mixpanel-browser'
 import { useRouter } from 'next/navigation'
 import RightSideBarDrawer from './components/RightSideBarDrawer'
+import { logtail } from '@/app/providers'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -71,10 +72,7 @@ const Dashboard = () => {
 		setThreads,
 		currentThread,
 		setCurrentThread,
-		documents,
-		setDocuments,
-		currentDocument,
-		setCurrentDocument,
+
 		currentView,
 		setCurrentView,
 	} = useThreads()
@@ -134,6 +132,7 @@ const Dashboard = () => {
 				left={0}
 				p={'20px'}
 				bg={base}
+				borderBottom={'1px solid #2c2c2c'}
 				alignItems={'center'}
 				justifyContent={'space-between'}
 			>
@@ -141,7 +140,9 @@ const Dashboard = () => {
 				{currentThread !== 'new' &&
 					currentView == 'chat' &&
 					threadData && (
-						<Text fontSize={'md'}>{threadData[0]?.chat_name}</Text>
+						<Text maxW={'60%'} isTruncated fontSize={'md'}>
+							{threadData[0]?.chat_name}
+						</Text>
 					)}
 				<AiOutlinePlus
 					onClick={() => {
@@ -163,7 +164,7 @@ const Dashboard = () => {
 			{currentView == 'chat' && currentThread !== 'new' && (
 				<Box
 					cursor={'pointer'}
-					p={['8px' ,'10px']}
+					p={['8px', '10px']}
 					onClick={() => setIsSidebarOpen(!isSidebarOpen)}
 					position={'absolute'}
 					right={'0'}
@@ -171,11 +172,10 @@ const Dashboard = () => {
 					borderLeftRadius={4}
 					borderRightRadius={0}
 					background={base700}
-					
 					display={isSidebarOpen ? 'none' : 'flex'}
 				>
 					{' '}
-					<BsLayoutSidebarInsetReverse fontSize={[22 , 24]} />
+					<BsLayoutSidebarInsetReverse fontSize={[22, 24]} />
 				</Box>
 			)}
 			<OnboardingModal
@@ -237,7 +237,6 @@ const OnboardingModal = ({
 			})
 		},
 		onError: (error) => {
-			console.log(error)
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
@@ -245,6 +244,9 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
+
+			logtail.info('Error uploading document', error)
+			logtail.flush()
 		},
 	})
 
@@ -274,6 +276,8 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
+			logtail.info('Error uploading link', error)
+			logtail.flush()
 		},
 	})
 

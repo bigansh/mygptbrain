@@ -4,6 +4,7 @@ import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useThreads } from '@/context'
 import { getUser, readChat } from '@/api'
 import { Flex, Spinner } from '@chakra-ui/react'
+import { logtail } from '@/app/providers'
 
 const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
@@ -30,7 +31,9 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 			//divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 		},
 		onError: (error) => {
-			console.log(error, 'read chat data 1')
+
+			logtail.info('Error getting thread', error)
+			logtail.flush()
 		},
 	})
 	useEffect(() => {
@@ -53,17 +56,14 @@ feel free to customize your experience by changing the thread's name, the model 
 		<Flex
 			className='wrapper'
 			id='wrapper'
+			h={'100vh'}
 			justifyContent={'center'}
 			alignItems={'center'}
 		>
 			<Spinner />
 		</Flex>
 	) : (
-		<Flex
-			flexDir={'column'}
-			overflow={'scroll'}
-			w={'100%'}
-		>
+		<Flex flexDir={'column'} overflow={'scroll'} w={'100%'}>
 			{currentThread == 'new' &&
 			(threadData == undefined || threadData.length == 0)
 				? placeholderData?.chat_array?.map((message, index) => (

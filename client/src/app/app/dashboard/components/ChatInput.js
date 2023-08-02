@@ -14,6 +14,7 @@ import {
 	CircularProgress,
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
+import { logtail } from '@/app/providers'
 const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
 
@@ -54,7 +55,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			})
 		},
 		onError: (error) => {
-			console.log(error)
 			toast({
 				title: 'Error creating chat',
 				position: 'top',
@@ -62,6 +62,9 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				status: 'success',
 				duration: 3000,
 			})
+
+			logtail.info('Error creating chat', error)
+			logtail.flush()
 		},
 	})
 
@@ -99,7 +102,8 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 		},
 
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error getting thread', error)
+			logtail.flush()
 		},
 	})
 

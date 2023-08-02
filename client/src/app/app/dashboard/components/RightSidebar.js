@@ -25,6 +25,7 @@ import {
 	ThreadIcon,
 	DocumentIcon,
 } from '@/icons'
+import { logtail } from '@/app/providers'
 
 const RightSideBar = () => {
 	const queryClient = useQueryClient()
@@ -63,7 +64,9 @@ const RightSideBar = () => {
 		enabled: userData?.profile_id ? true : false,
 		//placeholderData: [{ chat_id: 1, chat_name: 'title 1' }],
 		onError: (error) => {
-			console.log(data, 'read chat data 3')
+			logtail.info('Error getting thread', error)
+			logtail.flush()
+			logtail
 		},
 	})
 
@@ -73,7 +76,8 @@ const RightSideBar = () => {
 		enabled: userData?.profile_id ? true : false,
 		//placeholderData: [{ document_id: 1, heading: 'title 1' }],
 		onError: (error) => {
-			console.log(error, 'current doc check')
+			logtail.info('Error getting document', error)
+			logtail.flush()
 		},
 	})
 
@@ -99,7 +103,8 @@ const RightSideBar = () => {
 			// ])
 		},
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error uploading document', error)
+			logtail.flush()
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
@@ -133,7 +138,8 @@ const RightSideBar = () => {
 			// ])
 		},
 		onError: (error) => {
-			console.log(error)
+			logtail.info('Error syncing data', error)
+			logtail.flush()
 		},
 	})
 

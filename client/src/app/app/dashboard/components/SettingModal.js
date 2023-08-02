@@ -11,6 +11,7 @@ import {
 	ModalCloseButton,
 	Lorem,
 	Flex,
+	Box,
 	Heading,
 	Grid,
 } from '@chakra-ui/react'
@@ -61,40 +62,45 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 						templateColumns={'1fr 4fr'}
 						rounded={'lg'}
 						overflow={'hidden'}
+						display={['flex', 'grid']}
+						flexDir={['column', 'row']}
 					>
 						<Flex
-							h={'100%'}
 							flexDir='column'
 							bg={base800}
 							p={5}
-							height={'100%'}
+							h={['auto', '100%']}
 							gap={2}
 						>
 							<Heading fontSize={'2xl'} fontWeight={'500'} mb={4}>
 								setting
 							</Heading>
-							<SidebarItem
-								activeButton={activeButton}
-								cursor={'pointer'}
-								onClick={() => handleButtonClick('account')}
-								title='account'
-								icon={<UserIcon fill={text} />}
-							/>
-							<SidebarItem
-								activeButton={activeButton}
-								cursor={'pointer'}
-								onClick={() => handleButtonClick('platform')}
-								title='platform'
-								icon={<PlatformIcon fill={text} />}
-							/>
-							<SidebarItem
-							disabled={true}
-								activeButton={activeButton}
-								cursor={'pointer'}
-								onClick={() => handleButtonClick('billing')}
-								title='billing'
-								icon={<BillingIcon fill={text} />}
-							/>
+							<Flex>
+								<SidebarItem
+									activeButton={activeButton}
+									cursor={'pointer'}
+									onClick={() => handleButtonClick('account')}
+									title='account'
+									icon={<UserIcon fill={text} />}
+								/>
+								<SidebarItem
+									activeButton={activeButton}
+									cursor={'pointer'}
+									onClick={() =>
+										handleButtonClick('platform')
+									}
+									title='platform'
+									icon={<PlatformIcon fill={text} />}
+								/>
+								<SidebarItem
+									disabled={true}
+									activeButton={activeButton}
+									cursor={'pointer'}
+									onClick={() => handleButtonClick('billing')}
+									title='billing'
+									icon={<BillingIcon fill={text} />}
+								/>
+							</Flex>
 						</Flex>
 						<Flex bg={base}>{childComponent}</Flex>
 					</Grid>
@@ -106,7 +112,13 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 
 export default SettingModal
 
-const SidebarItem = ({ title, icon, onClick, activeButton , disabled = false }) => {
+const SidebarItem = ({
+	title,
+	icon,
+	onClick,
+	activeButton,
+	disabled = false,
+}) => {
 	const { base, base800, base700, text, base600 } = useColors()
 	return (
 		<Button
@@ -120,10 +132,14 @@ const SidebarItem = ({ title, icon, onClick, activeButton , disabled = false }) 
 			// _active={{ background: base800 }}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
+			fontSize={['sm', 'md']}
 			disabled={disabled}
+			textAlign={['center', 'left']}
+			//p={[2 , 'auto']}
+			m={'auto'}
 		>
 			{title}
-			{icon}
+			<Box display={['none', 'block']}>{icon}</Box>
 		</Button>
 	)
 }

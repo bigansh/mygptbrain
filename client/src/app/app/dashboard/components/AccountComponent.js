@@ -1,5 +1,6 @@
 'use client'
 import { deleteUser, getUser } from '@/api'
+import { logtail } from '@/app/providers'
 import { useColors } from '@/utils/colors'
 import {
 	Flex,
@@ -60,7 +61,6 @@ const AccountComponent = () => {
 				router.push('/')
 			},
 			onError: (error) => {
-				console.log(error)
 				toast({
 					title: 'Error deleting account!',
 					position: 'top',
@@ -68,8 +68,11 @@ const AccountComponent = () => {
 					status: 'error',
 					duration: 3000,
 				})
+
 				localStorage.removeItem('x-session-token')
 				localStorage.removeItem('modal-display')
+				logtail.info('Error deleting account', error)
+				logtail.flush()
 				router.push('/')
 			},
 		})
@@ -111,7 +114,7 @@ const AccountComponent = () => {
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
-				w={'400px'}
+				w={['100%', '400px']}
 				contentEditable={false}
 				disabled
 				opacity={1}
@@ -126,7 +129,7 @@ const AccountComponent = () => {
 				fontSize={'18px'}
 				bg={base800}
 				p={2.5}
-				w={'400px'}
+				w={['100%', '400px']}
 				contentEditable={false}
 				disabled
 			/>
@@ -150,7 +153,7 @@ const AccountComponent = () => {
 						fontSize={'18px'}
 						bg={base800}
 						p={2.5}
-						w={'400px'}
+						w={['100%', '400px']}
 					/>
 
 					<FormLabel fontSize={'xl'} fontWeight={'400'} mb={0} mt={4}>
@@ -170,7 +173,7 @@ const AccountComponent = () => {
 						fontSize={'18px'}
 						bg={base800}
 						p={2.5}
-						w={'400px'}
+						w={['100%', '400px']}
 					/>
 				</>
 			)}
