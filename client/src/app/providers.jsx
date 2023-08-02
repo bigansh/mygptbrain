@@ -33,7 +33,7 @@ const queryClient = new QueryClient({
 	},
 })
 
-export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL_SOURCE_TOKEN)
+export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL)
 
 export function Providers({ children }) {
 	return (
