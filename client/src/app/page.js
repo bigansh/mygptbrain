@@ -12,7 +12,7 @@ import {
 import { Head } from 'next/document'
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
-import { motion, useAnimationControls } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const scrollingTexts = [
 	'imagine not having to read your bookmarks...',
@@ -23,7 +23,6 @@ const scrollingTexts = [
 export default function Home() {
 	const { toggleColorMode } = useColorMode()
 	const [focusedTextIndex, setFocusedTextIndex] = useState(0)
-	const animationController = useAnimationControls()
 
 	useEffect(() => {
 		function scrollHandler(e) {
@@ -63,7 +62,20 @@ export default function Home() {
 							</div> */}
 							{scrollingTexts.map((text, index) => (
 								<motion.p
-									animate={animationController}
+									animate={{
+										y: `-${focusedTextIndex * 100}%`,
+										opacity:
+											index > focusedTextIndex
+												? 0
+												: focusedTextIndex - index === 1
+												? 0.75
+												: focusedTextIndex - index === 2
+												? 0.5
+												: 1,
+										transition: {
+											type: 'just',
+										},
+									}}
 									style={{
 										fontSize:
 											focusedTextIndex - index === 1
@@ -71,19 +83,10 @@ export default function Home() {
 												: focusedTextIndex - index === 2
 												? 20
 												: 26,
-										opacity:
-											focusedTextIndex - index === 1
-												? 0.75
-												: focusedTextIndex - index === 2
-												? 0.5
-												: undefined,
 										display:
 											index > focusedTextIndex
 												? 'none'
 												: undefined,
-										translateY: `-${
-											focusedTextIndex * 100
-										}%`,
 									}}
 								>
 									{text}
