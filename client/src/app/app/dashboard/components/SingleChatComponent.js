@@ -19,7 +19,7 @@ const SingleChatComponent = ({ message }) => {
 						<Box w={['40px', 'auto']}>
 							<ChatUserIcon fill={text} size={30} />
 						</Box>
-						<Text marginBlock={'auto'} fontSize={['sm', 'auto']}>
+						<Text marginBlock={'auto'} fontSize={['sm', 'md']}>
 							{message.user}
 						</Text>
 					</Flex>
@@ -39,7 +39,7 @@ const SingleChatComponent = ({ message }) => {
 						<Text
 							whiteSpace={'break-spaces'}
 							marginBlock={'auto'}
-							fontSize={['sm', 'auto']}
+							fontSize={['sm', 'md']}
 						>
 							{message.llm}
 						</Text>

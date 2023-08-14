@@ -13,7 +13,7 @@ import {
 	Text,
 	Input,
 	Spinner,
-	useToast
+	useToast,
 } from '@chakra-ui/react'
 import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
@@ -225,7 +225,7 @@ const RightSideBar = () => {
 								onClick={() => {
 									setCurrentThread(item.chat_id)
 									setCurrentView('chat')
-									onCloseDr
+									//onClose()
 								}}
 								py={4}
 								px='10px'
