@@ -164,7 +164,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					maxRows={10}
 					as={ResizeTextarea}
 					transition='height none'
-					fontSize={['sm', 'auto']}
+					fontSize={['sm', 'md']}
 				/>
 				<Box
 					cursor={'pointer'}
