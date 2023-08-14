@@ -1,14 +1,10 @@
-//import { GPTBrain, UserSvg } from '@/app/assets'
 import { ChatLogoIcon, ChatUserIcon } from '@/icons'
 import { useColors } from '@/utils/colors'
 import { Box, Flex, Text } from '@chakra-ui/react'
-import Image from 'next/image'
 import React from 'react'
-import { LuBrainCircuit } from 'react-icons/lu'
-import { PiUserCircleLight } from 'react-icons/pi'
 
 const SingleChatComponent = ({ message }) => {
-	const { base, base800, base700, text } = useColors()
+	const { base700, text } = useColors()
 	return (
 		<>
 			<Flex flexDir={'column'}>

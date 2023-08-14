@@ -75,7 +75,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 							<Heading fontSize={'2xl'} fontWeight={'500'} mb={4}>
 								setting
 							</Heading>
-							<Flex>
+							<Flex flexDir={['row', 'column']}>
 								<SidebarItem
 									activeButton={activeButton}
 									cursor={'pointer'}
@@ -122,20 +122,17 @@ const SidebarItem = ({
 	const { base, base800, base700, text, base600 } = useColors()
 	return (
 		<Button
-			cursor={'pointer'}
 			onClick={!disabled && onClick}
 			bg={activeButton == title ? base700 : base800}
 			_hover={{ bg: base600 }}
 			opacity={disabled ? 0.5 : 1}
 			cursor={disabled ? 'not-allowed' : 'pointer'}
 			w={'100%'}
-			// _active={{ background: base800 }}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
 			fontSize={['sm', 'md']}
 			disabled={disabled}
 			textAlign={['center', 'left']}
-			//p={[2 , 'auto']}
 			m={'auto'}
 		>
 			{title}

@@ -12,14 +12,10 @@ import {
 	Spinner,
 	Input,
 	Drawer,
-	DrawerBody,
-	DrawerFooter,
-	DrawerHeader,
 	DrawerOverlay,
 	DrawerContent,
-	FormLabel,
 	DrawerCloseButton,
-	Stack,
+	useToast,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
@@ -36,7 +32,10 @@ import {
 	ThreadIcon,
 	DocumentIcon,
 } from '@/icons'
-const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
+import { logtail } from '@/app/providers'
+const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
+	const toast = useToast()
+	
 	const queryClient = useQueryClient()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
@@ -50,15 +49,10 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 	const { colorMode, toggleColorMode } = useColorMode()
 	const { base, base800, base700, text } = useColors()
 	const {
-		threads,
-		setThreads,
 		currentThread,
 		setCurrentThread,
-		documents,
-		setDocuments,
 		currentDocument,
 		setCurrentDocument,
-		currentView,
 		setCurrentView,
 	} = useThreads()
 
@@ -71,7 +65,6 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 		queryKey: ['threads'],
 		queryFn: () => readChat({ profile_id: userData?.profile_id }),
 		enabled: userData?.profile_id ? true : false,
-		//placeholderData: [{ chat_id: 1, chat_name: 'title 1' }],
 		onError: (error) => {
 			logtail.info('Error getting thread', error)
 			logtail.flush()
@@ -90,13 +83,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 	})
 
 	const {
-		data,
 		mutate: uploadDocMutate,
 		isLoading: uploadDocIsLoading,
 	} = useMutation({
 		mutationFn: () => uploadDoc(uploadRef.current.files[0]),
 
-		onSuccess: (data) => {
+		onSuccess: () => {
 			queryClient.invalidateQueries(['documents'])
 			toast({
 				title: 'Document uploaded successfully',
@@ -124,14 +116,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 	})
 
 	const {
-		data: syncDocData,
 		mutate: syncDocMutate,
 		isLoading: syncDocIsLoading,
 	} = useMutation({
 		mutationFn: () => syncDoc(),
 
-		onSuccess: (data) => {
-			console.log(data, 'sync doc')
+		onSuccess: () => {
 			toast({
 				title: 'Data synced successfully',
 				position: 'top',
@@ -139,11 +129,6 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 				status: 'success',
 				duration: 3000,
 			})
-			//queryClient.invalidateQueries(['documents'])
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
 		},
 		onError: (error) => {
 			logtail.info('Error syncing document', error)
@@ -194,7 +179,6 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 							title='new thread'
 							cursor={'pointer'}
 							onClick={() => {
-								console.log('chat clicked')
 								setCurrentThread('new')
 								setCurrentView('chat')
 								onCloseDrawer()
@@ -220,7 +204,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 							//maxH={'400px'}
 							overflow={'scroll'}
 						>
-							{filteredThreads?.map((item, index) => (
+							{filteredThreads?.map((item) => (
 								<Button
 									display={'flex'}
 									justifyContent={'flex-start'}
@@ -273,7 +257,6 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 							title='sync documents'
 							cursor={'pointer'}
 							onClick={() => {
-								console.log('trigger')
 								syncDocMutate()
 							}}
 							icon={
@@ -321,7 +304,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer, onOpenDrawer }) => {
 							//maxH={'400px'}
 							overflow={'scroll'}
 						>
-							{filteredDocuments?.map((item, index) => (
+							{filteredDocuments?.map((item) => (
 								<Button
 									display={'grid'}
 									gridTemplateColumns={'24px 1fr'}

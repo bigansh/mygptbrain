@@ -12,6 +12,7 @@ import {
 	Input,
 	Textarea,
 	CircularProgress,
+	useToast,
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
 import { logtail } from '@/app/providers'
@@ -21,7 +22,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const ref = useRef()
 	const { currentThread, setCurrentThread } = useThreads()
 	const { base, base800, base700, text } = useColors()
-
+	const toast = useToast()
 	const {
 		data,
 		isLoading: addIsLoading,
@@ -114,7 +115,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	}
 
 	if (updateIsLoading || addIsLoading) {
-		console.log('loading')
 		setInputValue('')
 		divRef?.current.scrollIntoView({ behavior: 'smooth' })
 		divRef.current.scrollIntoView({ behavior: 'smooth' })

@@ -1,5 +1,5 @@
 import { useColors } from '@/utils/colors'
-import { Button, Flex } from '@chakra-ui/react'
+import { Button, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 const FunctionalBtn = ({ title, onClick, icon, disabled }) => {
 	const { base, base800, base700, base600, text } = useColors()
@@ -13,8 +13,11 @@ const FunctionalBtn = ({ title, onClick, icon, disabled }) => {
 			w={'100%'}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
+			isTruncated
 		>
-			{title}
+			<Text textAlign={'initial'} isTruncated>
+				{title}
+			</Text>
 			{icon}
 		</Button>
 

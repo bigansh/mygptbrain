@@ -1,6 +1,14 @@
 import { useColors } from '@/utils/colors'
 import React, { useRef, useState } from 'react'
-import { Button, Flex, Heading, Spinner, Text, Tooltip } from '@chakra-ui/react'
+import {
+	Button,
+	Flex,
+	Heading,
+	Spinner,
+	Text,
+	Tooltip,
+	useToast,
+} from '@chakra-ui/react'
 import { useThreads } from '@/context'
 import { deleteChat, deleteDoc, getDoc, getUser } from '@/api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -10,17 +18,12 @@ import { DeleteIcon, LinkIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
 import { logtail } from '@/app/providers'
 const DocumentWrapper = ({ isSidebarOpen }) => {
-	const { base, base800, base700, base600, text } = useColors()
+	const toast = useToast()
+	const { base, text } = useColors()
 	const {
-		threads,
-		setThreads,
-		currentThread,
 		setCurrentThread,
-		documents,
-		setDocuments,
 		currentDocument,
 		setCurrentDocument,
-		currentView,
 		setCurrentView,
 	} = useThreads()
 	const queryClient = useQueryClient()
@@ -38,53 +41,46 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 				document_id: currentDocument,
 			}),
 		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
-		onSuccess: (data) => {
-			console.log(data, data[0].body, 'read doc data')
-		},
-		onError: (error) => {
 
+		onError: (error) => {
 			logtail.info('Error getting document', error)
 			logtail.flush()
 		},
 	})
 
-	const {
-		data: deleteDocData,
-		isLoading: deleteDocIsLoading,
-		mutate: deleteDocMutate,
-	} = useMutation({
-		mutationFn: () =>
-			deleteDoc({
-				profile_id: userData?.profile_id,
-				document_id: currentDocument,
-			}),
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-			toast({
-				title: 'Document deleted',
-				position: 'top',
-				variant: 'left-accent',
-				status: 'success',
-				duration: 3000,
-			})
-			setCurrentDocument('')
-			setCurrentThread('new')
-			setCurrentView('chat')
-		},
-		onError: (error) => {
-			logtail.info('Error deleting document', error)
-			logtail.flush()
-			toast({
-				title: 'Error deleting document',
-				position: 'top',
-				variant: 'left-accent',
-				status: 'error',
-				duration: 3000,
-			})
-		},
-	})
+	const { isLoading: deleteDocIsLoading, mutate: deleteDocMutate } =
+		useMutation({
+			mutationFn: () =>
+				deleteDoc({
+					profile_id: userData?.profile_id,
+					document_id: currentDocument,
+				}),
+			onSuccess: () => {
+				queryClient.invalidateQueries(['documents'])
+				toast({
+					title: 'Document deleted',
+					position: 'top',
+					variant: 'left-accent',
+					status: 'success',
+					duration: 3000,
+				})
+				setCurrentDocument('')
+				setCurrentThread('new')
+				setCurrentView('chat')
+			},
+			onError: (error) => {
+				logtail.info('Error deleting document', error)
+				logtail.flush()
+				toast({
+					title: 'Error deleting document',
+					position: 'top',
+					variant: 'left-accent',
+					status: 'error',
+					duration: 3000,
+				})
+			},
+		})
 
-	const divRef = useRef()
 	const router = useRouter()
 
 	return documentData ? (

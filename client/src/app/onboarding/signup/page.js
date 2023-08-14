@@ -1,5 +1,6 @@
 'use client'
 import { authenticateUser, authenticateUserByGoogle, verifyEmail } from '@/api'
+import { logtail } from '@/app/providers'
 import { OnboardingBanner } from '@/assets'
 import { useColors } from '@/utils/colors'
 import {
@@ -80,6 +81,9 @@ const Signup = () => {
 			})
 			console.log(error)
 			localStorage.removeItem('x-session-token')
+			logtail.info('Error signing up', error) 
+			logtail.flush()
+
 		}
 	}
 
