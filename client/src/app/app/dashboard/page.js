@@ -57,7 +57,7 @@ mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 })
 const Dashboard = () => {
 	const router = useRouter()
-const toast = useToast()
+	const toast = useToast()
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -96,8 +96,6 @@ const toast = useToast()
 	const { data: threadData, isLoading: threadIsLoading } = useQuery({
 		queryKey: ['threads', currentThread],
 	})
-
-
 
 	useEffect(() => {
 		if (!localStorage.getItem('x-session-token')) {

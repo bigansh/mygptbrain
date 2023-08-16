@@ -15,11 +15,16 @@ const colors = {
 		700: '#2a69ac',
 	},
 }
+const config = {
+	initialColorMode: 'light',
+	useSystemColorMode: false,
+}
+
 const fonts = {
 	heading: `'Poppins', sans-serif`,
 	body: `'Poppins', sans-serif`,
 }
-export const theme = extendTheme({ colors, fonts })
+export const theme = extendTheme({ colors, fonts, config })
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {

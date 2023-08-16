@@ -9,7 +9,6 @@ import {
 	Box,
 	useColorModeValue,
 } from '@chakra-ui/react'
-import { Head } from 'next/document'
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
