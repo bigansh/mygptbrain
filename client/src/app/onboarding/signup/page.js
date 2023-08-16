@@ -48,7 +48,7 @@ const Signup = () => {
 			toast({
 				title: 'Email not valid. Please use a valid email address',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -63,7 +63,7 @@ const Signup = () => {
 				toast({
 					title: 'Signed up successfully',
 					position: 'top',
-					variant: 'left-accent',
+					variant: 'solid',
 					status: 'success',
 					duration: 3000,
 				})
@@ -75,7 +75,7 @@ const Signup = () => {
 			toast({
 				title: 'Error while signing up',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})

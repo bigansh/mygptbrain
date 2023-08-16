@@ -56,7 +56,7 @@ const Login = () => {
 			toast({
 				title: 'Email not valid. Please use a valid email address',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -73,7 +73,7 @@ const Login = () => {
 				toast({
 					title: 'Logged in successfully',
 					position: 'top',
-					variant: 'left-accent',
+					variant: 'solid',
 					status: 'success',
 					duration: 3000,
 				})
@@ -84,7 +84,7 @@ const Login = () => {
 			toast({
 				title: 'Error while logging in',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})

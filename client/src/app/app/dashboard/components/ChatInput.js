@@ -50,7 +50,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'New chat created',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -59,7 +59,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'Error creating chat',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})

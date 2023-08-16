@@ -93,7 +93,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 			toast({
 				title: 'Document uploaded successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -108,7 +108,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -125,7 +125,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 			toast({
 				title: 'Data synced successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})

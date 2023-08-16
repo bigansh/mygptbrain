@@ -60,7 +60,7 @@ console.log(documentData , 'error here')
 				toast({
 					title: 'Document deleted',
 					position: 'top',
-					variant: 'left-accent',
+					variant: 'solid',
 					status: 'success',
 					duration: 3000,
 				})
@@ -74,7 +74,7 @@ console.log(documentData , 'error here')
 				toast({
 					title: 'Error deleting document',
 					position: 'top',
-					variant: 'left-accent',
+					variant: 'solid',
 					status: 'error',
 					duration: 3000,
 				})

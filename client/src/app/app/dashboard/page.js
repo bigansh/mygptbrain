@@ -102,7 +102,7 @@ const Dashboard = () => {
 			toast({
 				title: 'No auth token found',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -229,7 +229,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Document uploaded successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -238,7 +238,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -261,7 +261,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Link scraped successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -270,7 +270,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Error uploading link',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
