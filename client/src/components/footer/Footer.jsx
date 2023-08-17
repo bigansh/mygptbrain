@@ -1,4 +1,8 @@
+// import {  } from '@chakra-ui/next-js'
 import { Container, Flex, List, ListItem, Text } from '@chakra-ui/react'
+import { ProductHuntBanner } from '@/assets'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export function Footer() {
 	return (
@@ -7,44 +11,59 @@ export function Footer() {
 			paddingY='16'
 			paddingX='24'
 			justifyContent='space-between'
+			gap='24'
+			flexDirection={['column', 'row']}
+			alignItems={['center', 'start']}
 		>
-			<Container
-				backgroundColor='white'
-				borderRadius='lg'
-				borderWidth='thin'
-				borderColor='orange'
-				width='fit-content'
-				alignSelf='start'
-				justifySelf='start'
-				paddingY='2'
-				paddingX='4'
-			>
-				<div></div>
-				<Container fontWeight='bold' color='orange'>
-					<Text>#1 Product of the Day</Text>
-					<Text fontSize='x-small'>May 08, 2022</Text>
-				</Container>
-			</Container>
-			<Flex gap='24' color='black'>
-				<Container>
+			<Image
+				src={ProductHuntBanner}
+				alt='Number 1 Product of the Day on Product Hunt'
+				style={{ maxWidth: 250 }}
+			/>
+			<Flex gap={['8', '24']} color='black'>
+				<Container width='unset'>
 					<Text paddingBottom='1'>about</Text>
 					<List>
-						<ListItem fontSize='sm'>privacy policy</ListItem>
-						<ListItem fontSize='sm'>terms and conditions</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='https://public.mygptbrain.com/privacy-policy'>
+								privacy policy
+							</Link>
+						</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='https://publuc.mygptbrain.com/terms-of-service'>
+								terms and conditions
+							</Link>
+						</ListItem>
 					</List>
 				</Container>
-				<Container>
+				<Container width='unset'>
 					<Text paddingBottom='1'>social media</Text>
 					<List>
-						<ListItem fontSize='sm'>twitter</ListItem>
-						<ListItem fontSize='sm'>product hunt</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='https://twitter.com/myGPTBrain'>
+								twitter
+							</Link>
+						</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='https://producthunt.com/mygptbrain'>
+								product hunt
+							</Link>
+						</ListItem>
 					</List>
 				</Container>
-				<Container>
+				<Container width='unset'>
 					<Text paddingBottom='1'>contact us</Text>
 					<List>
-						<ListItem fontSize='sm'>twitter</ListItem>
-						<ListItem fontSize='sm'>email id</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='https://twitter.com/myGPTBrain'>
+								twitter
+							</Link>
+						</ListItem>
+						<ListItem fontSize='sm'>
+							<Link href='mailto:support@mygptbrain.com'>
+								email id
+							</Link>
+						</ListItem>
 					</List>
 				</Container>
 			</Flex>

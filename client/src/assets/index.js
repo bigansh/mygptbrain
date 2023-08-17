@@ -1,3 +1,4 @@
-import OnboardingBanner from "./OnboardingBanner.svg";
+import OnboardingBanner from './OnboardingBanner.svg'
+import ProductHuntBanner from './ProductHuntBanner.svg'
 
-export { OnboardingBanner };
+export { OnboardingBanner, ProductHuntBanner }

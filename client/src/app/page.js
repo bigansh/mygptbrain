@@ -1,19 +1,12 @@
 'use client'
 
-import {
-	Heading,
-	Text,
-	Flex,
-	Button,
-	useColorMode,
-	Box,
-	useColorModeValue,
-} from '@chakra-ui/react'
+import { Text, Flex, Button } from '@chakra-ui/react'
 import Script from 'next/script'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Footer } from '@/components'
 import { useColors } from '@/utils/colors'
+import { ArrowRightIcon, ChevIcon } from '@/icons'
 
 const scrollingTexts = [
 	'imagine not having to read your bookmarks...',
@@ -47,77 +40,71 @@ export default function Home() {
 
 	return (
 		<>
-			<AnimatePresence>
-				{!isPastScrollingText ? (
-					<motion.section
-						data-w-id='38731044-e467-6d7d-8b84-2e54494432a0'
-						class='section wf-section'
-						exit={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-					>
-						<div class='div-block'>
+			{!isPastScrollingText ? (
+				<section
+					data-w-id='38731044-e467-6d7d-8b84-2e54494432a0'
+					class='section wf-section'
+				>
+					<div class='div-block'>
+						<div
+							class='w-layout-blockcontainer container w-container'
+							style={{ maxWidth: 'unset' }}
+						>
 							<div
-								class='w-layout-blockcontainer container w-container'
-								style={{ maxWidth: 'unset' }}
+								class='div-block-2'
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									gap: 32,
+									padding: '32 0',
+								}}
 							>
-								<div
-									class='div-block-2'
-									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										gap: 32,
-									}}
-								>
-									{scrollingTexts.map((text, index) => (
-										<motion.p
-											animate={{
-												y: `-${
-													focusedTextIndex * 100
-												}%`,
-												opacity:
-													index > focusedTextIndex
-														? 0
-														: focusedTextIndex -
-																index ===
-														  1
-														? 0.75
-														: focusedTextIndex -
-																index ===
-														  2
-														? 0.5
-														: 1,
-												transition: {
-													type: 'just',
-												},
-											}}
-											style={{
-												fontSize:
-													focusedTextIndex - index ===
-													1
-														? 24
-														: focusedTextIndex -
-																index ===
-														  2
-														? 20
-														: 26,
-												display:
-													index > focusedTextIndex
-														? 'none'
-														: undefined,
-											}}
-										>
-											{text}
-										</motion.p>
-									))}
-								</div>
+								{scrollingTexts.map((text, index) => (
+									<motion.p
+										animate={{
+											y: `-${focusedTextIndex * 100}%`,
+											opacity:
+												index > focusedTextIndex
+													? 0
+													: focusedTextIndex -
+															index ===
+													  1
+													? 0.75
+													: focusedTextIndex -
+															index ===
+													  2
+													? 0.5
+													: 1,
+											transition: {
+												type: 'just',
+											},
+										}}
+										style={{
+											fontSize:
+												focusedTextIndex - index === 1
+													? 24
+													: focusedTextIndex -
+															index ===
+													  2
+													? 20
+													: 26,
+											display:
+												index > focusedTextIndex
+													? 'none'
+													: undefined,
+										}}
+									>
+										{text}
+									</motion.p>
+								))}
 							</div>
 						</div>
-					</motion.section>
-				) : null}
-			</AnimatePresence>
+					</div>
+				</section>
+			) : null}
 			<Flex
 				ref={staticSectionRef}
-				minHeight='100vh'
+				minHeight='75vh'
 				flexDirection='column'
 				alignItems='center'
 				justifyContent='center'
@@ -135,8 +122,9 @@ export default function Home() {
 					color={text}
 					cursor={'pointer'}
 					mt={2}
+					gap='3'
 				>
-					lets get started
+					lets get started <ArrowRightIcon />
 				</Button>
 			</Flex>
 			<Footer />
