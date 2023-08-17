@@ -1,5 +1,6 @@
 'use client'
 import { authenticateUser, authenticateUserByGoogle, verifyEmail } from '@/api'
+import { logtail } from '@/app/providers'
 import { OnboardingBanner } from '@/assets'
 import { useColors } from '@/utils/colors'
 import {
@@ -55,7 +56,7 @@ const Login = () => {
 			toast({
 				title: 'Email not valid. Please use a valid email address',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -68,12 +69,11 @@ const Login = () => {
 				queryType: 'login',
 				data: userDetails,
 			})
-			console.log(res)
 			if (res.status == 200) {
 				toast({
 					title: 'Logged in successfully',
 					position: 'top',
-					variant: 'left-accent',
+					variant: 'solid',
 					status: 'success',
 					duration: 3000,
 				})
@@ -81,15 +81,17 @@ const Login = () => {
 			localStorage.setItem('x-session-token', res.data.sessionToken)
 			router.push('/app/dashboard')
 		} catch (error) {
-			console.log(error)
 			toast({
 				title: 'Error while logging in',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
 			localStorage.removeItem('x-session-token')
+			logtail.info('Error logging in', error) 
+			logtail.flush()
+
 		}
 		setLoading(false)
 	}

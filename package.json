@@ -4,8 +4,5 @@
     "description": "QnA over your personal data and bookmarks.",
     "private": "true",
     "author": "myGPTBrain",
-    "license": "UNLICENSED",
-    "dependencies": {
-        "@logtail/browser": "^0.4.5"
-    }
+    "license": "UNLICENSED"
 }

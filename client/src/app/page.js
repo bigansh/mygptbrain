@@ -1,6 +1,14 @@
 'use client'
 
-import { Button, Container, Flex, Text, useColorMode } from '@chakra-ui/react'
+import {
+	Heading,
+	Text,
+	Flex,
+	Button,
+	useColorMode,
+	Box,
+	useColorModeValue,
+} from '@chakra-ui/react'
 import Script from 'next/script'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'

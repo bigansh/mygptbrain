@@ -22,19 +22,14 @@ import FunctionalBtn from './FunctionalBtn'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 import { logtail } from '@/app/providers'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-	const { base, base800, base700, base600, text, redbg } = useColors()
+	const { base800, base700, text, redbg } = useColors()
 	const toast = useToast()
 	const queryClient = useQueryClient()
 	const {
-		threads,
-		setThreads,
 		currentThread,
 		setCurrentThread,
-		documents,
-		setDocuments,
 		currentDocument,
 		setCurrentDocument,
-		currentView,
 		setCurrentView,
 	} = useThreads()
 
@@ -58,7 +53,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				: false,
 		onSuccess: (data) => {
 			setEditName(data[0].chat_name)
-			// console.log(data, 'read chat data 1', currentThread)
 		},
 		onError: (error) => {
 			logtail.info('Error getting thread', error)
@@ -77,8 +71,8 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				document_id: currentDocument,
 			}),
 		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
-		onSuccess: (data) => {
-			// console.log(data, data[0].body, 'read doc data')
+		onSuccess: () => {
+
 		},
 		onError: (error) => {
 			logtail.info('Error getting document', error)
@@ -87,7 +81,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	})
 
 	const {
-		data: updateNameData,
 		isLoading: updateNameIsLoading,
 		mutate: updateNameMutate,
 	} = useMutation({
@@ -98,14 +91,13 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			setNameEditing(false)
 			setEditName(data.chat_name)
 			queryClient.invalidateQueries(['threads'])
-			console.log(data, 'update chat name data')
-			queryClient.setQueryData(['threads', currentThread], (prev) => {
+			queryClient.setQueryData(['threads', currentThread], () => {
 				return [data]
 			})
 			toast({
 				title: 'Name updated successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -118,7 +110,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	})
 
 	const {
-		data: deleteThreadData,
 		isLoading: deleteThreadIsLoading,
 		mutate: deleteThreadMutate,
 	} = useMutation({
@@ -128,12 +119,11 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				profile_id: userData?.profile_id,
 			}),
 		onSuccess: (data) => {
-			console.log(data, 'update chat name data')
 			queryClient.invalidateQueries(['threads'])
 			toast({
 				title: 'Thread deleted',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -148,7 +138,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			toast({
 				title: 'Error deleting thread',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})

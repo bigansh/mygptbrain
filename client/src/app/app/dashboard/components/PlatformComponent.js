@@ -95,6 +95,7 @@ const PlatformCard = ({ name, color, icon, state }) => {
 				color={'white'}
 				rounded={'5px'}
 				p={2.5}
+				justifyContent={'space-between'}
 			>
 				<Text>{state}</Text>
 				{icon}

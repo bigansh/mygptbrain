@@ -5,21 +5,15 @@ import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
-	ModalFooter,
 	ModalBody,
 	ModalCloseButton,
-	Lorem,
 	Flex,
 	Box,
 	Heading,
+	Text,
 	Grid,
 } from '@chakra-ui/react'
-import FunctionalBtn from './FunctionalBtn'
 import { useColors } from '@/utils/colors'
-import { GoCreditCard } from 'react-icons/go'
-import { PiPuzzlePiece } from 'react-icons/pi'
-import { AiOutlineUser } from 'react-icons/ai'
 import {
 	AccountComponent,
 	PlatformComponent,
@@ -27,7 +21,7 @@ import {
 } from '@/app/app/dashboard/components'
 import { BillingIcon, PlatformIcon, UserIcon } from '@/icons'
 const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
-	const { base, base800, base700, base600, text } = useColors()
+	const { base, base800, text } = useColors()
 	const [activeButton, setActiveButton] = useState('account')
 
 	const handleButtonClick = (button) => {
@@ -49,12 +43,17 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 			childComponent = null
 	}
 	return (
-		<Modal size={'6xl'} isOpen={isOpenSetting} onClose={onCloseSetting}>
+		<Modal
+			size={['2xl', '6xl']}
+			
+			isOpen={isOpenSetting}
+			onClose={onCloseSetting}
+		>
 			<ModalOverlay
 				backdropFilter='blur(2px)'
 				//bg='rgba(123, 130, 148, 0.2)'
 			/>
-			<ModalContent>
+			<ModalContent mx={4}>
 				<ModalCloseButton />
 				<ModalBody p={0}>
 					<Grid
@@ -75,7 +74,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 							<Heading fontSize={'2xl'} fontWeight={'500'} mb={4}>
 								setting
 							</Heading>
-							<Flex>
+							<Flex flexDir={['row', 'column']} gap={[0,2]}>
 								<SidebarItem
 									activeButton={activeButton}
 									cursor={'pointer'}
@@ -119,26 +118,23 @@ const SidebarItem = ({
 	activeButton,
 	disabled = false,
 }) => {
-	const { base, base800, base700, text, base600 } = useColors()
+	const { base800, base700, base600 } = useColors()
 	return (
 		<Button
-			cursor={'pointer'}
 			onClick={!disabled && onClick}
 			bg={activeButton == title ? base700 : base800}
 			_hover={{ bg: base600 }}
 			opacity={disabled ? 0.5 : 1}
 			cursor={disabled ? 'not-allowed' : 'pointer'}
 			w={'100%'}
-			// _active={{ background: base800 }}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
 			fontSize={['sm', 'md']}
 			disabled={disabled}
 			textAlign={['center', 'left']}
-			//p={[2 , 'auto']}
 			m={'auto'}
 		>
-			{title}
+			<Text textAlign={['center', 'left']} margin={['auto' , 'unset']}>{title}</Text>
 			<Box display={['none', 'block']}>{icon}</Box>
 		</Button>
 	)

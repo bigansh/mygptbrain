@@ -1,14 +1,10 @@
-//import { GPTBrain, UserSvg } from '@/app/assets'
 import { ChatLogoIcon, ChatUserIcon } from '@/icons'
 import { useColors } from '@/utils/colors'
 import { Box, Flex, Text } from '@chakra-ui/react'
-import Image from 'next/image'
 import React from 'react'
-import { LuBrainCircuit } from 'react-icons/lu'
-import { PiUserCircleLight } from 'react-icons/pi'
 
 const SingleChatComponent = ({ message }) => {
-	const { base, base800, base700, text } = useColors()
+	const { base700, text } = useColors()
 	return (
 		<>
 			<Flex flexDir={'column'}>
@@ -23,7 +19,7 @@ const SingleChatComponent = ({ message }) => {
 						<Box w={['40px', 'auto']}>
 							<ChatUserIcon fill={text} size={30} />
 						</Box>
-						<Text marginBlock={'auto'} fontSize={['sm', 'auto']}>
+						<Text marginBlock={'auto'} fontSize={['sm', 'md']}>
 							{message.user}
 						</Text>
 					</Flex>
@@ -43,7 +39,7 @@ const SingleChatComponent = ({ message }) => {
 						<Text
 							whiteSpace={'break-spaces'}
 							marginBlock={'auto'}
-							fontSize={['sm', 'auto']}
+							fontSize={['sm', 'md']}
 						>
 							{message.llm}
 						</Text>

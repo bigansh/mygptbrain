@@ -32,7 +32,6 @@ app.register(multipart, { limits: { fileSize: 10000000, files: 1 } })
 app.register(helmet, { global: true })
 app.register(cors, {
 	credentials: true,
-	strictPreflight: false,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 	origin: [process.env.CLIENT, 'http://localhost:3001'],
 })

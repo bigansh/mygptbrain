@@ -13,6 +13,7 @@ import {
 	Text,
 	Input,
 	Spinner,
+	useToast,
 } from '@chakra-ui/react'
 import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
@@ -29,6 +30,7 @@ import { logtail } from '@/app/providers'
 
 const RightSideBar = () => {
 	const queryClient = useQueryClient()
+	const toast = useToast()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
@@ -93,7 +95,7 @@ const RightSideBar = () => {
 			toast({
 				title: 'Document uploaded successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -108,7 +110,7 @@ const RightSideBar = () => {
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -123,11 +125,10 @@ const RightSideBar = () => {
 		mutationFn: () => syncDoc(),
 
 		onSuccess: (data) => {
-			console.log(data, 'sync doc')
 			toast({
 				title: 'Data synced successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -210,7 +211,7 @@ const RightSideBar = () => {
 					>
 						{filteredThreads?.map((item, index) => (
 							<Button
-								display={'flex'}
+								display={'grid'}
 								justifyContent={'flex-start'}
 								key={item.chat_id}
 								gridTemplateColumns={'24px 1fr'}
@@ -224,7 +225,7 @@ const RightSideBar = () => {
 								onClick={() => {
 									setCurrentThread(item.chat_id)
 									setCurrentView('chat')
-									onCloseDr
+									//onClose()
 								}}
 								py={4}
 								px='10px'
@@ -261,7 +262,6 @@ const RightSideBar = () => {
 						title='sync documents'
 						cursor={'pointer'}
 						onClick={() => {
-							console.log('trigger')
 							syncDocMutate()
 						}}
 						icon={

@@ -12,6 +12,7 @@ import {
 	Input,
 	Textarea,
 	CircularProgress,
+	useToast,
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
 import { logtail } from '@/app/providers'
@@ -21,7 +22,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const ref = useRef()
 	const { currentThread, setCurrentThread } = useThreads()
 	const { base, base800, base700, text } = useColors()
-
+	const toast = useToast()
 	const {
 		data,
 		isLoading: addIsLoading,
@@ -49,7 +50,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'New chat created',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -58,7 +59,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'Error creating chat',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -114,7 +115,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	}
 
 	if (updateIsLoading || addIsLoading) {
-		console.log('loading')
 		setInputValue('')
 		divRef?.current.scrollIntoView({ behavior: 'smooth' })
 		divRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -164,7 +164,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					maxRows={10}
 					as={ResizeTextarea}
 					transition='height none'
-					fontSize={['sm', 'auto']}
+					fontSize={['sm', 'md']}
 				/>
 				<Box
 					cursor={'pointer'}

@@ -15,11 +15,16 @@ const colors = {
 		700: '#2a69ac',
 	},
 }
+const config = {
+	initialColorMode: 'light',
+	useSystemColorMode: false,
+}
+
 const fonts = {
 	heading: `'Poppins', sans-serif`,
 	body: `'Poppins', sans-serif`,
 }
-export const theme = extendTheme({ colors, fonts })
+export const theme = extendTheme({ colors, fonts, config })
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
@@ -33,7 +38,7 @@ const queryClient = new QueryClient({
 	},
 })
 
-export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL)
+export const logtail = new Logtail('EFgZ1Fe1TgHWWNCnknBWjdkS')
 
 export function Providers({ children }) {
 	return (

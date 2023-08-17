@@ -57,7 +57,7 @@ mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 })
 const Dashboard = () => {
 	const router = useRouter()
-
+	const toast = useToast()
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -97,14 +97,12 @@ const Dashboard = () => {
 		queryKey: ['threads', currentThread],
 	})
 
-	console.log('threadData', threadData)
-
 	useEffect(() => {
 		if (!localStorage.getItem('x-session-token')) {
 			toast({
 				title: 'No auth token found',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -231,7 +229,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Document uploaded successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -240,7 +238,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
@@ -263,7 +261,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Link scraped successfully',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'success',
 				duration: 3000,
 			})
@@ -272,7 +270,7 @@ const OnboardingModal = ({
 			toast({
 				title: 'Error uploading link',
 				position: 'top',
-				variant: 'left-accent',
+				variant: 'solid',
 				status: 'error',
 				duration: 3000,
 			})
