@@ -47,7 +47,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			logtail.flush()
 		},
 	})
-console.log(documentData , 'error here')
+	console.log(documentData, 'error here')
 	const { isLoading: deleteDocIsLoading, mutate: deleteDocMutate } =
 		useMutation({
 			mutationFn: () =>
@@ -139,7 +139,9 @@ console.log(documentData , 'error here')
 						</Tooltip>
 					</Flex>
 				</Flex>
-				{/* <div dangerouslySetInnerHTML={{ __html: documentData[0]?.body }} /> */}
+				<div
+					dangerouslySetInnerHTML={{ __html: documentData[0]?.body }}
+				/>
 				<Text whiteSpace={'break-spaces'}>{documentData[0]?.body}</Text>
 			</Flex>
 		</Flex>

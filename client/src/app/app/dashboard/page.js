@@ -95,12 +95,7 @@ const Dashboard = () => {
 
 	const { data: threadData, isLoading: threadIsLoading } = useQuery({
 		queryKey: ['threads', currentThread],
-		enabled:
-			currentThread !== '' &&
-			currentThread !== 'new' &&
-			userData?.profile_id
-				? true
-				: false,
+		enabled: currentThread !== '' && currentThread !== 'new' ? true : false,
 	})
 
 	useEffect(() => {
