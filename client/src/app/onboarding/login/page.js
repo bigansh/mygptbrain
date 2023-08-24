@@ -117,7 +117,7 @@ justifyContent={'center'}
 					value={userDetails.email}
 					onChange={handleChange}
 					onFocus={handleEmailFocus}
-					placeholder='hello@bigansh.me'
+					placeholder='brain@human.com'
 				/>
 				{isEmailFocused ? (
 					<Flex flexDir={'column'} gap={2.5}>

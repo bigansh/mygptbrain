@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Footer } from '@/components'
 import { useColors } from '@/utils/colors'
+import Link from 'next/link'
 import { ArrowRightIcon, ChevIcon } from '@/icons'
 
 const scrollingTexts = [
@@ -112,20 +113,22 @@ export default function Home() {
 				<Text fontSize='larger' color='black' marginBottom='2'>
 					now stop imagining...
 				</Text>
-				<Button
-					title='login'
-					fontWeight={'400'}
-					bg={base700}
-					_hover={{
-						bg: base600,
-					}}
-					color={text}
-					cursor={'pointer'}
-					mt={2}
-					gap='3'
-				>
-					lets get started <ArrowRightIcon />
-				</Button>
+				<Link href='/onboarding/login'>
+					<Button
+						title='login'
+						fontWeight={'400'}
+						bg={base700}
+						_hover={{
+							bg: base600,
+						}}
+						color={text}
+						cursor={'pointer'}
+						mt={2}
+						gap='3'
+					>
+						lets get started <ArrowRightIcon />
+					</Button>
+				</Link>
 			</Flex>
 			<Footer />
 			<Script>Webflow.require(‘ix2’).init()</Script>

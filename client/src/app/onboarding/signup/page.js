@@ -117,7 +117,7 @@ const Signup = () => {
 					value={userDetails.email}
 					onChange={handleChange}
 					onFocus={(e) => setIsEmailFocused(true)}
-					placeholder='hello@bigansh.me'
+					placeholder='brain@human.com'
 				/>
 				{isEmailFocused || userDetails.email !== '' ? (
 					<>
