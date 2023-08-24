@@ -134,7 +134,7 @@ const Signup = () => {
 							type='password'
 							value={userDetails.password}
 							onChange={handleChange}
-							placeholder='***'
+							placeholder='********'
 						/>
 						<Button
 							title='login'
