@@ -15,11 +15,20 @@ export function Footer() {
 			flexDirection={['column', 'row']}
 			alignItems={['center', 'start']}
 		>
-			<Image
-				src={ProductHuntBanner}
-				alt='Number 1 Product of the Day on Product Hunt'
-				style={{ maxWidth: 250 }}
-			/>
+			<div>
+				<a
+					href='https://www.producthunt.com/posts/mygptbrain?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-mygptbrain'
+					target='_blank'
+				>
+					<img
+						src='https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412183&theme=neutral'
+						alt='myGPTBrain - QnA&#0032;over&#0032;your&#0032;personal&#0032;data&#0032;&#0038;&#0032;bookmarks | Product Hunt'
+						style={{ width: '250px', height: '54px' }}
+						width='250'
+						height='54'
+					/>
+				</a>
+			</div>
 			<Flex gap={['8', '24']} color='black'>
 				<Container width='unset'>
 					<Text paddingBottom='1'>about</Text>
