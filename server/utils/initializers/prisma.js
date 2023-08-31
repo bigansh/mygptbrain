@@ -18,7 +18,7 @@ const cacheMiddleware = createPrismaRedisCache({
 	},
 })
 
-prisma.$use(cacheMiddleware)
+// prisma.$use(cacheMiddleware)
 
 export default prisma
 
