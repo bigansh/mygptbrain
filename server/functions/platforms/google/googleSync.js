@@ -66,7 +66,7 @@ const googleSync = async (profile_id) => {
 		const promiseArray = []
 
 		for (const file of driveFiles) {
-			const saveAndLoadPromise = new Promise(async (resolve) => {
+			const saveAndLoadPromise = new Promise(async (resolve, reject) => {
 				const fileData = await drive.files.get(
 					{ fileId: file.id, alt: 'media' },
 					{ responseType: 'stream' }
@@ -79,7 +79,7 @@ const googleSync = async (profile_id) => {
 				)
 
 				if (!fileBuffer) {
-					throw new Error('Unable to get the document Buffer.')
+					reject('Unable to get the document Buffer.')
 				}
 
 				if (file.mimeType === 'application/pdf') {
@@ -121,7 +121,9 @@ const googleSync = async (profile_id) => {
 			promiseArray.push(saveAndLoadPromise)
 		}
 
-		return await Promise.allSettled(promiseArray)
+		return await Promise.allSettled(promiseArray).catch((error) => {
+			throw error
+		})
 	} catch (error) {
 		throw error
 	}
