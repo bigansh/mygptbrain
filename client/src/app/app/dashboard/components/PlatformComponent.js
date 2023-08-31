@@ -36,6 +36,7 @@ const PlatformComponent = () => {
 					data?.auth?.notion_id ? '#58DD58' : 'rgba(55, 53, 48, 1)'
 				}
 				icon={<NotionIcon fill={'rgba(255, 255, 255, 1)'} />}
+				disabled='true'
 			/>
 
 			<PlatformCard
