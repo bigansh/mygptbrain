@@ -39,7 +39,7 @@ export function Footer() {
 							</Link>
 						</ListItem>
 						<ListItem fontSize='sm'>
-							<Link href='https://publuc.mygptbrain.com/terms-of-service'>
+							<Link href='https://public.mygptbrain.com/terms-of-service'>
 								terms and conditions
 							</Link>
 						</ListItem>
@@ -54,7 +54,7 @@ export function Footer() {
 							</Link>
 						</ListItem>
 						<ListItem fontSize='sm'>
-							<Link href='https://producthunt.com/mygptbrain'>
+							<Link href='https://producthunt.com/posts/mygptbrain'>
 								product hunt
 							</Link>
 						</ListItem>
