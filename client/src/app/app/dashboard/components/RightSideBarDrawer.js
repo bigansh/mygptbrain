@@ -145,7 +145,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	const filteredDocuments = docData
 		?.filter((e) =>
-			e.heading.toLowerCase().includes(documentInput.toLowerCase())
+			e.heading?.toLowerCase().includes(documentInput.toLowerCase())
 		)
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	return (
@@ -330,7 +330,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 								>
 									<DocumentIcon fill={text} />
 									<Text textAlign={'initial'} isTruncated>
-										{item.heading}
+										{item?.heading}
 									</Text>
 								</Button>
 							))}
