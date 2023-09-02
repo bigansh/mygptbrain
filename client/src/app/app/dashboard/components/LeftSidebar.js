@@ -175,7 +175,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				</Heading>
 				{threadData && (
 					<Flex flexDir={'column'} gap={2} mt={2}>
-						{threadData[0]?.source_documents.filter(item => documentData.some(idItem => idItem.document_id === item)).map((item, index) => (
+						{threadData[0]?.source_documents?.filter(item => documentData?.some(idItem => idItem.document_id === item)).map((item, index) => (
 							<Button
 								display={'flex'}
 								overflow={'hidden'}
