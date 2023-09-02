@@ -133,7 +133,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
-		console.log(file, file.size)
+		 
 		if (file && file.size > 10 * 1024 * 1024) {
 			// 10MB in bytes
 			toast({
