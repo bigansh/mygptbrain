@@ -35,7 +35,7 @@ import {
 import { logtail } from '@/app/providers'
 const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const toast = useToast()
-	
+
 	const queryClient = useQueryClient()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
@@ -82,43 +82,38 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		},
 	})
 
-	const {
-		mutate: uploadDocMutate,
-		isLoading: uploadDocIsLoading,
-	} = useMutation({
-		mutationFn: () => uploadDoc(uploadRef.current.files[0]),
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useMutation({
+			mutationFn: () => uploadDoc(uploadRef.current.files[0]),
 
-		onSuccess: () => {
-			queryClient.invalidateQueries(['documents'])
-			toast({
-				title: 'Document uploaded successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
-		},
-		onError: (error) => {
-			logtail.info('Error uploading document', error)
-			logtail.flush()
-			toast({
-				title: 'Error uploading document',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-		},
-	})
+			onSuccess: () => {
+				queryClient.invalidateQueries(['documents'])
+				toast({
+					title: 'Document uploaded successfully',
+					position: 'top',
+					variant: 'solid',
+					status: 'success',
+					duration: 3000,
+				})
+				// queryClient.setQueryData(['documents'], (oldData) => [
+				// 	...oldData,
+				// 	data.chat,
+				// ])
+			},
+			onError: (error) => {
+				logtail.info('Error uploading document', error)
+				logtail.flush()
+				toast({
+					title: 'Error uploading document',
+					position: 'top',
+					variant: 'solid',
+					status: 'error',
+					duration: 3000,
+				})
+			},
+		})
 
-	const {
-		mutate: syncDocMutate,
-		isLoading: syncDocIsLoading,
-	} = useMutation({
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useMutation({
 		mutationFn: () => syncDoc(),
 
 		onSuccess: () => {
@@ -202,7 +197,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 							gap={2}
 							px={6}
 							//maxH={'400px'}
-							overflow={'scroll'}
+							overflowY='auto'
+							overflowX='hidden'
 						>
 							{filteredThreads?.map((item) => (
 								<Button
@@ -301,8 +297,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 							flexDir={'column'}
 							gap={2}
 							px={6}
-							//maxH={'400px'}
-							overflow={'scroll'}
+							overflowY='auto'
+							overflowX='hidden'
 						>
 							{filteredDocuments?.map((item) => (
 								<Button
