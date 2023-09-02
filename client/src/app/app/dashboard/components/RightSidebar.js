@@ -207,7 +207,8 @@ const RightSideBar = () => {
 						gap={2}
 						px={6}
 						//maxH={'400px'}
-						overflow={'scroll'}
+						overflowY='auto'
+					overflowX='hidden'
 					>
 						{filteredThreads?.map((item, index) => (
 							<Button
@@ -307,7 +308,7 @@ const RightSideBar = () => {
 						gap={2}
 						px={6}
 						//maxH={'400px'}
-						overflow={'scroll'}
+						
 					>
 						{filteredDocuments?.map((item, index) => (
 							<Button

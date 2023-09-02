@@ -31,7 +31,6 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 			//divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 		},
 		onError: (error) => {
-
 			logtail.info('Error getting thread', error)
 			logtail.flush()
 		},
@@ -63,7 +62,7 @@ feel free to customize your experience by changing the thread's name, the model 
 			<Spinner />
 		</Flex>
 	) : (
-		<Flex flexDir={'column'} overflow={'scroll'} w={'100%'}>
+		<Flex flexDir={'column'} overflowY='auto' overflowX='hidden' w={'100%'}>
 			{currentThread == 'new' &&
 			(threadData == undefined || threadData.length == 0)
 				? placeholderData?.chat_array?.map((message, index) => (
