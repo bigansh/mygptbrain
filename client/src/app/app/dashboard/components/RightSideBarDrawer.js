@@ -131,6 +131,26 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		},
 	})
 
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+		console.log(file, file.size)
+		if (file && file.size > 10 * 1024 * 1024) {
+			// 10MB in bytes
+			toast({
+				title: 'File is too large',
+				description: 'Please select a file less than 10MB.',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			event.target.value = '' // Reset the file input
+			return
+		}
+
+		// If the file size is within the limits, invoke the mutation
+		uploadDocMutate()
+	}
 	// UI funcs
 
 	const filteredThreads = threadsData
@@ -266,7 +286,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 						<Input
 							type='file'
 							ref={uploadRef}
-							onChange={() => uploadDocMutate()}
+							onChange={(e) => handleFileChange(e)}
 							display={'none'}
 						/>
 
