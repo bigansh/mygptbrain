@@ -23,6 +23,10 @@ const createUser = async ({ authDetails, personalDetails }) => {
 			subscription_status: false,
 		})
 
+		mixpanel.track('signup', {
+			distinct_id: user.profile_id,
+		})
+
 		return user
 	} catch (error) {
 		throw error
