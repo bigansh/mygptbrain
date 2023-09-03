@@ -34,10 +34,6 @@ const userFinderAndUpdater = async (userObject) => {
 		if (!user) {
 			const createdUser = await createUser(userObject)
 
-			mixpanel.track('signup', {
-				distinct_id: createdUser.profile_id,
-			})
-
 			return createdUser
 		} else {
 			const updatedUser = await updateUser(userObject)
