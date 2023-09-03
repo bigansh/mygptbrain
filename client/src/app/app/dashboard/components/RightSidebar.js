@@ -323,10 +323,12 @@ const RightSideBar = () => {
 					<Spinner m={'auto'} mt={4} />
 				) : (
 					<Flex
-						flexDir={'column'}
-						gap={2}
-						px={6}
-						//maxH={'400px'}
+					flexDir={'column'}
+					gap={2}
+					px={6}
+					//maxH={'400px'}
+					overflowY='auto'
+					overflowX='hidden'
 					>
 						{filteredDocuments?.map((item, index) => (
 							<Button

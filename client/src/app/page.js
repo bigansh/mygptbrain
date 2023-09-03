@@ -8,6 +8,7 @@ import { Footer } from '@/components'
 import { useColors } from '@/utils/colors'
 import Link from 'next/link'
 import { ArrowRightIcon, ChevIcon } from '@/icons'
+import { useRouter } from 'next/navigation'
 
 const scrollingTexts = [
 	'imagine not having to read your bookmarks...',
@@ -20,8 +21,12 @@ export default function Home() {
 	const [focusedTextIndex, setFocusedTextIndex] = useState(0)
 	const [isPastScrollingText, setIsPastScrollingText] = useState(false)
 	const staticSectionRef = useRef(null)
+	const router = useRouter()
 
 	useEffect(() => {
+		if (localStorage.getItem('x-session-token')) {
+			router.push('/app/dashboard')
+		}
 		function scrollHandler(e) {
 			const indexToSet = Math.round(
 				e.target.defaultView.scrollY / window.innerHeight
