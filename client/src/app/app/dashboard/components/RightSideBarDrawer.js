@@ -35,7 +35,7 @@ import {
 import { logtail } from '@/app/providers'
 const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const toast = useToast()
-	
+
 	const queryClient = useQueryClient()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
@@ -82,43 +82,38 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		},
 	})
 
-	const {
-		mutate: uploadDocMutate,
-		isLoading: uploadDocIsLoading,
-	} = useMutation({
-		mutationFn: () => uploadDoc(uploadRef.current.files[0]),
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useMutation({
+			mutationFn: () => uploadDoc(uploadRef.current.files[0]),
 
-		onSuccess: () => {
-			queryClient.invalidateQueries(['documents'])
-			toast({
-				title: 'Document uploaded successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
-		},
-		onError: (error) => {
-			logtail.info('Error uploading document', error)
-			logtail.flush()
-			toast({
-				title: 'Error uploading document',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-		},
-	})
+			onSuccess: () => {
+				queryClient.invalidateQueries(['documents'])
+				toast({
+					title: 'Document uploaded successfully',
+					position: 'top',
+					variant: 'solid',
+					status: 'success',
+					duration: 3000,
+				})
+				// queryClient.setQueryData(['documents'], (oldData) => [
+				// 	...oldData,
+				// 	data.chat,
+				// ])
+			},
+			onError: (error) => {
+				logtail.info('Error uploading document', error)
+				logtail.flush()
+				toast({
+					title: 'Error uploading document',
+					position: 'top',
+					variant: 'solid',
+					status: 'error',
+					duration: 3000,
+				})
+			},
+		})
 
-	const {
-		mutate: syncDocMutate,
-		isLoading: syncDocIsLoading,
-	} = useMutation({
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useMutation({
 		mutationFn: () => syncDoc(),
 
 		onSuccess: () => {
@@ -136,6 +131,26 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		},
 	})
 
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+		 
+		if (file && file.size > 10 * 1024 * 1024) {
+			// 10MB in bytes
+			toast({
+				title: 'File is too large',
+				description: 'Please select a file less than 10MB.',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			event.target.value = '' // Reset the file input
+			return
+		}
+
+		// If the file size is within the limits, invoke the mutation
+		uploadDocMutate()
+	}
 	// UI funcs
 
 	const filteredThreads = threadsData
@@ -145,7 +160,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	const filteredDocuments = docData
 		?.filter((e) =>
-			e.heading.toLowerCase().includes(documentInput.toLowerCase())
+			e.heading?.toLowerCase().includes(documentInput.toLowerCase())
 		)
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	return (
@@ -202,7 +217,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 							gap={2}
 							px={6}
 							//maxH={'400px'}
-							overflow={'scroll'}
+							overflowY='auto'
+							overflowX='hidden'
 						>
 							{filteredThreads?.map((item) => (
 								<Button
@@ -270,7 +286,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 						<Input
 							type='file'
 							ref={uploadRef}
-							onChange={() => uploadDocMutate()}
+							onChange={(e) => handleFileChange(e)}
 							display={'none'}
 						/>
 
@@ -301,8 +317,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 							flexDir={'column'}
 							gap={2}
 							px={6}
-							//maxH={'400px'}
-							overflow={'scroll'}
+							overflowY='auto'
+							overflowX='hidden'
 						>
 							{filteredDocuments?.map((item) => (
 								<Button
@@ -330,7 +346,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 								>
 									<DocumentIcon fill={text} />
 									<Text textAlign={'initial'} isTruncated>
-										{item.heading}
+										{item?.heading}
 									</Text>
 								</Button>
 							))}

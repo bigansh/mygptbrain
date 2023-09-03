@@ -157,7 +157,8 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					onKeyDown={handleKeyDown}
 					minH='unset'
 					w='100%'
-					overflow='scroll'
+					overflowY='auto'
+					overflowX='hidden'
 					resize='none'
 					ref={ref}
 					minRows={1}

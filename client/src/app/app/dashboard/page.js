@@ -249,6 +249,26 @@ const OnboardingModal = ({
 		},
 	})
 
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+		 
+		if (file && file.size > 10 * 1024 * 1024) {
+			// 10MB in bytes
+			toast({
+				title: 'File is too large',
+				description: 'Please select a file less than 10MB.',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			event.target.value = '' // Reset the file input
+			return
+		}
+
+		// If the file size is within the limits, invoke the mutation
+		uploadDocMutate()
+	}
 	const {
 		data: scrapeLinkData,
 		mutate: scrapeLinkMutate,
@@ -284,7 +304,7 @@ const OnboardingModal = ({
 	return (
 		<Modal
 			onClose={onCloseOnboarding}
-			size={'6xl'}
+			size={['xl', '6xl']}
 			isOpen={isOpenOnboarding}
 			isCentered
 			bg={base800}
@@ -293,13 +313,13 @@ const OnboardingModal = ({
 				backdropFilter='blur(2px)'
 				bg='rgba(123, 130, 148, 0.2)'
 			/>
-			<ModalContent h={'80vh'} bg={base800}>
+			<ModalContent h={'80vh'} margin={['10px', 'auto']} bg={base800}>
 				<ModalCloseButton
 					cursor={'pointer'}
 					onClick={onCloseOnboarding}
 				/>
 				<ModalBody
-					w={'60%'}
+					w={['100%', '60%']}
 					m={'auto'}
 					display={'flex'}
 					alignItems={'center'}
@@ -317,7 +337,10 @@ const OnboardingModal = ({
 							gap={4}
 							w={'100%'}
 						>
-							<Heading fontSize={'2xl'} fontWeight={'400'}>
+							<Heading
+								fontSize={['xl', '2xl']}
+								fontWeight={'400'}
+							>
 								welcome to mygptbrain! please...
 							</Heading>
 							<Box
@@ -403,7 +426,7 @@ const OnboardingModal = ({
 								<Input
 									type='file'
 									ref={uploadRef}
-									onChange={() => uploadDocMutate()}
+									onChange={(e) => handleFileChange(e)}
 									display={'none'}
 								/>
 
@@ -513,7 +536,7 @@ const PlatformCard = ({ title, color, icon }) => {
 			<Flex
 				alignItems={'center'}
 				bg={color}
-				gap={20}
+				gap={[10, 20]}
 				color={'white'}
 				rounded={'5px'}
 				p={2.5}

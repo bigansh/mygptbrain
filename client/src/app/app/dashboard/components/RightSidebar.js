@@ -116,7 +116,26 @@ const RightSideBar = () => {
 			})
 		},
 	})
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+		 
+		if (file && file.size > 10 * 1024 * 1024) {
+			// 10MB in bytes
+			toast({
+				title: 'File is too large',
+				description: 'Please select a file less than 10MB.',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			event.target.value = '' // Reset the file input
+			return
+		}
 
+		// If the file size is within the limits, invoke the mutation
+		uploadDocMutate()
+	}
 	const {
 		data: syncDocData,
 		mutate: syncDocMutate,
@@ -153,7 +172,7 @@ const RightSideBar = () => {
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	const filteredDocuments = docData
 		?.filter((e) =>
-			e.heading.toLowerCase().includes(documentInput.toLowerCase())
+			e?.heading?.toLowerCase().includes(documentInput.toLowerCase())
 		)
 		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	return (
@@ -207,7 +226,8 @@ const RightSideBar = () => {
 						gap={2}
 						px={6}
 						//maxH={'400px'}
-						overflow={'scroll'}
+						overflowY='auto'
+						overflowX='hidden'
 					>
 						{filteredThreads?.map((item, index) => (
 							<Button
@@ -275,7 +295,7 @@ const RightSideBar = () => {
 					<Input
 						type='file'
 						ref={uploadRef}
-						onChange={() => uploadDocMutate()}
+						onChange={(e) => handleFileChange(e)}
 						display={'none'}
 					/>
 
@@ -303,11 +323,12 @@ const RightSideBar = () => {
 					<Spinner m={'auto'} mt={4} />
 				) : (
 					<Flex
-						flexDir={'column'}
-						gap={2}
-						px={6}
-						//maxH={'400px'}
-						overflow={'scroll'}
+					flexDir={'column'}
+					gap={2}
+					px={6}
+					//maxH={'400px'}
+					overflowY='auto'
+					overflowX='hidden'
 					>
 						{filteredDocuments?.map((item, index) => (
 							<Button
@@ -334,7 +355,7 @@ const RightSideBar = () => {
 							>
 								<DocumentIcon fill={text} />
 								<Text textAlign={'initial'} isTruncated>
-									{item.heading}
+									{item?.heading}
 								</Text>
 							</Button>
 						))}

@@ -89,7 +89,8 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			transition={'all 0.5s ease-in'}
 			background={base}
 			h={'100vh'}
-			overflow={'scroll'}
+			overflowY='auto'
+			overflowX='hidden'
 			gap={4}
 			p={6}
 			w={['100%', isSidebarOpen ? '60vw' : '80vw']}
@@ -151,7 +152,6 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			transition={'all 0.5s ease-in'}
 			background={base}
 			h={'100vh'}
-			overflow={'scroll'}
 			gap={4}
 			p={6}
 			w={isSidebarOpen ? '60vw' : '80vw'}
