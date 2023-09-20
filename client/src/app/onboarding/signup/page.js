@@ -15,6 +15,7 @@ import {
 	Button,
 	Text,
 	useToast,
+	Img,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -81,9 +82,8 @@ const Signup = () => {
 			})
 			console.log(error)
 			localStorage.removeItem('x-session-token')
-			logtail.info('Error signing up', error) 
+			logtail.info('Error signing up', error)
 			logtail.flush()
-
 		}
 	}
 
@@ -169,18 +169,26 @@ const Signup = () => {
 						</Box>
 
 						<Button
-							bg='rgba(202, 80, 64, 1)'
-							p={2.5}
-							w={'100%'}
-							color={'white'}
-							gap={2.5}
-							fontSize={'18px'}
-							_hover={{ opacity: '80%' }}
+							fontWeight={'400'}
+							bg={base}
+							mt={2}
+							px={4}
+							py={2}
+							border={'1px solid #e0e0e0'}
+							gap={2}
+							rounded={'lg'}
+							color={text}
 							cursor={'pointer'}
 							onClick={() => authenticateUserByGoogle()}
 						>
-							<div>Continue with Google</div>
-							<FaGoogle />
+							<Img
+								w={6}
+								h={6}
+								src='https://www.svgrepo.com/show/475656/google-color.svg'
+								loading='lazy'
+								alt='google logo'
+							/>
+							<span>Continue with Google</span>
 						</Button>
 					</>
 				)}

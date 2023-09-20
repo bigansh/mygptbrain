@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 // import redis from '../api/redis.js'
 
-const prisma = new PrismaClient({ log: ['query'] })
+// const prisma = new PrismaClient({ log: ['query'] })
 
 // const cacheMiddleware = createPrismaRedisCache({
 // 	models: [
@@ -11,7 +11,7 @@ const prisma = new PrismaClient({ log: ['query'] })
 // 		{ model: 'Document', cacheTime: 60 },
 // 		{ model: 'Chat', cacheTime: 60 },
 // 	],
-// 	storage: { type: 'memory', options: { invalidation: true, log: console } },
+// 	storage: { type: 'redis', options: { client: redis, invalidation: true, log: console } },
 // 	cacheTime: 300,
 // 	onError: (key) => {
 // 		throw new Error('Error caching on Redis.')
