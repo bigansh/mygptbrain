@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 // import redis from '../api/redis.js'
 
-// const prisma = new PrismaClient({ log: ['query'] })
+const prisma = new PrismaClient({ log: ['query'] })
 
 // const cacheMiddleware = createPrismaRedisCache({
 // 	models: [
