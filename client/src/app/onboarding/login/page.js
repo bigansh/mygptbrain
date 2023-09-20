@@ -16,6 +16,7 @@ import {
 	Text,
 	useToast,
 	Spinner,
+	Img,
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -89,9 +90,8 @@ const Login = () => {
 				duration: 3000,
 			})
 			localStorage.removeItem('x-session-token')
-			logtail.info('Error logging in', error) 
+			logtail.info('Error logging in', error)
 			logtail.flush()
-
 		}
 		setLoading(false)
 	}
@@ -100,7 +100,7 @@ const Login = () => {
 		<Grid
 			display={['flex', 'grid']}
 			flexDir={['column-reverse', 'row']}
-justifyContent={'center'}
+			justifyContent={'center'}
 			w={'100vw'}
 			h={'100vh'}
 			bg='white'
@@ -166,18 +166,26 @@ justifyContent={'center'}
 						</Box>
 
 						<Button
-							bg='rgba(202, 80, 64, 1)'
-							p={2.5}
-							w={'100%'}
-							color={'white'}
-							gap={2.5}
-							fontSize={'18px'}
-							_hover={{ opacity: '80%' }}
+							fontWeight={'400'}
+							bg={base}
+							mt={2}
+							px={4}
+							py={2}
+							border={'1px solid #e0e0e0'}
+							gap={2}
+							rounded={'lg'}
+							color={text}
 							cursor={'pointer'}
 							onClick={() => authenticateUserByGoogle()}
 						>
-							<div>Continue with Google</div>
-							<FaGoogle />
+							<Img
+								w={6}
+								h={6}
+								src='https://www.svgrepo.com/show/475656/google-color.svg'
+								loading='lazy'
+								alt='google logo'
+							/>
+							<span>Continue with Google</span>
 						</Button>
 					</>
 				)}
