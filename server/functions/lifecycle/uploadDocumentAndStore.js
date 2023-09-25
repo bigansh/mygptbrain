@@ -1,6 +1,7 @@
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import officeParser from 'officeparser'
 import xss from 'xss'
+import tesseract from 'node-tesseract-ocr'
 
 import { Document } from '../../utils/initializers/prisma.js'
 
@@ -28,9 +29,21 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 			content = await officeParser.parseOfficeAsync(await file.toBuffer())
 
 			content = xss(content)
+		} else if (
+			['image/heic', 'image/jpeg', 'image/png'].some(
+				(type) => type === file.mimetype
+			)
+		) {
+			content = await tesseract.recognize(await file.toBuffer())
+
+			content = xss(content)
+
+			console.log(content)
 		} else {
 			throw new Error('File type is currently not supported!')
 		}
+
+		return
 
 		const createdDocument = await Document.create({
 			data: {

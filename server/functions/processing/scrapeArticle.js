@@ -1,4 +1,4 @@
-import { extract } from 'article-parser'
+import { extract } from '@extractus/article-extractor'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 import xss from 'xss'
 

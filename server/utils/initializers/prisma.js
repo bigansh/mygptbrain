@@ -1,24 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-// import { createPrismaRedisCache } from 'prisma-redis-middleware'
-
-// import redis from '../api/redis.js'
 
 const prisma = new PrismaClient({ log: ['query'] })
-
-// const cacheMiddleware = createPrismaRedisCache({
-// 	models: [
-// 		{ model: 'User', cacheTime: 60 },
-// 		{ model: 'Document', cacheTime: 60 },
-// 		{ model: 'Chat', cacheTime: 60 },
-// 	],
-// 	storage: { type: 'redis', options: { client: redis, invalidation: true, log: console } },
-// 	cacheTime: 300,
-// 	onError: (key) => {
-// 		throw new Error('Error caching on Redis.')
-// 	},
-// })
-
-// prisma.$use(cacheMiddleware)
 
 export default prisma
 
