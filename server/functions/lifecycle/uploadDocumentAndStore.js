@@ -43,8 +43,6 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 			throw new Error('File type is currently not supported!')
 		}
 
-		return
-
 		const createdDocument = await Document.create({
 			data: {
 				body: content,
