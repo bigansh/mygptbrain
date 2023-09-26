@@ -6,7 +6,7 @@ import { Chat } from '../../utils/initializers/prisma.js'
  * @param {import("../../utils/types/chatQueryObject").chatQueryObject} chatQueryObject
  * @param {Boolean} wantPref
  */
-const findChats = async (chatQueryObject, wantPref = undefined) => {
+const findChats = async (chatQueryObject, wantPref = false) => {
 	try {
 		return await Chat.findMany({
 			where: chatQueryObject,

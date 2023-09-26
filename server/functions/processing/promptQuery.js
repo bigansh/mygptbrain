@@ -22,9 +22,17 @@ const promptQuery = async (prompt, chat) => {
 
 		const { preferences, chat_history } = chat
 
-		const pineconeQuery = {
-			// chunk_source: preferences.data_sources,
+		let pineconeQuery = {
 			profile_id: chat.profile_id,
+		}
+
+		if (preferences.data_sources.includes('All')) {
+			pineconeQuery = { ...pineconeQuery }
+		} else {
+			pineconeQuery = {
+				...pineconeQuery,
+				chunk_source: { $in: preferences.data_sources },
+			}
 		}
 
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {

@@ -17,8 +17,8 @@ const updateChatPreferences = async (profile_id, chatPreferencesObject) => {
 		}
 
 		const updatedChatPreferences = await ChatPreferences.update({
-			data: charPreferencesObject,
-			where: { chat_id: chat_id },
+			data: chatPreferencesObject,
+			where: { chat_id: chatPreferencesObject.chat_id },
 		})
 
 		return updatedChatPreferences
