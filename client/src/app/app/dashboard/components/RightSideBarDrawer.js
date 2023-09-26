@@ -16,12 +16,21 @@ import {
 	DrawerContent,
 	DrawerCloseButton,
 	useToast,
+	InputRightElement,
+	InputGroup,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 import { useThreads } from '@/context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getDoc, getUser, readChat, syncDoc, uploadDoc } from '@/api'
+import {
+	getDoc,
+	getUser,
+	readChat,
+	scrapeLink,
+	syncDoc,
+	uploadDoc,
+} from '@/api'
 import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
 import SettingModal from './SettingModal'
@@ -31,8 +40,10 @@ import {
 	RotateIcon,
 	ThreadIcon,
 	DocumentIcon,
+	LinkIcon,
 } from '@/icons'
 import { logtail } from '@/app/providers'
+import isValidHttpUrl from '@/utils/valid-http-check'
 const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const toast = useToast()
 
@@ -40,6 +51,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
+	const [link, setLink] = useState('')
+
 	const {
 		isOpen: isOpenSetting,
 		onOpen: onOpenSetting,
@@ -131,9 +144,40 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		},
 	})
 
+	const {
+		data: scrapeLinkData,
+		mutate: scrapeLinkMutate,
+		isLoading: scrapeLinkIsLoading,
+	} = useMutation({
+		mutationFn: () => scrapeLink(link),
+
+		onSuccess: (data) => {
+			queryClient.invalidateQueries(['documents'])
+
+			toast({
+				title: 'Link scraped successfully',
+				position: 'top',
+				variant: 'solid',
+				status: 'success',
+				duration: 3000,
+			})
+		},
+		onError: (error) => {
+			toast({
+				title: 'Error uploading link',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			logtail.info('Error uploading link', error)
+			logtail.flush()
+		},
+	})
+
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
-		 
+
 		if (file && file.size > 10 * 1024 * 1024) {
 			// 10MB in bytes
 			toast({
@@ -283,6 +327,55 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 								)
 							}
 						/>
+						<InputGroup border={'0px solid transparent'}>
+							<Input
+								py={2}
+								h={'100%'}
+								type='text'
+								value={link}
+								placeholder='paste a link'
+								onChange={(e) => setLink(e.target.value)}
+								_focus={{
+									borderColor: isValidHttpUrl(link)
+										? 'green'
+										: 'red',
+								}}
+								_focusVisible={{
+									borderColor: isValidHttpUrl(link)
+										? 'green'
+										: 'red',
+								}}
+								//onChange={e => e.target.val}
+								onKeyDown={(e) =>
+									e.key === 'Enter'
+										? isValidHttpUrl(e.target.value)
+											? scrapeLinkMutate()
+											: toast({
+													title: 'Invalid Link',
+													position: 'top',
+													variant: 'left-accent',
+													status: 'error',
+													duration: 3000,
+											  })
+										: console.log('')
+								}
+								background={base700}
+								_hover={{ background: base700 }}
+							/>
+							<InputRightElement
+								mr={2}
+								ml={2}
+								display={'flex'}
+								justifyContent={'center'}
+								alignItems={'center'}
+							>
+								{scrapeLinkIsLoading ? (
+									<Spinner />
+								) : (
+									<LinkIcon fill={text} />
+								)}
+							</InputRightElement>
+						</InputGroup>
 						<Input
 							type='file'
 							ref={uploadRef}
