@@ -37,8 +37,6 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 			content = await tesseract.recognize(await file.toBuffer())
 
 			content = xss(content)
-
-			console.log(content)
 		} else {
 			throw new Error('File type is currently not supported!')
 		}

@@ -144,6 +144,7 @@ model Chat {
 model ChatPreferences {
   llm_model    String   @default("ChatGPT")
   data_sources String[] @default(["All"])
+  document_id  String?
   chat_id      String   @id @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

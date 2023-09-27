@@ -26,12 +26,15 @@ const promptQuery = async (prompt, chat) => {
 			profile_id: chat.profile_id,
 		}
 
-		if (preferences.data_sources.includes('All')) {
-			pineconeQuery = { ...pineconeQuery }
-		} else {
+		if (!preferences.data_sources.includes('All')) {
 			pineconeQuery = {
 				...pineconeQuery,
 				chunk_source: { $in: preferences.data_sources },
+			}
+		} else if (preferences.document_id) {
+			pineconeQuery = {
+				...pineconeQuery,
+				document_id: preferences.document_id,
 			}
 		}
 
