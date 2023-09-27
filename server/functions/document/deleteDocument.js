@@ -20,8 +20,8 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 			Document.delete({ where: { document_id: document_id } }),
 
 			Chat.findMany({
-				where: { source_documents: { hasSome: [document_id] } },
-				select: { source_documents: true },
+				where: { source_documents: { has: document_id } },
+				select: { source_documents: true, chat_id: true },
 			}).then(async (chats) => {
 				try {
 					for await (const chat of chats) {
