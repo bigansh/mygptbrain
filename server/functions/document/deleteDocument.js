@@ -29,7 +29,7 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 							(id) => id !== document_id
 						)
 
-						Chat.update({
+						await Chat.update({
 							where: { chat_id: chat.chat_id },
 							data: { source_documents: newSourceDocuments },
 						})
