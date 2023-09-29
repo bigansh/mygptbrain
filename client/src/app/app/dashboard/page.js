@@ -219,7 +219,7 @@ const OnboardingModal = ({
 		}
 		localStorage.setItem('modal-display', true)
 	}, [])
-
+	
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
 		useUploadDoc({
 			file: uploadRef?.current?.files[0],
@@ -231,7 +231,7 @@ const OnboardingModal = ({
 		const file = event.target.files[0]
 
 		if (file && file.size > 10 * 1024 * 1024) {
-			// 10MB in bytes
+// 10MB in bytes
 			toast({
 				title: 'File is too large',
 				description: 'Please select a file less than 10MB.',
@@ -240,12 +240,12 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
-			event.target.value = '' // Reset the file input
+			event.target.value = ''
 			return
 		}
 
-		// If the file size is within the limits, invoke the mutation
-		uploadDocMutate()
+		// Invoke the mutation here, passing the file
+		uploadDocMutate(file)
 	}
 	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
 		useScrapeLink({

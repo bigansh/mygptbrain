@@ -86,13 +86,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
 
 	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
-		useScrapeLink({link})
+		useScrapeLink({ link })
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
 
 		if (file && file.size > 10 * 1024 * 1024) {
-			// 10MB in bytes
 			toast({
 				title: 'File is too large',
 				description: 'Please select a file less than 10MB.',
@@ -101,12 +100,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 				status: 'error',
 				duration: 3000,
 			})
-			event.target.value = '' // Reset the file input
+			event.target.value = ''
 			return
 		}
 
-		// If the file size is within the limits, invoke the mutation
-		uploadDocMutate()
+		// Invoke the mutation here, passing the file
+		uploadDocMutate(file)
 	}
 	// UI funcs
 
