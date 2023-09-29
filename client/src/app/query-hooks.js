@@ -24,7 +24,7 @@ export const useThreadsData = ({ enabled, funcArgs }) => {
 	return useQuery({
 		queryKey: ['threads'],
 		queryFn: () => readChat(funcArgs),
-		enabled: enabled,
+		enabled,
 		onError: (error) => {
 			logtail.info('Error getting threads', error)
 			logtail.flush()
@@ -68,11 +68,11 @@ export const useDocumentsData = ({ enabled, funcArgs }) => {
 // 	})
 // }
 
-export const useUploadDoc = ({ file, onSuccess = () => {} }) => {
+export const useUploadDoc = () => {
 	const queryClient = useQueryClient()
 	const toast = useToast()
 
-	return useMutation(() => uploadDoc(file), {
+	return useMutation((file) => uploadDoc(file), {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['documents'])
 			toast({
@@ -82,7 +82,6 @@ export const useUploadDoc = ({ file, onSuccess = () => {} }) => {
 				status: 'success',
 				duration: 3000,
 			})
-			onSuccess()
 		},
 		onError: (error) => {
 			toast({

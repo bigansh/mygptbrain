@@ -69,31 +69,29 @@ const RightSideBar = () => {
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
-	
-	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
-		useUploadDoc({
-			file: uploadRef?.current?.files[0],
-		})
 
-		const handleFileChange = (event) => {
-			const file = event.target.files[0]
-	
-			if (file && file.size > 10 * 1024 * 1024) {
-				toast({
-					title: 'File is too large',
-					description: 'Please select a file less than 10MB.',
-					position: 'top',
-					variant: 'solid',
-					status: 'error',
-					duration: 3000,
-				})
-				event.target.value = ''
-				return
-			}
-	
-			// Invoke the mutation here, passing the file
-			uploadDocMutate(file)
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useUploadDoc()
+
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+
+		if (file && file.size > 10 * 1024 * 1024) {
+			toast({
+				title: 'File is too large',
+				description: 'Please select a file less than 10MB.',
+				position: 'top',
+				variant: 'solid',
+				status: 'error',
+				duration: 3000,
+			})
+			event.target.value = ''
+			return
 		}
+		console.log(file, 'fole')
+		// Invoke the mutation here, passing the file
+		uploadDocMutate(file)
+	}
 	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
 
 	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =

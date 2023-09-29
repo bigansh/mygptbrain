@@ -221,12 +221,7 @@ const OnboardingModal = ({
 	}, [])
 	
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
-		useUploadDoc({
-			file: uploadRef?.current?.files[0],
-			onSuccess: () => {
-				onCloseOnboarding()
-			},
-		})
+		useUploadDoc()
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
 

@@ -79,9 +79,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	})
 
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
-		useUploadDoc({
-			file: uploadRef?.current?.files[0],
-		})
+		useUploadDoc()
 
 	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
 
