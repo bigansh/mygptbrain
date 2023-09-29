@@ -17,6 +17,7 @@ import { LuDelete } from 'react-icons/lu'
 import { DeleteIcon, LinkIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
 import { logtail } from '@/app/providers'
+import { useUserData } from '@/app/query-hooks'
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const toast = useToast()
 	const { base, text } = useColors()
@@ -28,10 +29,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 	} = useThreads()
 	const queryClient = useQueryClient()
 
-	const { data: userData } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data: userData } = useUserData()
 
 	const { data: documentData } = useQuery({
 		queryKey: ['documents', currentDocument],

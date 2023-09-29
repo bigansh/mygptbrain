@@ -60,7 +60,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				title: 'Error creating chat',
 				position: 'top',
 				variant: 'solid',
-				status: 'success',
+				status: 'error',
 				duration: 3000,
 			})
 

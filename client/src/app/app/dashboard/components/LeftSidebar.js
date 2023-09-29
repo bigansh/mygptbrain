@@ -16,11 +16,12 @@ import {
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { deleteChat, getDoc, getUser, readChat, updateChat } from '@/api'
+import { deleteChat, readChat, updateChat } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
 import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
 import { logtail } from '@/app/providers'
+import { useDocumentData, useDocumentsData, useThreadData, useUserData } from '@/app/query-hooks'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base800, base700, text, redbg } = useColors()
 	const toast = useToast()
@@ -33,10 +34,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		setCurrentView,
 	} = useThreads()
 
-	const { data: userData } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data: userData } = useUserData()
 
 	const { data: threadData } = useQuery({
 		queryKey: ['threads', currentThread],
@@ -63,87 +61,74 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const [editName, setEditName] = useState('')
 	const [isNameEditing, setNameEditing] = useState(false)
 
-	const { data: documentData } = useQuery({
-		queryKey: ['documents'],
-		queryFn: () =>
-			getDoc({
-				profile_id: userData?.profile_id,
-				document_id: currentDocument,
-			}),
+	const { data: documentData } = useDocumentsData({
+		
 		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
-		onSuccess: () => {
-
-		},
-		onError: (error) => {
-			logtail.info('Error getting document', error)
-			logtail.flush()
+		funcArgs: {
+			profile_id: userData?.profile_id,
+			document_id: currentDocument,
 		},
 	})
+	const { isLoading: updateNameIsLoading, mutate: updateNameMutate } =
+		useMutation({
+			mutationFn: () =>
+				updateChat({ chat_id: currentThread, chat_name: editName }),
 
-	const {
-		isLoading: updateNameIsLoading,
-		mutate: updateNameMutate,
-	} = useMutation({
-		mutationFn: () =>
-			updateChat({ chat_id: currentThread, chat_name: editName }),
+			onSuccess: (data) => {
+				setNameEditing(false)
+				setEditName(data.chat_name)
+				queryClient.invalidateQueries(['threads'])
+				queryClient.setQueryData(['threads', currentThread], () => {
+					return [data]
+				})
+				toast({
+					title: 'Name updated successfully',
+					position: 'top',
+					variant: 'solid',
+					status: 'success',
+					duration: 3000,
+				})
+			},
 
-		onSuccess: (data) => {
-			setNameEditing(false)
-			setEditName(data.chat_name)
-			queryClient.invalidateQueries(['threads'])
-			queryClient.setQueryData(['threads', currentThread], () => {
-				return [data]
-			})
-			toast({
-				title: 'Name updated successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
+			onError: (error) => {
+				logtail.info('Error editng name', error)
+				logtail.flush()
+			},
+		})
 
-		onError: (error) => {
-			logtail.info('Error editng name', error)
-			logtail.flush()
-		},
-	})
+	const { isLoading: deleteThreadIsLoading, mutate: deleteThreadMutate } =
+		useMutation({
+			mutationFn: () =>
+				deleteChat({
+					chat_id: currentThread,
+					profile_id: userData?.profile_id,
+				}),
+			onSuccess: (data) => {
+				queryClient.invalidateQueries(['threads'])
+				toast({
+					title: 'Thread deleted',
+					position: 'top',
+					variant: 'solid',
+					status: 'success',
+					duration: 3000,
+				})
+				setCurrentDocument('')
+				setCurrentThread('new')
+				setCurrentView('chat')
+			},
 
-	const {
-		isLoading: deleteThreadIsLoading,
-		mutate: deleteThreadMutate,
-	} = useMutation({
-		mutationFn: () =>
-			deleteChat({
-				chat_id: currentThread,
-				profile_id: userData?.profile_id,
-			}),
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['threads'])
-			toast({
-				title: 'Thread deleted',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			setCurrentDocument('')
-			setCurrentThread('new')
-			setCurrentView('chat')
-		},
-
-		onError: (error) => {
-			logtail.info('Error deleting thread', error)
-			logtail.flush()
-			toast({
-				title: 'Error deleting thread',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-		},
-	})
+			onError: (error) => {
+				logtail.info('Error deleting thread', error)
+				logtail.flush()
+				toast({
+					title: 'Error deleting thread',
+					position: 'top',
+					variant: 'solid',
+					status: 'error',
+					duration: 3000,
+				})
+			},
+		})
 
 	return (
 		<Flex
@@ -175,36 +160,44 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				</Heading>
 				{threadData && (
 					<Flex flexDir={'column'} gap={2} mt={2}>
-						{threadData[0]?.source_documents?.filter(item => documentData?.some(idItem => idItem.document_id === item)).map((item, index) => (
-							<Button
-								display={'flex'}
-								overflow={'hidden'}
-								justifyContent={'flex-start'}
-								key={item.chat_id}
-								background={
-									currentDocument === item ? base700 : base800
-								}
-								_hover={{ background: base700 }}
-								cursor={'pointer'}
-								onClick={() => {
-									setCurrentDocument(item)
-									setCurrentView('document')
-								}}
-								py={4}
-								px='10px'
-								gap={2}
-								fontWeight={'400'}
-							>
-								<Text isTruncated>
-									{index + 1}.{' '}
-									{
-										documentData?.find(
-											(e) => e.document_id == item
-										)?.heading
+						{threadData[0]?.source_documents
+							?.filter((item) =>
+								documentData?.some(
+									(idItem) => idItem.document_id === item
+								)
+							)
+							.map((item, index) => (
+								<Button
+									display={'flex'}
+									overflow={'hidden'}
+									justifyContent={'flex-start'}
+									key={item.chat_id}
+									background={
+										currentDocument === item
+											? base700
+											: base800
 									}
-								</Text>
-							</Button>
-						))}
+									_hover={{ background: base700 }}
+									cursor={'pointer'}
+									onClick={() => {
+										setCurrentDocument(item)
+										setCurrentView('document')
+									}}
+									py={4}
+									px='10px'
+									gap={2}
+									fontWeight={'400'}
+								>
+									<Text isTruncated>
+										{index + 1}.{' '}
+										{
+											documentData?.find(
+												(e) => e.document_id == item
+											)?.heading
+										}
+									</Text>
+								</Button>
+							))}
 					</Flex>
 				)}
 			</Flex>

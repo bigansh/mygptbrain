@@ -22,15 +22,7 @@ import {
 import { useRef, useState } from 'react'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 import { useThreads } from '@/context'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-	getDoc,
-	getUser,
-	readChat,
-	scrapeLink,
-	syncDoc,
-	uploadDoc,
-} from '@/api'
+
 import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
 import SettingModal from './SettingModal'
@@ -42,12 +34,18 @@ import {
 	DocumentIcon,
 	LinkIcon,
 } from '@/icons'
-import { logtail } from '@/app/providers'
 import isValidHttpUrl from '@/utils/valid-http-check'
+import {
+	useDocumentsData,
+	useScrapeLink,
+	useSyncDoc,
+	useThreadsData,
+	useUploadDoc,
+	useUserData,
+} from '@/app/query-hooks'
+
 const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const toast = useToast()
-
-	const queryClient = useQueryClient()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
@@ -69,111 +67,26 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		setCurrentView,
 	} = useThreads()
 
-	const { data: userData } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data: userData } = useUserData()
 
-	const { data: threadsData, isLoading: threadsIsLoading } = useQuery({
-		queryKey: ['threads'],
-		queryFn: () => readChat({ profile_id: userData?.profile_id }),
-		enabled: userData?.profile_id ? true : false,
-		onError: (error) => {
-			logtail.info('Error getting thread', error)
-			logtail.flush()
-		},
+	const { data: threadsData, isLoading: threadsIsLoading } = useThreadsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
-
-	const { data: docData, isLoading: docsIsLoading } = useQuery({
-		queryKey: ['documents'],
-		queryFn: () => getDoc({ profile_id: userData?.profile_id }),
-		enabled: userData?.profile_id ? true : false,
-		//placeholderData: [{ document_id: 1, heading: 'title 1' }],
-		onError: (error) => {
-			logtail.info('Error getting document', error)
-			logtail.flush()
-		},
+	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
 
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
-		useMutation({
-			mutationFn: () => uploadDoc(uploadRef.current.files[0]),
-
-			onSuccess: () => {
-				queryClient.invalidateQueries(['documents'])
-				toast({
-					title: 'Document uploaded successfully',
-					position: 'top',
-					variant: 'solid',
-					status: 'success',
-					duration: 3000,
-				})
-				// queryClient.setQueryData(['documents'], (oldData) => [
-				// 	...oldData,
-				// 	data.chat,
-				// ])
-			},
-			onError: (error) => {
-				logtail.info('Error uploading document', error)
-				logtail.flush()
-				toast({
-					title: 'Error uploading document',
-					position: 'top',
-					variant: 'solid',
-					status: 'error',
-					duration: 3000,
-				})
-			},
+		useUploadDoc({
+			file: uploadRef?.current?.files[0],
 		})
 
-	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useMutation({
-		mutationFn: () => syncDoc(),
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
 
-		onSuccess: () => {
-			toast({
-				title: 'Data synced successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
-		onError: (error) => {
-			logtail.info('Error syncing document', error)
-			logtail.flush()
-		},
-	})
-
-	const {
-		data: scrapeLinkData,
-		mutate: scrapeLinkMutate,
-		isLoading: scrapeLinkIsLoading,
-	} = useMutation({
-		mutationFn: () => scrapeLink(link),
-
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-
-			toast({
-				title: 'Link scraped successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
-		onError: (error) => {
-			toast({
-				title: 'Error uploading link',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-			logtail.info('Error uploading link', error)
-			logtail.flush()
-		},
-	})
+	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
+		useScrapeLink({link})
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]

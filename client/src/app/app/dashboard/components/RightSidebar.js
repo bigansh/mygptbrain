@@ -1,15 +1,6 @@
 import { useRef, useState } from 'react'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 import { useThreads } from '@/context'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-	getDoc,
-	getUser,
-	readChat,
-	scrapeLink,
-	syncDoc,
-	uploadDoc,
-} from '@/api'
 import {
 	Flex,
 	Heading,
@@ -36,12 +27,17 @@ import {
 	DocumentIcon,
 	LinkIcon,
 } from '@/icons'
-import { logtail } from '@/app/providers'
-import { AiOutlineLink } from 'react-icons/ai'
 import isValidHttpUrl from '@/utils/valid-http-check'
+import {
+	useDocumentsData,
+	useScrapeLink,
+	useSyncDoc,
+	useThreadsData,
+	useUploadDoc,
+	useUserData,
+} from '@/app/query-hooks'
 
 const RightSideBar = () => {
-	const queryClient = useQueryClient()
 	const toast = useToast()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
@@ -54,81 +50,31 @@ const RightSideBar = () => {
 	} = useDisclosure()
 	const uploadRef = useRef(null)
 	const { colorMode, toggleColorMode } = useColorMode()
-	const { base, base800, base700, text } = useColors()
+	const { base800, base700, text } = useColors()
 	const {
-		threads,
-		setThreads,
 		currentThread,
 		setCurrentThread,
-		documents,
-		setDocuments,
 		currentDocument,
 		setCurrentDocument,
-		currentView,
 		setCurrentView,
 	} = useThreads()
 
-	const { data: userData } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
+	const { data: userData } = useUserData()
+	const { data: threadsData, isLoading: threadsIsLoading } = useThreadsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
 
-	const { data: threadsData, isLoading: threadsIsLoading } = useQuery({
-		queryKey: ['threads'],
-		queryFn: () => readChat({ profile_id: userData?.profile_id }),
-		enabled: userData?.profile_id ? true : false,
-		//placeholderData: [{ chat_id: 1, chat_name: 'title 1' }],
-		onError: (error) => {
-			logtail.info('Error getting thread', error)
-			logtail.flush()
-			logtail
-		},
+	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
 
-	const { data: docData, isLoading: docsIsLoading } = useQuery({
-		queryKey: ['documents'],
-		queryFn: () => getDoc({ profile_id: userData?.profile_id }),
-		enabled: userData?.profile_id ? true : false,
-		//placeholderData: [{ document_id: 1, heading: 'title 1' }],
-		onError: (error) => {
-			logtail.info('Error getting document', error)
-			logtail.flush()
-		},
-	})
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useUploadDoc({
+			file: uploadRef?.current?.files[0],
+		})
 
-	const {
-		data,
-		mutate: uploadDocMutate,
-		isLoading: uploadDocIsLoading,
-	} = useMutation({
-		mutationFn: () => uploadDoc(uploadRef.current.files[0]),
-
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-			toast({
-				title: 'Document uploaded successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
-		},
-		onError: (error) => {
-			logtail.info('Error uploading document', error)
-			logtail.flush()
-			toast({
-				title: 'Error uploading document',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-		},
-	})
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
 
@@ -149,63 +95,11 @@ const RightSideBar = () => {
 		// If the file size is within the limits, invoke the mutation
 		uploadDocMutate()
 	}
-	const {
-		data: syncDocData,
-		mutate: syncDocMutate,
-		isLoading: syncDocIsLoading,
-	} = useMutation({
-		mutationFn: () => syncDoc(),
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
 
-		onSuccess: (data) => {
-			toast({
-				title: 'Data synced successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			//queryClient.invalidateQueries(['documents'])
-			// queryClient.setQueryData(['documents'], (oldData) => [
-			// 	...oldData,
-			// 	data.chat,
-			// ])
-		},
-		onError: (error) => {
-			logtail.info('Error syncing data', error)
-			logtail.flush()
-		},
-	})
+	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
+		useScrapeLink({ link })
 
-	const {
-		data: scrapeLinkData,
-		mutate: scrapeLinkMutate,
-		isLoading: scrapeLinkIsLoading,
-	} = useMutation({
-		mutationFn: () => scrapeLink(link),
-
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-
-			toast({
-				title: 'Link scraped successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
-		onError: (error) => {
-			toast({
-				title: 'Error uploading link',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-			logtail.info('Error uploading link', error)
-			logtail.flush()
-		},
-	})
 	// UI funcs
 
 	const filteredThreads = threadsData
@@ -274,6 +168,7 @@ const RightSideBar = () => {
 					>
 						{filteredThreads?.map((item, index) => (
 							<Button
+								index={index}
 								display={'grid'}
 								justifyContent={'flex-start'}
 								key={item.chat_id}
@@ -337,7 +232,8 @@ const RightSideBar = () => {
 					/>
 					<InputGroup border={'0px solid transparent'}>
 						<Input
-						py={2}	h={'100%'}
+							py={2}
+							h={'100%'}
 							type='text'
 							value={link}
 							placeholder='paste a link'
@@ -423,6 +319,7 @@ const RightSideBar = () => {
 					>
 						{filteredDocuments?.map((item, index) => (
 							<Button
+								index={index}
 								display={'grid'}
 								gridTemplateColumns={'24px 1fr'}
 								justifyContent={'flex-start'}
