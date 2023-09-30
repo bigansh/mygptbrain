@@ -9,6 +9,7 @@ const client = async (profile_id) => {
 		const { google, google_id } = await Auth.findUnique({
 			where: { profile_id: profile_id },
 			include: { google: true },
+			cacheStrategy: { ttl: 60 },
 		})
 
 		const userClient = googleClient

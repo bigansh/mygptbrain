@@ -15,7 +15,9 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 		let data
 
 		if (url.includes('https://twitter.com')) {
-			data = await scrapeThread(url)
+			data = await scrapeArticle(
+				url.replace('https://twitter.com', 'https://nitter.net')
+			)
 		} else {
 			data = await scrapeArticle(url)
 		}

@@ -11,6 +11,7 @@ const findChats = async (chatQueryObject, wantPref = false) => {
 		return await Chat.findMany({
 			where: chatQueryObject,
 			include: { preferences: wantPref },
+			cacheStrategy: { ttl: 60 },
 		})
 	} catch (error) {
 		throw error

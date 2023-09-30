@@ -16,7 +16,7 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 		if (foundDocument.profile_id !== profile_id)
 			throw new Error("You don't have access to this document.")
 
-		await Promise.all([
+		await Promise.allSettled([
 			Document.delete({ where: { document_id: document_id } }),
 
 			Chat.findMany({
@@ -25,13 +25,13 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 			}).then(async (chats) => {
 				try {
 					for await (const chat of chats) {
-						const newSourceDocuments = chat.source_documents.filter(
-							(id) => id !== document_id
-						)
-
 						await Chat.update({
 							where: { chat_id: chat.chat_id },
-							data: { source_documents: newSourceDocuments },
+							data: {
+								source_documents: chat.source_documents.filter(
+									(id) => id !== document_id
+								),
+							},
 						})
 					}
 				} catch (error) {
