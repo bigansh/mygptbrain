@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
 import { logtail } from '@/app/providers'
+import { useDocumentsData, useUserData } from '@/app/query-hooks'
 const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
 
@@ -23,6 +24,12 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const { currentThread, setCurrentThread } = useThreads()
 	const { base, base800, base700, text } = useColors()
 	const toast = useToast()
+	const { userData } = useUserData()
+	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
+	})
+	console.log(docData, 'chat')
 	const {
 		data,
 		isLoading: addIsLoading,
@@ -138,7 +145,23 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				<Textarea
 					placeholder={['ask your second brain, a question!']}
 					value={inputValue}
-					onChange={(e) => setInputValue(e.target.value)}
+					on
+					onChange={(e) =>
+						docData.length !== 0 && setInputValue(e.target.value)
+					}
+					onClick={() => {
+						docData.length == 0 &&
+							toast({
+								title: 'Add a document to get started',
+								position: 'top',
+								variant: 'solid',
+								status: 'warning',
+								duration: 3000,
+							})
+					}}
+					style={{
+						cursor: docData.length == 0 ? 'not-allowed' : 'text',
+					}}
 					border={'transparent'}
 					bg={'transparent'}
 					p={0}
@@ -170,7 +193,20 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				<Box
 					cursor={'pointer'}
 					onClick={() => {
-						currentThread == 'new' ? addMutate() : updateMutate()
+						docData.length == 0
+							? toast({
+									title: 'Add a document to get started',
+									position: 'top',
+									variant: 'solid',
+									status: 'warning',
+									duration: 3000,
+							  })
+							: currentThread == 'new'
+							? addMutate()
+							: updateMutate()
+					}}
+					style={{
+						cursor: docData.length == 0 ? 'not-allowed' : 'pointer',
 					}}
 				>
 					{updateIsLoading || addIsLoading ? (
