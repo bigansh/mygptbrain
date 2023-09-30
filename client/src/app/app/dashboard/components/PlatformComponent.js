@@ -2,12 +2,10 @@ import { Flex, Grid, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { connectPlatform, getUser } from '@/api'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
+import { useUserData } from '@/app/query-hooks'
 
 const PlatformComponent = () => {
-	const { isLoading, isError, data, error } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data } = useUserData()
 	return (
 		<Grid
 			h={'fit-content'}
@@ -41,15 +39,9 @@ const PlatformComponent = () => {
 
 			<PlatformCard
 				name='drive'
-				state={
-					data?.auth?.google_id
-						? 'reauthorize'
-						: 'connect'
-				}
+				state={data?.auth?.google_id ? 'reauthorize' : 'connect'}
 				color={
-					data?.auth?.google_id
-						? '#58DD58'
-						: 'rgba(255, 208, 75, 1)'
+					data?.auth?.google_id ? '#58DD58' : 'rgba(255, 208, 75, 1)'
 				}
 				icon={<DriveIcon fill={'rgba(255, 255, 255, 1)'} />}
 			/>

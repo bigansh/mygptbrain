@@ -33,14 +33,12 @@ import { useColors } from '@/utils/colors'
 import { useThreads } from '@/context'
 import {
 	AiOutlineCloudUpload,
-	AiOutlineLink,
 	AiOutlineMenu,
 	AiOutlinePlus,
 } from 'react-icons/ai'
-import { connectPlatform, getUser, scrapeLink, uploadDoc } from '@/api'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { connectPlatform, getUser } from '@/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-	AddIcon,
 	DriveIcon,
 	LinkIcon,
 	NotionIcon,
@@ -50,8 +48,13 @@ import {
 import mixpanel from 'mixpanel-browser'
 import { useRouter } from 'next/navigation'
 import RightSideBarDrawer from './components/RightSideBarDrawer'
-import { logtail } from '@/app/providers'
 import isValidHttpUrl from '@/utils/valid-http-check'
+import {
+	useScrapeLink,
+	useThreadData,
+	useUploadDoc,
+	useUserData,
+} from '@/app/query-hooks'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -78,6 +81,7 @@ const Dashboard = () => {
 		currentView,
 		setCurrentView,
 	} = useThreads()
+
 	const { data, isLoading } = useQuery({
 		queryKey: ['user'],
 		queryFn: getUser,
@@ -95,8 +99,8 @@ const Dashboard = () => {
 		defaultIsOpen: false,
 	})
 
-	const { data: threadData, isLoading: threadIsLoading } = useQuery({
-		queryKey: ['threads', currentThread],
+	const { data: threadData } = useThreadData({
+		currentThread,
 		enabled: currentThread !== '' && currentThread !== 'new' ? true : false,
 	})
 
@@ -205,10 +209,7 @@ const OnboardingModal = ({
 	const uploadRef = useRef(null)
 	const toast = useToast()
 	const queryClient = useQueryClient()
-	const { data, isLoading } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data, isLoading } = useUserData()
 
 	useEffect(() => {
 		if (localStorage.getItem('modal-display') == 'true') {
@@ -218,44 +219,14 @@ const OnboardingModal = ({
 		}
 		localStorage.setItem('modal-display', true)
 	}, [])
-
-	const {
-		data: uploadDocData,
-		mutate: uploadDocMutate,
-		isLoading: uploadDocIsLoading,
-	} = useMutation({
-		mutationFn: () => uploadDoc(uploadRef.current.files[0]),
-
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-			onCloseOnboarding()
-			toast({
-				title: 'Document uploaded successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
-		onError: (error) => {
-			toast({
-				title: 'Error uploading document',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-
-			logtail.info('Error uploading document', error)
-			logtail.flush()
-		},
-	})
-
+	
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useUploadDoc()
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
-		 
+
 		if (file && file.size > 10 * 1024 * 1024) {
-			// 10MB in bytes
+// 10MB in bytes
 			toast({
 				title: 'File is too large',
 				description: 'Please select a file less than 10MB.',
@@ -264,43 +235,20 @@ const OnboardingModal = ({
 				status: 'error',
 				duration: 3000,
 			})
-			event.target.value = '' // Reset the file input
+			event.target.value = ''
 			return
 		}
 
-		// If the file size is within the limits, invoke the mutation
-		uploadDocMutate()
+		// Invoke the mutation here, passing the file
+		uploadDocMutate(file)
 	}
-	const {
-		data: scrapeLinkData,
-		mutate: scrapeLinkMutate,
-		isLoading: scrapeLinkIsLoading,
-	} = useMutation({
-		mutationFn: () => scrapeLink(link),
-
-		onSuccess: (data) => {
-			queryClient.invalidateQueries(['documents'])
-			onCloseOnboarding()
-			toast({
-				title: 'Link scraped successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-		},
-		onError: (error) => {
-			toast({
-				title: 'Error uploading link',
-				position: 'top',
-				variant: 'solid',
-				status: 'error',
-				duration: 3000,
-			})
-			logtail.info('Error uploading link', error)
-			logtail.flush()
-		},
-	})
+	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
+		useScrapeLink({
+			link,
+			onSuccess: () => {
+				onCloseOnboarding()
+			},
+		})
 
 	const { base, base800, base700, text } = useColors()
 	return (
@@ -515,10 +463,7 @@ const OnboardingModal = ({
 }
 
 const PlatformCard = ({ title, color, icon }) => {
-	const { isLoading, isError, data, error } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data } = useUserData()
 
 	return (
 		<Flex
@@ -550,5 +495,3 @@ const PlatformCard = ({ title, color, icon }) => {
 		</Flex>
 	)
 }
-
-

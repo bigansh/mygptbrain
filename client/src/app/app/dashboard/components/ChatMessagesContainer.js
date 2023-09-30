@@ -5,14 +5,12 @@ import { useThreads } from '@/context'
 import { getUser, readChat } from '@/api'
 import { Flex, Spinner } from '@chakra-ui/react'
 import { logtail } from '@/app/providers'
+import { useDocumentsData, useThreadsData, useUserData } from '@/app/query-hooks'
 
 const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
 	const { currentThread } = useThreads()
-	const { data: userData } = useQuery({
-		queryKey: ['user'],
-		queryFn: getUser,
-	})
+	const { data: userData } = useUserData()
 
 	const { data: threadData, isLoading: threadIsLoading } = useQuery({
 		queryKey: ['threads', currentThread],
