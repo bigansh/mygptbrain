@@ -97,7 +97,7 @@ export const useUploadDoc = () => {
 	})
 }
 
-export const useSyncDoc = () => {
+export const useSyncDoc = (onSuccess = () => {}) => {
 	const toast = useToast()
 
 	return useMutation(() => syncDoc(), {
@@ -109,6 +109,7 @@ export const useSyncDoc = () => {
 				status: 'success',
 				duration: 3000,
 			})
+			onSuccess()
 		},
 		onError: (error) => {
 			toast({
@@ -120,6 +121,7 @@ export const useSyncDoc = () => {
 			})
 			logtail.info('Error syncing data', error)
 			logtail.flush()
+			onSuccess()
 		},
 	})
 }

@@ -20,16 +20,6 @@ const FunctionalBtn = ({ title, onClick, icon, disabled }) => {
 			</Text>
 			{icon}
 		</Button>
-
-		// <div className="flex items-center justify-between bg-[#DFE8FF80] p-4 rounded-lg">
-		//   <button
-		//     className="text-black rounded-md text-xl focus:outline-none"
-		//     cursor={'pointer'} onClick={cursor={'pointer'} onClick}
-		//   >
-		//     {title}
-		//   </button>
-		//   {icon}
-		// </div>
 	)
 }
 

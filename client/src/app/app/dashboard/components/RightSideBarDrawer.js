@@ -18,6 +18,9 @@ import {
 	useToast,
 	InputRightElement,
 	InputGroup,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
@@ -56,9 +59,10 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 		onOpen: onOpenSetting,
 		onClose: onCloseSetting,
 	} = useDisclosure()
+	const { isOpen, onToggle, onClose } = useDisclosure()
 	const uploadRef = useRef(null)
 	const { colorMode, toggleColorMode } = useColorMode()
-	const { base, base800, base700, text } = useColors()
+	const { base, base800, base600, base700, text } = useColors()
 	const {
 		currentThread,
 		setCurrentThread,
@@ -81,10 +85,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
 		useUploadDoc()
 
-	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc()
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc(
+		() => onToggle()
+	)
 
 	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
-		useScrapeLink({ link })
+		useScrapeLink({ link, onSuccess: () => onToggle() })
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
@@ -98,6 +104,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 				status: 'error',
 				duration: 3000,
 			})
+			onToggle()
 			event.target.value = ''
 			return
 		}
@@ -207,7 +214,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 						</Flex>
 					))}
 				{sidebarTopic == 'documents' && (
-					<Flex flexDir={'column'} gap={2} p={6}>
+					<Flex flexDir={'column'} gap={2} p={6} pos={'relative'}>
 						<Heading fontSize={'2xl'} fontWeight={'400'}>
 							documents
 						</Heading>
@@ -222,89 +229,127 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 							searchTerm={documentInput}
 							setSearchTerm={setDocumentInput}
 						/>
-
-						<FunctionalBtn
-							title='sync documents'
-							cursor={'pointer'}
-							onClick={() => {
-								syncDocMutate()
-							}}
-							icon={
-								syncDocIsLoading ? (
-									<Spinner />
-								) : (
-									<RotateIcon fill={text} />
-								)
-							}
-						/>
-						<InputGroup border={'0px solid transparent'}>
-							<Input
-								py={2}
-								h={'100%'}
-								type='text'
-								value={link}
-								placeholder='paste a link'
-								onChange={(e) => setLink(e.target.value)}
-								_focus={{
-									borderColor: isValidHttpUrl(link)
-										? 'green'
-										: 'red',
-								}}
-								_focusVisible={{
-									borderColor: isValidHttpUrl(link)
-										? 'green'
-										: 'red',
-								}}
-								//onChange={e => e.target.val}
-								onKeyDown={(e) =>
-									e.key === 'Enter'
-										? isValidHttpUrl(e.target.value)
-											? scrapeLinkMutate()
-											: toast({
-													title: 'Invalid Link',
-													position: 'top',
-													variant: 'left-accent',
-													status: 'error',
-													duration: 3000,
-											  })
-										: console.log('')
-								}
-								background={base700}
-								_hover={{ background: base700 }}
-							/>
-							<InputRightElement
-								mr={2}
-								ml={2}
-								display={'flex'}
-								justifyContent={'center'}
-								alignItems={'center'}
+						<Popover
+							placement='bottom-start'
+							isOpen={isOpen}
+							matchWidth
+							returnFocusOnClose={false}
+							onClose={onClose}
+						>
+							<PopoverTrigger>
+								<Button
+									cursor={'pointer'}
+									onClick={onToggle}
+									_hover={{ bg: base600 }}
+									bg={base700}
+									w={'100%'}
+									justifyContent={'space-between'}
+									fontWeight={'400'}
+									isTruncated
+								>
+									<Text textAlign={'initial'} isTruncated>
+										new document
+									</Text>
+									<AddIcon fill={text} />
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent
+								boxShadow={'0px'}
+								mt={'-0.5rem'}
+								borderTopRadius={'0px'}
+								borderTop={'1px solid black'}
+								background={'#DFE8FF80'}
+								w={'100%'}
+								style={{ 'backdrop-filter': 'blur(5px)' }}
 							>
-								{scrapeLinkIsLoading ? (
-									<Spinner />
-								) : (
-									<LinkIcon fill={text} />
-								)}
-							</InputRightElement>
-						</InputGroup>
-						<Input
-							type='file'
-							ref={uploadRef}
-							onChange={(e) => handleFileChange(e)}
-							display={'none'}
-						/>
-
-						<FunctionalBtn
-							title={'upload document'}
-							cursor={'pointer'}
-							onClick={() => uploadRef.current.click()}
-							icon={
-								uploadDocIsLoading ? (
-									<Spinner />
-								) : (
-									<CloudUploadIcon fill={text} />
-								)
-							}
-						/>
+								<FunctionalBtn
+									title={'upload document'}
+									cursor={'pointer'}
+									onClick={() => {
+										uploadRef.current.click()
+									}}
+									icon={
+										uploadDocIsLoading ? (
+											<Spinner />
+										) : (
+											<CloudUploadIcon fill={text} />
+										)
+									}
+								/>
+								<FunctionalBtn
+									title='sync documents'
+									cursor={'pointer'}
+									onClick={() => {
+										syncDocMutate()
+									}}
+									icon={
+										syncDocIsLoading ? (
+											<Spinner />
+										) : (
+											<RotateIcon fill={text} />
+										)
+									}
+								/>
+								<InputGroup border={'0px solid transparent'}>
+									<Input
+										py={2}
+										h={'100%'}
+										type='text'
+										value={link}
+										placeholder='paste a link'
+										onChange={(e) =>
+											setLink(e.target.value)
+										}
+										_focus={{
+											borderColor: isValidHttpUrl(link)
+												? 'green'
+												: 'red',
+										}}
+										_focusVisible={{
+											borderColor: isValidHttpUrl(link)
+												? 'green'
+												: 'red',
+										}}
+										//onChange={e => e.target.val}
+										onKeyDown={(e) =>
+											e.key === 'Enter'
+												? isValidHttpUrl(e.target.value)
+													? scrapeLinkMutate()
+													: toast({
+															title: 'Invalid Link',
+															position: 'top',
+															variant:
+																'left-accent',
+															status: 'error',
+															duration: 3000,
+													  })
+												: console.log('')
+										}
+										background={base700}
+										_hover={{ background: base700 }}
+									/>
+									<InputRightElement
+										mr={2}
+										ml={2}
+										display={'flex'}
+										justifyContent={'center'}
+										alignItems={'center'}
+									>
+										{scrapeLinkIsLoading ? (
+											<Spinner />
+										) : (
+											<LinkIcon fill={text} />
+										)}
+									</InputRightElement>
+								</InputGroup>
+								<Input
+									type='file'
+									ref={uploadRef}
+									onChange={(e) => handleFileChange(e)}
+									display={'none'}
+								/>
+							</PopoverContent>
+						</Popover>
 						<Box
 							borderTop='2px'
 							borderColor='black.900'
