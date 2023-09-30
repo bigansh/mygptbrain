@@ -22,7 +22,6 @@ const authFinderAndUpdater = async (userObject) => {
 		if (userObject.authDetails.google_id) {
 			foundUser = await Google.findUnique({
 				where: { google_id: userObject.authDetails.google_id },
-				cacheStrategy: { ttl: 60 },
 			})
 
 			foundUser &&
@@ -35,27 +34,22 @@ const authFinderAndUpdater = async (userObject) => {
 		} else if (userObject.authDetails.pocket_id) {
 			foundUser = await Pocket.findUnique({
 				where: { pocket_id: userObject.authDetails.pocket_id },
-				cacheStrategy: { ttl: 60 },
 			})
 		} else if (userObject.authDetails.twitter_id) {
 			foundUser = await Twitter.findUnique({
 				where: { twitter_id: userObject.authDetails.twitter_id },
-				cacheStrategy: { ttl: 60 },
 			})
 		} else if (userObject.authDetails.reddit_id) {
 			foundUser = await Reddit.findUnique({
 				where: { reddit_id: userObject.authDetails.reddit_id },
-				cacheStrategy: { ttl: 60 },
 			})
 		} else if (userObject.authDetails.password) {
 			foundUser = await Auth.findUnique({
 				where: { profile_id: userObject.personalDetails.profile_id },
-				cacheStrategy: { ttl: 60 },
 			})
 		} else if (userObject.authDetails.notion_id) {
 			foundUser = await Notion.findUnique({
 				where: { notion_id: userObject.authDetails.notion_id },
-				cacheStrategy: { ttl: 60 },
 			})
 		}
 

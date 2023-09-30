@@ -10,7 +10,6 @@ const authFinder = async (profile_id) => {
 		const userAuth = await Auth.findUnique({
 			where: { profile_id: profile_id },
 			include: { google: true },
-			cacheStrategy: { ttl: 60 },
 		})
 
 		if (!userAuth) throw new Error('No such user exists')
