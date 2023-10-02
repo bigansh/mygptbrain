@@ -9,6 +9,7 @@ export const useColors = () => {
 		'rgba(255, 223, 223, 1)',
 		'rgba(255, 163, 163, 1)'
 	)
+
 	const text = useColorModeValue('#000000', '#FFFFFF')
-	return { base, base800, base700, text, base600  , redbg}
+	return { base, base800, base700, text, base600, redbg }
 }
