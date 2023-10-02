@@ -257,8 +257,8 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 								boxShadow={'0px'}
 								mt={'-0.5rem'}
 								borderTopRadius={'0px'}
-								borderTop={'1px solid black'}
-								background={'#DFE8FF80'}
+								borderTop={`1px solid ${text}`}
+								background={base700}
 								w={'100%'}
 								style={{ 'backdrop-filter': 'blur(5px)' }}
 							>
