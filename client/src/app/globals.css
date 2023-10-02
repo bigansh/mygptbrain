@@ -103,3 +103,6 @@ textarea {
 	transform: scale(0.5);
 	transition: transform 400ms ease-in-out;
 }
+.break-spaces {
+	white-space: break-spaces;
+}

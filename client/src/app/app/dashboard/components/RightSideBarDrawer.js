@@ -183,10 +183,10 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 						>
 							{filteredThreads?.map((item) => (
 								<Button
-									display={'flex'}
+									display={'grid'}
+									gridTemplateColumns={'24px 1fr'}
 									justifyContent={'flex-start'}
 									key={item.chat_id}
-									gridTemplateColumns={'24px 1fr'}
 									background={
 										currentThread === item.chat_id
 											? base700

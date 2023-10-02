@@ -227,8 +227,6 @@ const RightSideBar = () => {
 						matchWidth
 						returnFocusOnClose={false}
 						onClose={onClose}
-						trigger='hover'
-						
 					>
 						<PopoverTrigger>
 							<Button

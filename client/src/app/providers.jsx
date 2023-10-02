@@ -38,7 +38,7 @@ const queryClient = new QueryClient({
 	},
 })
 
-export const logtail = new Logtail('EFgZ1Fe1TgHWWNCnknBWjdkS')
+export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL)
 
 export function Providers({ children }) {
 	return (
