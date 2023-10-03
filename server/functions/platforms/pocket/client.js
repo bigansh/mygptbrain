@@ -12,6 +12,7 @@ const client = async (profile_id) => {
 		const { pocket_id, pocket } = await Auth.findUnique({
 			where: { profile_id: profile_id },
 			include: { pocket: true },
+			cacheStrategy: { ttl: 60 },
 		})
 
 		return pocketClient(undefined, pocket.access_token)

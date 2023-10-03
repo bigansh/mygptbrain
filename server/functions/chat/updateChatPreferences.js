@@ -10,6 +10,7 @@ const updateChatPreferences = async (profile_id, chatPreferencesObject) => {
 	try {
 		const foundChat = await Chat.findUnique({
 			where: { chat_id: chatPreferencesObject.chat_id },
+			cacheStrategy: { ttl: 60 },
 		})
 
 		if (foundChat.profile_id !== profile_id) {

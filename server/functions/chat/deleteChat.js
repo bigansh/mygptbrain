@@ -9,7 +9,10 @@ import { Chat } from '../../utils/initializers/prisma.js'
  */
 const deleteChat = async ({ chat_id }, profile_id) => {
 	try {
-		const foundChat = await Chat.findUnique({ where: { chat_id: chat_id } })
+		const foundChat = await Chat.findUnique({
+			where: { chat_id: chat_id },
+			cacheStrategy: { ttl: 60 },
+		})
 
 		if (foundChat.profile_id !== profile_id) {
 			throw new Error("You don't have access to this chat")

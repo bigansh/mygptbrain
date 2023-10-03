@@ -27,6 +27,7 @@ const userFinderAndUpdater = async (userObject) => {
 
 		const user = await User.findUnique({
 			where: query,
+			cacheStrategy: { ttl: 60 },
 		})
 
 		user && (userObject.personalDetails.profile_id = user.profile_id)

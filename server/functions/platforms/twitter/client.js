@@ -15,6 +15,7 @@ const client = async (profile_id) => {
 		const { twitter_id, twitter } = await Auth.findUnique({
 			where: { profile_id: profile_id },
 			include: { twitter: true },
+			cacheStrategy: { ttl: 60 },
 		})
 
 		const access_token = twitter.access_token
