@@ -1,5 +1,6 @@
 'use client'
 
+import { syncDoc } from '@/api'
 import { Flex, Heading, Spinner } from '@chakra-ui/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -12,6 +13,7 @@ const Callback = () => {
 
 	useEffect(() => {
 		localStorage.setItem('x-session-token', sessionToken)
+		syncDoc()
 		router.push('/app/dashboard')
 	}, [])
 

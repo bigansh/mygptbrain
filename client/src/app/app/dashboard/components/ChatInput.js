@@ -147,10 +147,10 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					value={inputValue}
 					on
 					onChange={(e) =>
-						docData.length !== 0 && setInputValue(e.target.value)
+						docData?.length !== 0 && setInputValue(e.target.value)
 					}
 					onClick={() => {
-						docData.length == 0 &&
+						docData?.length == 0 &&
 							toast({
 								title: 'Add a document to get started',
 								position: 'top',
@@ -160,7 +160,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 							})
 					}}
 					style={{
-						cursor: docData.length == 0 ? 'not-allowed' : 'text',
+						cursor: docData?.length == 0 ? 'not-allowed' : 'text',
 					}}
 					border={'transparent'}
 					bg={'transparent'}
@@ -193,7 +193,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				<Box
 					cursor={'pointer'}
 					onClick={() => {
-						docData.length == 0
+						docData?.length == 0
 							? toast({
 									title: 'Add a document to get started',
 									position: 'top',
@@ -206,7 +206,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 							: updateMutate()
 					}}
 					style={{
-						cursor: docData.length == 0 ? 'not-allowed' : 'pointer',
+						cursor: docData?.length == 0 ? 'not-allowed' : '',
 					}}
 				>
 					{updateIsLoading || addIsLoading ? (

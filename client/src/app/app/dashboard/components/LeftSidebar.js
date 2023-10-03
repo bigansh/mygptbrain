@@ -13,17 +13,37 @@ import {
 	Spinner,
 	Box,
 	useToast,
+	Popover,
+	PopoverTrigger,
+	useDisclosure,
+	PopoverContent,
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
 import { deleteChat, readChat, updateChat } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
-import { ChevIcon, DeleteIcon, EditIcon, FilterIcon } from '@/icons'
+import {
+	ChevIcon,
+	ChevRevIcon,
+	DeleteIcon,
+	EditIcon,
+	FilterIcon,
+} from '@/icons'
 import { logtail } from '@/app/providers'
-import { useDocumentData, useDocumentsData, useThreadData, useUserData } from '@/app/query-hooks'
+import {
+	useDocumentData,
+	useDocumentsData,
+	useThreadData,
+	useUserData,
+} from '@/app/query-hooks'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-	const { base800, base700, text, redbg } = useColors()
+	const { base800, base700, base600, text, redbg } = useColors()
+	const {
+		isOpen: isOpenLLM,
+		onToggle: onToggleLLM,
+		onClose: onCloseLLM,
+	} = useDisclosure()
 	const toast = useToast()
 	const queryClient = useQueryClient()
 	const {
@@ -62,7 +82,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const [isNameEditing, setNameEditing] = useState(false)
 
 	const { data: documentData } = useDocumentsData({
-		
 		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
 		funcArgs: {
 			profile_id: userData?.profile_id,
@@ -251,11 +270,78 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 							onClick={() => setNameEditing(true)}
 						/>
 					)}
-					<FunctionalBtn
-						title='llm model'
-						disabled={true}
-						icon={<ChevIcon fill={text} />}
-					/>
+
+					<Popover
+						placement='bottom-start'
+						isOpen={isOpenLLM}
+						matchWidth
+						returnFocusOnClose={false}
+						onClose={onCloseLLM}
+					>
+						<PopoverTrigger>
+							<Button
+								cursor={'not-allowed'}
+								opacity={'0.5'}
+								//onClick={onToggleLLM}
+								_hover={{ bg: base600 }}
+								bg={base700}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								isTruncated
+							>
+								<Text textAlign={'initial'} isTruncated>
+									llm model
+								</Text>
+								{isOpenLLM ? (
+									<ChevRevIcon fill={text} />
+								) : (
+									<ChevIcon fill={text} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							boxShadow={'0px'}
+							mt={'-0.5rem'}
+							borderTopRadius={'0px'}
+							borderTop={`1px solid ${text}`}
+							background={base700}
+							w={'100%'}
+							style={{ 'backdrop-filter': 'blur(5px)' }}
+						>
+							<FunctionalBtn
+								title={'chatgpt'}
+								cursor={'pointer'}
+								onClick={() => {}}
+								icon={<img src='/gpt.png' />}
+							/>
+							<FunctionalBtn
+								title={'palm2'}
+								cursor={'pointer'}
+								onClick={() => {}}
+								icon={<img src='/palm.png' />}
+							/>
+							<FunctionalBtn
+								title={'gpt4'}
+								cursor={'pointer'}
+								onClick={() => {}}
+								icon={<img src='/gpt.png' />}
+							/>
+							<FunctionalBtn
+								title={'cohere'}
+								cursor={'pointer'}
+								onClick={() => {}}
+								icon={<img src='/cohere.png' />}
+							/>
+							<FunctionalBtn
+								title={'claude'}
+								cursor={'pointer'}
+								onClick={() => {}}
+								icon={<img src='/claude.png' />}
+							/>
+						</PopoverContent>
+					</Popover>
+
 					<FunctionalBtn
 						title='send type'
 						disabled={true}

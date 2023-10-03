@@ -18,6 +18,8 @@ import { DeleteIcon, LinkIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
 import { logtail } from '@/app/providers'
 import { useUserData } from '@/app/query-hooks'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const toast = useToast()
 	const { base, text } = useColors()
@@ -104,7 +106,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 				mx={'auto'}
 			>
 				{' '}
-				<Flex justifyContent={'space-between'}>
+				<Flex justifyContent={'space-between'} mb={4}>
 					<Heading fontSize={'2xl'} fontWeight={600}>
 						{documentData[0]?.heading}
 					</Heading>
@@ -138,10 +140,13 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 						</Tooltip>
 					</Flex>
 				</Flex>
-				<div
-					dangerouslySetInnerHTML={{ __html: documentData[0]?.body }}
-				/>
-				<Text whiteSpace={'break-spaces'}>{documentData[0]?.body}</Text>
+				<Markdown
+					className='break-spaces'
+					disallowedElements={['img']}
+					remarkPlugins={[remarkGfm]}
+				>
+					{documentData[0]?.body}
+				</Markdown>
 			</Flex>
 		</Flex>
 	) : (
