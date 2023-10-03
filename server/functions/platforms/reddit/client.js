@@ -7,7 +7,6 @@ const client = async (profile_id) => {
 		const { reddit, reddit_id } = await Auth.findUnique({
 			where: { profile_id: profile_id },
 			include: { reddit: true },
-			cacheStrategy: { ttl: 60 },
 		})
 
 		const redditUserClient = redditClient(reddit.refresh_token)
