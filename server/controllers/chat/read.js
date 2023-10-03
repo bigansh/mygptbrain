@@ -23,7 +23,7 @@ const read = async (req, res) => {
 			throw new Error("You aren't authorized to read this document.")
 		}
 
-		const data = await findChats(chatQueryObject)
+		const data = await findChats(chatQueryObject, true)
 
 		res.status(200).send(data)
 	} catch (error) {
