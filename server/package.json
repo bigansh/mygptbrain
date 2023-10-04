@@ -10,7 +10,8 @@
   "types": "./types/app.d.ts",
   "scripts": {
     "start": "node app.js",
-    "build": "sudo apt-get update && sudo apt-get install -y tesseract-ocr"
+    "build": "sudo apt-get update && sudo apt-get install -y tesseract-ocr",
+    "prepare": "npx prisma generate && npx prisma db push"
   },
   "prisma": {
     "schema": "utils/schema/schema.prisma"
