@@ -114,11 +114,11 @@ model Document {
 model DocumentMetadata {
   document_id        String   @id @unique
   source             String
-  twitter_status_id  String?  @unique
-  reddit_post_id     String?  @unique
+  twitter_status_id  String?
+  reddit_post_id     String?
   pocket_article_id  String?
   document_file_type String?
-  drive_document_id  String?  @unique
+  drive_document_id  String?
   keep_id            String?
   url                String?
   createdAt          DateTime @default(now())
