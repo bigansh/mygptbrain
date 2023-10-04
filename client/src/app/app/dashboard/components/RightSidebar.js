@@ -237,6 +237,7 @@ const RightSideBar = () => {
 								w={'100%'}
 								justifyContent={'space-between'}
 								fontWeight={'400'}
+								borderBottomRadius={isOpen && '0px'}
 								isTruncated
 							>
 								<Text textAlign={'initial'} isTruncated>

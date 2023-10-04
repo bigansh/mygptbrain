@@ -244,6 +244,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 									bg={base700}
 									w={'100%'}
 									justifyContent={'space-between'}
+									borderBottomRadius={isOpen && '0px'}
 									fontWeight={'400'}
 									isTruncated
 								>
