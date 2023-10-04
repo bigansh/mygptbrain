@@ -6,6 +6,7 @@ import {
 	readChat,
 	scrapeLink,
 	syncDoc,
+	updateChatPreferences,
 	uploadDoc,
 } from '@/api'
 import { useToast } from '@chakra-ui/react'
@@ -151,6 +152,60 @@ export const useScrapeLink = ({ link, onSuccess }) => {
 				duration: 3000,
 			})
 			logtail.info('Error uploading link', error)
+			logtail.flush()
+		},
+	})
+}
+
+export const useChatPreferences = ({ currentThread, onSuccess }) => {
+	const toast = useToast()
+	return useMutation({
+		mutationFn: (llmTypeValue) =>
+			updateChatPreferences({
+				chat_id: currentThread,
+				llm_model: llmTypeValue,
+			}),
+
+		onSuccess: (data) => {
+			toast({
+				title: 'Chat preference updated successfully',
+				position: 'top',
+				variant: 'solid',
+				status: 'success',
+				duration: 3000,
+			})
+			onSuccess(data.llm_model)
+		},
+
+		onError: (error) => {
+			logtail.info('Error updating chat preference', error)
+			logtail.flush()
+		},
+	})
+}
+
+export const useFilterPreferences = ({ currentThread, onSuccess }) => {
+	const toast = useToast()
+	return useMutation({
+		mutationFn: (sourceDocs) =>
+			updateChatPreferences({
+				chat_id: currentThread,
+				data_sources: sourceDocs,
+			}),
+
+		onSuccess: (data) => {
+			toast({
+				title: 'Chat preference updated successfully',
+				position: 'top',
+				variant: 'solid',
+				status: 'success',
+				duration: 3000,
+			})
+			onSuccess(data.data_sources)
+		},
+
+		onError: (error) => {
+			logtail.info('Error updating chat preference', error)
 			logtail.flush()
 		},
 	})

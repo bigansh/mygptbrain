@@ -20,10 +20,12 @@ import {
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { deleteChat, readChat, updateChat } from '@/api'
+import { deleteChat, readChat, updateChat, updateChatPreferences } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
 import {
+	CheckCircleFilledIcon,
+	CheckCircleIcon,
 	ChevIcon,
 	ChevRevIcon,
 	DeleteIcon,
@@ -32,17 +34,26 @@ import {
 } from '@/icons'
 import { logtail } from '@/app/providers'
 import {
-	useDocumentData,
+	useChatPreferences,
 	useDocumentsData,
-	useThreadData,
+	useFilterPreferences,
 	useUserData,
 } from '@/app/query-hooks'
+import { filterButtons, llmButtons } from '@/data'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base800, base700, base600, text, redbg } = useColors()
+	const [llmType, setLlmType] = useState('chatgpt')
+	const [sourceDoc, setSourceDoc] = useState(['All'])
+
 	const {
 		isOpen: isOpenLLM,
 		onToggle: onToggleLLM,
 		onClose: onCloseLLM,
+	} = useDisclosure()
+	const {
+		isOpen: isOpenFilter,
+		onToggle: onToggleFilter,
+		onClose: onCloseFilter,
 	} = useDisclosure()
 	const toast = useToast()
 	const queryClient = useQueryClient()
@@ -70,7 +81,10 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
+			console.log(data, 'here')
 			setEditName(data[0].chat_name)
+			setLlmType(data[0].preferences.llm_model || 'chatgpt')
+			setSourceDoc(data[0].preferences.data_sources || ['All'])
 		},
 		onError: (error) => {
 			logtail.info('Error getting thread', error)
@@ -149,6 +163,27 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			},
 		})
 
+	const {
+		isLoading: isLoadingChatPreferences,
+		mutate: mutateChatPreferences,
+	} = useChatPreferences({
+		currentThread,
+		onSuccess: (data) => {
+			setLlmType(data)
+			onToggleLLM()
+		},
+	})
+
+	const {
+		isLoading: isLoadingFilterPreferences,
+		mutate: mutateFilterPreferences,
+	} = useFilterPreferences({
+		currentThread,
+		onSuccess: (data) => {
+			setSourceDoc(data)
+			onToggleFilter()
+		},
+	})
 	return (
 		<Flex
 			transition={'all 0.5s ease-in'}
@@ -280,18 +315,21 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 					>
 						<PopoverTrigger>
 							<Button
-								cursor={'not-allowed'}
-								opacity={'0.5'}
-								//onClick={onToggleLLM}
+								onClick={onToggleLLM}
 								_hover={{ bg: base600 }}
 								bg={base700}
 								w={'100%'}
 								justifyContent={'space-between'}
 								fontWeight={'400'}
+								borderTopRadius={isOpenLLM && '0px'}
 								isTruncated
 							>
 								<Text textAlign={'initial'} isTruncated>
-									llm model
+									{!isLoadingChatPreferences ? (
+										llmType
+									) : (
+										<Spinner />
+									)}
 								</Text>
 								{isOpenLLM ? (
 									<ChevRevIcon fill={text} />
@@ -302,43 +340,26 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 						</PopoverTrigger>
 						<PopoverContent
 							boxShadow={'0px'}
-							mt={'-0.5rem'}
-							borderTopRadius={'0px'}
-							borderTop={`1px solid ${text}`}
+							mb={'-0.5rem'}
+							borderBottomRadius={'0px'}
+							borderBottom={`1px solid ${text}`}
 							background={base700}
 							w={'100%'}
 							style={{ 'backdrop-filter': 'blur(5px)' }}
 						>
-							<FunctionalBtn
-								title={'chatgpt'}
-								cursor={'pointer'}
-								onClick={() => {}}
-								icon={<img src='/gpt.png' />}
-							/>
-							<FunctionalBtn
-								title={'palm2'}
-								cursor={'pointer'}
-								onClick={() => {}}
-								icon={<img src='/palm.png' />}
-							/>
-							<FunctionalBtn
-								title={'gpt4'}
-								cursor={'pointer'}
-								onClick={() => {}}
-								icon={<img src='/gpt.png' />}
-							/>
-							<FunctionalBtn
-								title={'cohere'}
-								cursor={'pointer'}
-								onClick={() => {}}
-								icon={<img src='/cohere.png' />}
-							/>
-							<FunctionalBtn
-								title={'claude'}
-								cursor={'pointer'}
-								onClick={() => {}}
-								icon={<img src='/claude.png' />}
-							/>
+							{llmButtons.map(
+								({ title, llmTypeValue, iconSrc }) => (
+									<FunctionalBtn
+										title={title}
+										enabled={llmType == llmTypeValue}
+										cursor={'pointer'}
+										onClick={() => {
+											mutateChatPreferences(llmTypeValue)
+										}}
+										icon={<img src={iconSrc} />}
+									/>
+								)
+							)}
 						</PopoverContent>
 					</Popover>
 
@@ -347,11 +368,73 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 						disabled={true}
 						icon={<ChevIcon fill={text} />}
 					/>
-					<FunctionalBtn
-						title='filter documents'
-						disabled={true}
-						icon={<FilterIcon fill={text} />}
-					/>
+
+					<Popover
+						placement='bottom-start'
+						isOpen={isOpenFilter}
+						matchWidth
+						returnFocusOnClose={false}
+						onClose={onCloseFilter}
+					>
+						<PopoverTrigger>
+							<Button
+								onClick={onToggleFilter}
+								_hover={{ bg: base600 }}
+								bg={base700}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								isTruncated
+								borderTopRadius={isOpenFilter && '0px'}
+							>
+								<Text textAlign={'initial'} isTruncated>
+									{isLoadingFilterPreferences ? (
+										<Spinner />
+									) : (
+										'filter documents'
+									)}
+								</Text>
+								<FilterIcon fill={text} />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							boxShadow={'0px'}
+							mb={'-0.5rem'}
+							borderBottomRadius={'0px'}
+							borderBottom={`1px solid ${text}`}
+							background={base700}
+							w={'100%'}
+							style={{ 'backdrop-filter': 'blur(5px)' }}
+						>
+							{filterButtons.map(({ title }) => (
+								<FunctionalBtn
+									title={title}
+									cursor={'pointer'}
+									onClick={() => {
+										sourceDoc.includes(title)
+											? mutateFilterPreferences(
+													sourceDoc.filter(
+														(e) => e !== title
+													)
+											  )
+											: mutateFilterPreferences([
+													...sourceDoc,
+													title,
+											  ])
+									}}
+									icon={
+										sourceDoc.includes(title) ? (
+											<CheckCircleFilledIcon
+												fill={text}
+											/>
+										) : (
+											<CheckCircleIcon fill={text} />
+										)
+									}
+								/>
+							))}
+						</PopoverContent>
+					</Popover>
 					<Button
 						cursor={'pointer'}
 						onClick={() => {
