@@ -348,9 +348,10 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 							style={{ 'backdrop-filter': 'blur(5px)' }}
 						>
 							{llmButtons.map(
-								({ title, llmTypeValue, iconSrc }) => (
+								({ title, llmTypeValue, iconSrc, isPro }) => (
 									<FunctionalBtn
 										title={title}
+										isPro={isPro}
 										enabled={llmType == llmTypeValue}
 										cursor={'pointer'}
 										onClick={() => {
