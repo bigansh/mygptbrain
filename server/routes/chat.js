@@ -14,6 +14,10 @@ const chat = (fastify, _options, done) => {
 	fastify.post(
 		'/create',
 		{
+			preHandler: fastify.rateLimit({
+				max: 1,
+				timeWindow: 1000 * 60,
+			}),
 			onRequest: [fastify.userAuth],
 		},
 		create
@@ -28,6 +32,10 @@ const chat = (fastify, _options, done) => {
 	fastify.patch(
 		'/update',
 		{
+			preHandler: fastify.rateLimit({
+				max: 5,
+				timeWindow: 1000 * 60,
+			}),
 			onRequest: [fastify.userAuth],
 		},
 		update

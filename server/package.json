@@ -26,6 +26,7 @@
     "@fastify/helmet": "^11.1.1",
     "@fastify/jwt": "^6.7.1",
     "@fastify/multipart": "^7.6.0",
+    "@fastify/rate-limit": "^8.0.3",
     "@google-ai/generativelanguage": "^1.1.0",
     "@logtail/pino": "^0.4.2",
     "@notionhq/client": "^2.2.4",

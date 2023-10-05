@@ -27,9 +27,11 @@ const app = fastify({
 import helmet from '@fastify/helmet'
 import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
+import rateLimit from '@fastify/rate-limit'
 
 app.register(multipart, { limits: { fileSize: 10000000, files: 1 } })
 app.register(helmet, { global: true })
+app.register(rateLimit, { global: false })
 app.register(cors, {
 	credentials: true,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
