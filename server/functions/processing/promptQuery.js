@@ -25,13 +25,13 @@ const promptQuery = async (prompt, chat) => {
 				profile_id: chat.profile_id,
 			}
 
-		if (preferences.llm_model === 'chatgpt') {
+		if (preferences.llm_model === 'ChatGPT') {
 			model = gpt_turbo
-		} else if (preferences.llm_model === 'gpt4') {
+		} else if (preferences.llm_model === 'GPT4') {
 			model = gpt_4
-		} else if (preferences.llm_model === 'palm') {
+		} else if (preferences.llm_model === 'PaLM') {
 			model = palm
-		} else if (preferences.llm_model === 'cohere') {
+		} else if (preferences.llm_model === 'Cohere') {
 			model = cohere
 		}
 
@@ -47,11 +47,11 @@ const promptQuery = async (prompt, chat) => {
 			}
 		}
 
-		if (preferences.send_type === 'stuff') {
+		if (preferences.send_type === 'Stuff') {
 			send_type = 'stuff'
-		} else if (preferences.send_type === 'map reduce') {
+		} else if (preferences.send_type === 'Map Reduce') {
 			send_type = 'map_reduce'
-		} else if (preferences.send_type === 'refine') {
+		} else if (preferences.send_type === 'Refine') {
 			send_type = 'refine'
 		}
 
