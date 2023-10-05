@@ -1,5 +1,4 @@
 import { YoutubeTranscript } from 'youtube-transcript'
-import ytdl from 'ytdl-core'
 
 /**
  * A function that will scrape a YT video
