@@ -9,9 +9,8 @@
   "license": "UNLICENSED",
   "types": "./types/app.d.ts",
   "scripts": {
-    "start": "node app.js",
-    "build": "sudo apt-get update && sudo apt-get install -y tesseract-ocr",
-    "prepare": "npx prisma generate && npx prisma db push"
+    "start": "npx prisma generate && npx prisma db push && node app.js",
+    "build": "sudo apt-get update && sudo apt-get install -y tesseract-ocr"
   },
   "prisma": {
     "schema": "utils/schema/schema.prisma"
@@ -59,7 +58,9 @@
     "stream-to-array": "^2.3.0",
     "stripe": "^13.7.0",
     "twitter-api-v2": "^1.14.2",
-    "xss": "^1.0.14"
+    "xss": "^1.0.14",
+    "youtube-transcript": "^1.0.6",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "pino-pretty": "^10.0.0",

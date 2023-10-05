@@ -2,6 +2,7 @@ import { Document, User } from '../../utils/initializers/prisma.js'
 
 import scrapeArticle from '../processing/scrapeArticle.js'
 import scrapeThread from '../processing/scrapeThread.js'
+import scrapeYT from '../processing/scrapeYT.js'
 import documentLoadAndStore from './documentLoadAndStore.js'
 
 /**
@@ -18,6 +19,8 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			data = await scrapeArticle(
 				url.replace('https://twitter.com', 'https://nitter.net')
 			)
+		} else if(url.includes('https://youtube.com') || url.includes('https://youtu.be')) {
+			data = await scrapeYT(url)
 		} else {
 			data = await scrapeArticle(url)
 		}
