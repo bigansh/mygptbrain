@@ -59,8 +59,7 @@
     "stripe": "^13.7.0",
     "twitter-api-v2": "^1.14.2",
     "xss": "^1.0.14",
-    "youtube-transcript": "^1.0.6",
-    "ytdl-core": "^4.11.5"
+    "youtube-transcript": "^1.0.6"
   },
   "devDependencies": {
     "pino-pretty": "^10.0.0",

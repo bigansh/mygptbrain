@@ -12,11 +12,11 @@ const scrapeYT = async (url) => {
 			YoutubeTranscript.fetchTranscript(url).then((scenes) =>
 				scenes.map(({ text }) => text).join(' ')
 			),
-			ytdl.getInfo(url).then((info) => info.videoDetails.title),
+			// ytdl.getInfo(url).then((info) => info.videoDetails.title),
 		])
 
 		return {
-			title: title,
+			title: url,
 			content: script,
 		}
 	} catch (error) {
