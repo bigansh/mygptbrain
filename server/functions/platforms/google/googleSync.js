@@ -43,6 +43,9 @@ const googleSync = async (profile_id) => {
 			const response = await drive.files.list({
 				fields: 'nextPageToken, files(id, name, mimeType)',
 				spaces: 'drive',
+				corpora: 'user',
+				includeItemsFromAllDrives: false,
+				supportsAllDrives: false,
 				pageToken: pageToken,
 			})
 
@@ -52,6 +55,9 @@ const googleSync = async (profile_id) => {
 						[
 							'application/pdf',
 							'application/vnd.openxmlformats-officedocument',
+							'application/vnd.google-apps.presentation',
+							'application/vnd.google-apps.spreadsheet',
+							'application/vnd.google-apps.document',
 						].some((fileType) => fileType === file.mimeType) &&
 						!foundDriveIds.includes(file.id)
 					) {
@@ -67,34 +73,55 @@ const googleSync = async (profile_id) => {
 
 		for (const file of driveFiles) {
 			const saveAndLoadPromise = new Promise(async (resolve, reject) => {
-				const fileData = await drive.files.get(
-					{ fileId: file.id, alt: 'media' },
-					{ responseType: 'stream' }
-				)
-
 				let content
 
-				const fileBuffer = await toArray(fileData.data).then((chunks) =>
-					Buffer.concat(chunks)
-				)
-
-				if (!fileBuffer) {
-					reject('Unable to get the document Buffer.')
-				}
-
-				if (file.mimeType === 'application/pdf') {
-					content = (await pdf(fileBuffer))?.text
-
-					content = xss(content)
-				} else if (
-					file.mimeType.includes(
-						'application/vnd.openxmlformats-officedocument'
-					)
+				if (
+					[
+						'application/pdf',
+						'application/vnd.openxmlformats-officedocument',
+					].some((fileType) => fileType === file.mimeType)
 				) {
-					content = await officeParser.parseOfficeAsync(fileBuffer)
+					const fileData = await drive.files.get(
+						{ fileId: file.id, alt: 'media' },
+						{ responseType: 'stream' }
+					)
 
-					content = xss(content)
+					const fileBuffer = await toArray(fileData.data).then(
+						(chunks) => Buffer.concat(chunks)
+					)
+
+					if (!fileBuffer) {
+						reject('Unable to get the document Buffer.')
+					}
+
+					if (file.mimeType === 'application/pdf') {
+						content = (await pdf(fileBuffer))?.text
+
+						content = xss(content)
+					} else if (
+						file.mimeType.includes(
+							'application/vnd.openxmlformats-officedocument'
+						)
+					) {
+						content = await officeParser.parseOfficeAsync(
+							fileBuffer
+						)
+
+						content = xss(content)
+					}
 				}
+				// else {
+				// 	const toPDF = await drive.files.export({
+				// 		fileId: file.id,
+				// 		mimeType: 'application/pdf',
+				// 	})
+
+				// 	content = (await pdf(Buffer.from(toPDF.data)))?.text
+
+				// 	content = xss(content)
+
+				// 	console.log(content)
+				// }
 
 				const createdDocument = await Document.create({
 					data: {

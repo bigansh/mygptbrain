@@ -142,10 +142,11 @@ model Chat {
 }
 
 model ChatPreferences {
+  chat_id      String   @id @unique
   llm_model    String   @default("ChatGPT")
   data_sources String[] @default(["All"])
+  send_type    String   @default("Stuff")
   document_id  String?
-  chat_id      String   @id @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   chat         Chat     @relation(fields: [chat_id], references: [chat_id], onDelete: Cascade)

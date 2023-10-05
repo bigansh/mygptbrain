@@ -1,12 +1,9 @@
-import {
-	ConversationalRetrievalQAChain,
-	loadQAMapReduceChain,
-	loadQAStuffChain,
-	loadQARefineChain,
-} from 'langchain/chains'
+import { ConversationalRetrievalQAChain } from 'langchain/chains'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
-import { embeddings, model } from '../../utils/api/openai.js'
+import { embeddings, gpt_4, gpt_turbo } from '../../utils/api/openai.js'
+import { palm } from '../../utils/api/google.js'
+import { cohere } from '../../utils/api/cohere.js'
 import pineconeIndex from '../../utils/api/pinecone.js'
 import mixpanel from '../../utils/api/mixpanel.js'
 
@@ -22,8 +19,20 @@ const promptQuery = async (prompt, chat) => {
 
 		const { preferences, chat_history } = chat
 
-		let pineconeQuery = {
-			profile_id: chat.profile_id,
+		let model,
+			send_type,
+			pineconeQuery = {
+				profile_id: chat.profile_id,
+			}
+
+		if (preferences.llm_model === 'chatgpt') {
+			model = gpt_turbo
+		} else if (preferences.llm_model === 'gpt4') {
+			model = gpt_4
+		} else if (preferences.llm_model === 'palm') {
+			model = palm
+		} else if (preferences.llm_model === 'cohere') {
+			model = cohere
 		}
 
 		if (!preferences.data_sources.includes('All')) {
@@ -38,27 +47,25 @@ const promptQuery = async (prompt, chat) => {
 			}
 		}
 
+		if (preferences.send_type === 'stuff') {
+			send_type = 'stuff'
+		} else if (preferences.send_type === 'map reduce') {
+			send_type = 'map_reduce'
+		} else if (preferences.send_type === 'refine') {
+			send_type = 'refine'
+		}
+
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
 			pineconeIndex,
 		})
 
-		// ! This will be used for to allow users to change how the query is fed to the system. For a later date.
-		// const method = new ConversationalRetrievalQAChain({
-		// 	combineDocumentsChain: loadQAStuffChain(model),
-		// 	questionGeneratorChain: loadQAStuffChain(model),
-		// 	retriever: vectorStore.asRetriever(5, pineconeQuery),
-		// 	returnSourceDocuments: true,
-		// })
-
-		// const chain = method.fromLLM(
-		// 	model,
-		// 	vectorStore.asRetriever(5, pineconeQuery)
-		// )
-
 		const chain = ConversationalRetrievalQAChain.fromLLM(
 			model,
 			vectorStore.asRetriever(5, pineconeQuery),
-			{ returnSourceDocuments: true }
+			{
+				returnSourceDocuments: true,
+				qaChainOptions: { type: send_type },
+			}
 		)
 
 		const res = await chain.call({

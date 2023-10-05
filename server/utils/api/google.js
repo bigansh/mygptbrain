@@ -1,4 +1,5 @@
 import { google } from 'googleapis'
+import { ChatGooglePaLM } from 'langchain/chat_models/googlepalm'
 
 const googleClient = new google.auth.OAuth2(
 	process.env.GOOGLE_ID,
@@ -7,3 +8,7 @@ const googleClient = new google.auth.OAuth2(
 )
 
 export default googleClient
+
+export const palm = new ChatGooglePaLM({
+	apiKey: process.env.PALM_ID,
+})
