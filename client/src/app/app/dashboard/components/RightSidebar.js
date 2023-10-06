@@ -93,7 +93,6 @@ const RightSideBar = () => {
 			event.target.value = ''
 			return
 		}
-		console.log(file, 'fole')
 		// Invoke the mutation here, passing the file
 		uploadDocMutate(file)
 		onToggle()

@@ -29,7 +29,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
-	console.log(docData, 'chat')
+	
 	const {
 		data,
 		isLoading: addIsLoading,

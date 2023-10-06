@@ -81,7 +81,6 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
-			console.log(data, 'here')
 			setEditName(data[0].chat_name)
 			setLlmType(data[0].preferences.llm_model || 'chatgpt')
 			setSourceDoc(data[0].preferences.data_sources || ['All'])

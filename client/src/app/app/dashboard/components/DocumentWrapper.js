@@ -47,7 +47,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 			logtail.flush()
 		},
 	})
-	console.log(documentData, 'error here')
+
 	const { isLoading: deleteDocIsLoading, mutate: deleteDocMutate } =
 		useMutation({
 			mutationFn: () =>
