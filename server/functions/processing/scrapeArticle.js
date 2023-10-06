@@ -28,13 +28,18 @@ const scrapeArticle = async (url) => {
 
 		const content = xss(data?.content)
 		const title = xss(data?.title)
+		const source = xss(data?.source)
 
 		if (!content || !title)
 			throw new Error(
 				"Sorry, we don't have functionality needed to scrape this website. We will store this bookmark but you won't be able to open the canvas for the same. "
 			)
 
-		return { title, content: NodeHtmlMarkdown.translate(content) }
+		return {
+			title,
+			content: NodeHtmlMarkdown.translate(content),
+			source: source,
+		}
 	} catch (error) {
 		throw error
 	}

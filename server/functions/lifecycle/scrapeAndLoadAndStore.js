@@ -19,7 +19,10 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			data = await scrapeArticle(
 				url.replace('https://twitter.com', 'https://nitter.net')
 			)
-		} else if(url.includes('https://youtube.com') || url.includes('https://youtu.be')) {
+		} else if (
+			url.includes('https://youtube.com') ||
+			url.includes('https://youtu.be')
+		) {
 			data = await scrapeYT(url)
 		} else {
 			data = await scrapeArticle(url)
@@ -32,7 +35,7 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 				profile_id: profile_id,
 				documentMetadata: {
 					create: {
-						source: 'custom',
+						source: data.source,
 						url: url,
 					},
 				},
