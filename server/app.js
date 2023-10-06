@@ -29,13 +29,17 @@ import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 
+await app.register(rateLimit, { global: false })
 app.register(multipart, { limits: { fileSize: 10000000, files: 1 } })
 app.register(helmet, { global: true })
-app.register(rateLimit, { global: false })
 app.register(cors, {
 	credentials: true,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 	origin: [process.env.CLIENT, 'http://localhost:3001'],
+})
+
+app.setNotFoundHandler({
+	preHandler: app.rateLimit({ max: 0, timeWindow: 1000 }),
 })
 
 import jwt from './utils/plugins/jwt.js'
