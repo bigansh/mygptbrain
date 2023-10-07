@@ -57,6 +57,7 @@
     "snoowrap": "^1.23.0",
     "stream-to-array": "^2.3.0",
     "stripe": "^13.7.0",
+    "turndown": "^7.1.2",
     "twitter-api-v2": "^1.14.2",
     "xss": "^1.0.14",
     "youtube-transcript": "^1.0.6"

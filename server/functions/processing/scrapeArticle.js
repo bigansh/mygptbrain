@@ -1,5 +1,6 @@
 import { extract } from '@extractus/article-extractor'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
+import TurndownService from 'turndown'
 import xss from 'xss'
 
 /**
@@ -37,7 +38,7 @@ const scrapeArticle = async (url) => {
 
 		return {
 			title,
-			content: NodeHtmlMarkdown.translate(content),
+			content: new TurndownService().turndown(content),
 			source: source,
 		}
 	} catch (error) {
