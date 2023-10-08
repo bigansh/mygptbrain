@@ -210,3 +210,30 @@ export const useFilterPreferences = ({ currentThread, onSuccess }) => {
 		},
 	})
 }
+
+export const useSendTypePreferences = ({ currentThread, onSuccess }) => {
+	const toast = useToast()
+	return useMutation({
+		mutationFn: (sendType) =>
+			updateChatPreferences({
+				chat_id: currentThread,
+				send_type: sendType,
+			}),
+
+		onSuccess: (data) => {
+			toast({
+				title: 'Chat preference updated successfully',
+				position: 'top',
+				variant: 'solid',
+				status: 'success',
+				duration: 3000,
+			})
+			onSuccess(data.send_type)
+		},
+
+		onError: (error) => {
+			logtail.info('Error updating chat preference', error)
+			logtail.flush()
+		},
+	})
+}

@@ -90,7 +90,13 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	)
 
 	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
-		useScrapeLink({ link, onSuccess: () => onToggle() })
+		useScrapeLink({
+			link,
+			onSuccess: () => {
+				onToggle()
+				setLink('')
+			},
+		})
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
@@ -294,6 +300,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 								<InputGroup border={'0px solid transparent'}>
 									<Input
 										py={2}
+										pr={12}
 										h={'100%'}
 										type='text'
 										value={link}

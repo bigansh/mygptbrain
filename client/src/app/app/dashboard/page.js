@@ -247,6 +247,7 @@ const OnboardingModal = ({
 			link,
 			onSuccess: () => {
 				onCloseOnboarding()
+				setLink('')
 			},
 		})
 
@@ -406,6 +407,7 @@ const OnboardingModal = ({
 								>
 									<Input
 										h={'100%'}
+										pr={12}
 										type='text'
 										value={link}
 										placeholder='paste a link'

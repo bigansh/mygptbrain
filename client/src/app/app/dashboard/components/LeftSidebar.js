@@ -17,10 +17,11 @@ import {
 	PopoverTrigger,
 	useDisclosure,
 	PopoverContent,
+	Img,
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { deleteChat, readChat, updateChat, updateChatPreferences } from '@/api'
+import { deleteChat, readChat, updateChat } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
 import {
@@ -37,12 +38,14 @@ import {
 	useChatPreferences,
 	useDocumentsData,
 	useFilterPreferences,
+	useSendTypePreferences,
 	useUserData,
 } from '@/app/query-hooks'
-import { filterButtons, llmButtons } from '@/data'
+import { filterButtons, llmButtons, sendTypeButtons } from '@/data'
 const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base800, base700, base600, text, redbg } = useColors()
-	const [llmType, setLlmType] = useState('chatgpt')
+	const [llmType, setLlmType] = useState('chatGPT')
+	const [sendType, setSendType] = useState('Stuff')
 	const [sourceDoc, setSourceDoc] = useState(['All'])
 
 	const {
@@ -55,6 +58,12 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		onToggle: onToggleFilter,
 		onClose: onCloseFilter,
 	} = useDisclosure()
+
+	const {
+		isOpen: isOpenSendType,
+		onToggle: onToggleSendType,
+		onClose: onCloseSendType,
+	} = useDisclosure()
 	const toast = useToast()
 	const queryClient = useQueryClient()
 	const {
@@ -66,6 +75,25 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	} = useThreads()
 
 	const { data: userData } = useUserData()
+
+	const socialMediaKeys = [
+		{
+			title: 'Reddit',
+			key: 'reddit_id',
+		},
+		{
+			title: 'Pocket',
+			key: 'pocket_id',
+		},
+		{
+			title: 'Google',
+			key: 'google_id',
+		},
+		{
+			title: 'Notion',
+			key: 'notion_id',
+		},
+	]
 
 	const { data: threadData } = useQuery({
 		queryKey: ['threads', currentThread],
@@ -81,9 +109,11 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
+			console.log(data)
 			setEditName(data[0].chat_name)
-			setLlmType(data[0].preferences.llm_model || 'chatgpt')
+			setLlmType(data[0].preferences.llm_model || 'ChatGPT')
 			setSourceDoc(data[0].preferences.data_sources || ['All'])
+			setSendType(data[0].preferences.send_type || 'Stuff')
 		},
 		onError: (error) => {
 			logtail.info('Error getting thread', error)
@@ -101,6 +131,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			document_id: currentDocument,
 		},
 	})
+
 	const { isLoading: updateNameIsLoading, mutate: updateNameMutate } =
 		useMutation({
 			mutationFn: () =>
@@ -161,7 +192,7 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				})
 			},
 		})
-
+	console.log(documentData)
 	const {
 		isLoading: isLoadingChatPreferences,
 		mutate: mutateChatPreferences,
@@ -180,7 +211,17 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		currentThread,
 		onSuccess: (data) => {
 			setSourceDoc(data)
-			onToggleFilter()
+		},
+	})
+
+	const {
+		isLoading: isLoadingSendTypePreferences,
+		mutate: mutateSendTypePreferences,
+	} = useSendTypePreferences({
+		currentThread,
+		onSuccess: (data) => {
+			setSendType(data)
+			onToggleSendType()
 		},
 	})
 	return (
@@ -330,6 +371,16 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 										<Spinner />
 									)}
 								</Text>
+								<Img
+									ml={2}
+									mr={'auto'}
+									src={
+										llmButtons.find(
+											(e) => e.llmTypeValue == llmType
+										)?.iconSrc
+									}
+								/>
+
 								{isOpenLLM ? (
 									<ChevRevIcon fill={text} />
 								) : (
@@ -363,22 +414,86 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 						</PopoverContent>
 					</Popover>
 
-					<FunctionalBtn
-						title='send type'
-						disabled={true}
-						icon={<ChevIcon fill={text} />}
-					/>
+					<Popover
+						placement='bottom-start'
+						isOpen={isOpenSendType}
+						matchWidth
+						returnFocusOnClose={false}
+						onClose={onCloseSendType}
+					>
+						<PopoverTrigger>
+							<Button
+								onClick={onToggleSendType}
+								_hover={{ bg: base600 }}
+								bg={base700}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								isTruncated
+								borderTopRadius={isOpenSendType && '0px'}
+							>
+								<Text textAlign={'initial'} isTruncated>
+									{isLoadingSendTypePreferences ? (
+										<Spinner />
+									) : (
+										'send type'
+									)}
+								</Text>
+								{isOpenSendType ? (
+									<ChevRevIcon fill={text} />
+								) : (
+									<ChevIcon fill={text} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							boxShadow={'0px'}
+							mb={'-0.5rem'}
+							borderBottomRadius={'0px'}
+							borderBottom={`1px solid ${text}`}
+							background={base700}
+							w={'100%'}
+							style={{ 'backdrop-filter': 'blur(5px)' }}
+						>
+							{sendTypeButtons.map(({ title }) => (
+								<FunctionalBtn
+									title={title}
+									enabled={llmType == title}
+									cursor={'pointer'}
+									onClick={() => {
+										mutateSendTypePreferences(title)
+									}}
+									icon={
+										sendType == title ? (
+											<CheckCircleFilledIcon
+												fill={text}
+											/>
+										) : (
+											<CheckCircleIcon fill={text} />
+										)
+									}
+								/>
+							))}
+						</PopoverContent>
+					</Popover>
 
 					<Popover
 						placement='bottom-start'
 						isOpen={isOpenFilter}
 						matchWidth
 						returnFocusOnClose={false}
-						onClose={onCloseFilter}
+						onClose={() => {
+							onCloseFilter()
+							isOpenFilter && mutateFilterPreferences(sourceDoc)
+						}}
 					>
 						<PopoverTrigger>
 							<Button
-								onClick={onToggleFilter}
+								onClick={() => {
+									onToggleFilter()
+									isOpenFilter &&
+										mutateFilterPreferences(sourceDoc)
+								}}
 								_hover={{ bg: base600 }}
 								bg={base700}
 								w={'100%'}
@@ -412,15 +527,20 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 									cursor={'pointer'}
 									onClick={() => {
 										sourceDoc.includes(title)
-											? mutateFilterPreferences(
+											? setSourceDoc(
 													sourceDoc.filter(
 														(e) => e !== title
 													)
 											  )
-											: mutateFilterPreferences([
-													...sourceDoc,
-													title,
-											  ])
+											: title == 'All'
+											? setSourceDoc([title])
+											: setSourceDoc(
+													[
+														...sourceDoc,
+														title,
+													].filter((e) => e !== 'All')
+											  )
+										// onToggleFilter()
 									}}
 									icon={
 										sourceDoc.includes(title) ? (
