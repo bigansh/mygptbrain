@@ -13,7 +13,6 @@ const scrapeArticle = async (url) => {
 
 		const content = xss(data?.content)
 		const title = xss(data?.title)
-		const source = xss(data?.source)
 
 		if (!content || !title)
 			throw new Error(
@@ -23,7 +22,6 @@ const scrapeArticle = async (url) => {
 		return {
 			title,
 			content: NodeHtmlMarkdown.translate(content),
-			source: source,
 		}
 	} catch (error) {
 		throw error

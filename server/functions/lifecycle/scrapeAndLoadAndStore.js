@@ -19,13 +19,19 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			data = await scrapeArticle(
 				url.replace('https://twitter.com', 'https://nitter.net')
 			)
+
+			data.source = 'twitter'
 		} else if (
 			url.includes('https://youtube.com') ||
 			url.includes('https://youtu.be')
 		) {
 			data = await scrapeYT(url)
+
+			data.source = 'youtube'
 		} else {
 			data = await scrapeArticle(url)
+
+			data.source = 'article'
 		}
 
 		const createdDocument = await Document.create({

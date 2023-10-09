@@ -17,7 +17,6 @@ const scrapeYT = async (url) => {
 		return {
 			title: url,
 			content: script,
-			source: 'YouTube',
 		}
 	} catch (error) {
 		throw error
