@@ -106,7 +106,7 @@ const Signup = () => {
 					type='name'
 					value={userDetails.name}
 					onChange={handleChange}
-					placeholder='Ansh Aggarwal'
+					placeholder='Jarvis'
 				/>
 				<FormLabel fontSize={'2xl'} fontWeight={'400'} mb={0} mt={2}>
 					email

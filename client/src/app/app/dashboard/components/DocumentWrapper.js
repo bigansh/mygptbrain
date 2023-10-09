@@ -142,7 +142,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 				</Flex>
 				<Markdown
 					className='break-spaces'
-					disallowedElements={['img']}
+					//disallowedElements={['img']}
 					remarkPlugins={[remarkGfm]}
 				>
 					{documentData[0]?.body}

@@ -2,6 +2,8 @@ import { ChatLogoIcon, ChatUserIcon } from '@/icons'
 import { useColors } from '@/utils/colors'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const SingleChatComponent = ({ message }) => {
 	const { base700, text } = useColors()
@@ -36,13 +38,21 @@ const SingleChatComponent = ({ message }) => {
 							<ChatLogoIcon fill={text} size={30} />
 						</Box>
 
-						<Text
+						{/* <Text
 							whiteSpace={'break-spaces'}
 							marginBlock={'auto'}
 							fontSize={['sm', 'md']}
 						>
 							{message.llm}
-						</Text>
+						</Text> */}
+
+						<Markdown
+							className='break-spaces'
+							//disallowedElements={['img']}
+							remarkPlugins={[remarkGfm]}
+						>
+							{message.llm}
+						</Markdown>
 					</Flex>
 				</Flex>
 			</Flex>
