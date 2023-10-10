@@ -2,6 +2,7 @@
 import { deleteUser, getUser } from '@/api'
 import { logtail } from '@/app/providers'
 import { useColors } from '@/utils/colors'
+import { removeTokens } from '@/utils/helpers'
 import {
 	Flex,
 	FormLabel,
@@ -56,8 +57,7 @@ const AccountComponent = () => {
 					duration: 3000,
 				})
 				onCloseDelete()
-				localStorage.removeItem('x-session-token')
-				localStorage.removeItem('modal-display')
+				removeTokens()
 				router.push('/')
 			},
 			onError: (error) => {
@@ -69,8 +69,7 @@ const AccountComponent = () => {
 					duration: 3000,
 				})
 
-				localStorage.removeItem('x-session-token')
-				localStorage.removeItem('modal-display')
+				removeTokens()
 				logtail.info('Error deleting account', error)
 				logtail.flush()
 				router.push('/')
