@@ -72,9 +72,7 @@ const Signup = () => {
 			}
 			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
-			document.cookie = `x-session-token=${res.data.sessionToken};${
-				process.env.NEXT_PUBLIC_PRODUCTION && `domain=.mygptbrain.com;`
-			} expires=Fri, 31 Dec 9999 21:10:10 GMT`
+			document.cookie = `x-session-token=${res.data.sessionToken}; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
 			router.push('/app/dashboard')
 		} catch (error) {
 			toast({
