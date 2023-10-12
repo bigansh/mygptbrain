@@ -83,7 +83,7 @@ const Login = () => {
 			localStorage.setItem('x-session-token', res.data.sessionToken)
 			console.log(
 				'sessionToken',
-				sessionToken,
+				res.data.sessionToken,
 				process.env.NEXT_PUBLIC_PRODUCTION
 			)
 			document.cookie = `x-session-token=${res.data.sessionToken};${
