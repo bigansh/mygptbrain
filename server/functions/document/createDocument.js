@@ -1,5 +1,5 @@
 import { Document } from '../../utils/initializers/prisma.js'
-import checkSubscription from '../utility/checkSubscription'
+import checkSubscription from '../utility/checkSubscription.js'
 
 /**
  * A function that will create a new document for a user
