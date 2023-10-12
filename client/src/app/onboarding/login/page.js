@@ -81,6 +81,7 @@ const Login = () => {
 				})
 			}
 			localStorage.setItem('x-session-token', res.data.sessionToken)
+			console.log('here')
 			console.log(
 				'sessionToken',
 				res.data.sessionToken,
