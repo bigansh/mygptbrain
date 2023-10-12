@@ -5,6 +5,7 @@ import scrapeThread from '../../processing/scrapeThread.js'
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
 
 import { Document } from '../../../utils/initializers/prisma.js'
+import createDocument from '../../document/createDocument.js'
 
 /**
  * A function that syncs Twitter bookmarks
@@ -42,20 +43,17 @@ const twitterSync = async (profile_id) => {
 					`https://twitter.com/mygptbrain/status/${tweet.id}`
 				).catch((error) => new Error(error))
 
-				const createdDocument = await Document.create({
-					data: {
-						body: threadData.content,
-						heading: threadData.title,
-						profile_id: profile_id,
-						documentMetadata: {
-							create: {
-								source: 'twitter',
-								twitter_status_id: tweet.id,
-								url: `https://twitter.com/mygptbrain/status/${tweet.id}`,
-							},
+				const createdDocument = await createDocument(profile_id, {
+					body: threadData.content,
+					heading: threadData.title,
+					profile_id: profile_id,
+					documentMetadata: {
+						create: {
+							source: 'twitter',
+							twitter_status_id: tweet.id,
+							url: `https://twitter.com/mygptbrain/status/${tweet.id}`,
 						},
 					},
-					include: { documentMetadata: true },
 				})
 
 				await documentLoadAndStore(profile_id, createdDocument)

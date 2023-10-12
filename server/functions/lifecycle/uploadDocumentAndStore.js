@@ -3,9 +3,9 @@ import officeParser from 'officeparser'
 import xss from 'xss'
 import tesseract from 'node-tesseract-ocr'
 
-import { Document } from '../../utils/initializers/prisma.js'
-
 import documentLoadAndStore from './documentLoadAndStore.js'
+import checkSubscription from '../utility/checkSubscription.js'
+import createDocument from '../document/createDocument.js'
 
 /**
  * A function that extracts the content of the uploaded file and create a record in the DB
@@ -17,8 +17,14 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 	try {
 		let content
 
+		const fileBuffer = await file.toBuffer()
+
+		if (Buffer.byteLength(fileBuffer) > 10 * 1024 * 1024) {
+			await checkSubscription(profile_id)
+		}
+
 		if (file.mimetype === 'application/pdf') {
-			content = (await pdf(await file.toBuffer()))?.text
+			content = (await pdf(fileBuffer))?.text
 
 			content = xss(content)
 		} else if (
@@ -26,7 +32,7 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 				'application/vnd.openxmlformats-officedocument'
 			)
 		) {
-			content = await officeParser.parseOfficeAsync(await file.toBuffer())
+			content = await officeParser.parseOfficeAsync(fileBuffer)
 
 			content = xss(content)
 		} else if (
@@ -34,26 +40,25 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 				(type) => type === file.mimetype
 			)
 		) {
-			content = await tesseract.recognize(await file.toBuffer())
+			await checkSubscription(profile_id)
+
+			content = await tesseract.recognize(fileBuffer)
 
 			content = xss(content)
 		} else {
 			throw new Error('File type is currently not supported!')
 		}
 
-		const createdDocument = await Document.create({
-			data: {
-				body: content,
-				heading: file.filename,
-				profile_id: profile_id,
-				documentMetadata: {
-					create: {
-						source: 'upload',
-						document_file_type: file.mimetype,
-					},
+		const createdDocument = await createDocument(profile_id, {
+			body: content,
+			heading: file.filename,
+			profile_id: profile_id,
+			documentMetadata: {
+				create: {
+					source: 'upload',
+					document_file_type: file.mimetype,
 				},
 			},
-			include: { documentMetadata: true },
 		})
 
 		await documentLoadAndStore(profile_id, createdDocument)

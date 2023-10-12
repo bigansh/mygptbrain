@@ -30,12 +30,16 @@ import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 
 await app.register(rateLimit, { global: false })
-app.register(multipart, { limits: { fileSize: 10000000, files: 1 } })
+app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024, files: 1 } })
 app.register(helmet, { global: true })
 app.register(cors, {
 	credentials: true,
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-	origin: [process.env.CLIENT, 'http://localhost:3001'],
+	origin: [
+		process.env.CLIENT,
+		'http://localhost:3001',
+		process.env.EXTENSION,
+	],
 })
 
 app.setNotFoundHandler({

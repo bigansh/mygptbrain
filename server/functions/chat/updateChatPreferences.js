@@ -1,3 +1,5 @@
+import checkSubscription from '../utility/checkSubscription.js'
+
 import { Chat, ChatPreferences } from '../../utils/initializers/prisma.js'
 
 /**
@@ -14,6 +16,14 @@ const updateChatPreferences = async (profile_id, chatPreferencesObject) => {
 
 		if (foundChat.profile_id !== profile_id) {
 			throw new Error("You don't have access to this chat")
+		}
+
+		if (
+			chatPreferencesObject.llm_model ||
+			chatPreferencesObject.data_sources ||
+			chatPreferencesObject.send_type
+		) {
+			await checkSubscription(profile_id)
 		}
 
 		const updatedChatPreferences = await ChatPreferences.update({

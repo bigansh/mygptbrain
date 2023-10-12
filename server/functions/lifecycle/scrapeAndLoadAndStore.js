@@ -1,5 +1,4 @@
-import { Document, User } from '../../utils/initializers/prisma.js'
-
+import createDocument from '../document/createDocument.js'
 import scrapeArticle from '../processing/scrapeArticle.js'
 import scrapeThread from '../processing/scrapeThread.js'
 import scrapeYT from '../processing/scrapeYT.js'
@@ -34,19 +33,16 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			data.source = 'article'
 		}
 
-		const createdDocument = await Document.create({
-			data: {
-				body: data.content,
-				heading: data.title,
-				profile_id: profile_id,
-				documentMetadata: {
-					create: {
-						source: data.source,
-						url: url,
-					},
+		const createdDocument = await createDocument(profile_id, {
+			body: data.content,
+			heading: data.title,
+			profile_id: profile_id,
+			documentMetadata: {
+				create: {
+					source: data.source,
+					url: url,
 				},
 			},
-			include: { documentMetadata: true },
 		})
 
 		await documentLoadAndStore(profile_id, createdDocument)

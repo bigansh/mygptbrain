@@ -8,8 +8,7 @@ import client from './client.js'
 
 import findDocuments from '../../document/findDocuments.js'
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
-
-import { Document } from '../../../utils/initializers/prisma.js'
+import createDocument from '../../document/createDocument.js'
 
 /**
  * A function that syncs Google Drive and Keep files
@@ -123,21 +122,18 @@ const googleSync = async (profile_id) => {
 				// 	console.log(content)
 				// }
 
-				const createdDocument = await Document.create({
-					data: {
-						body: content,
-						heading: file.name,
-						profile_id: profile_id,
-						documentMetadata: {
-							create: {
-								source: 'drive',
-								document_file_type: file.mimeType,
-								url: `https://drive.google.com/file/d/${file.id}`,
-								drive_document_id: file.id,
-							},
+				const createdDocument = await createDocument(profile_id, {
+					body: content,
+					heading: file.name,
+					profile_id: profile_id,
+					documentMetadata: {
+						create: {
+							source: 'drive',
+							document_file_type: file.mimeType,
+							url: `https://drive.google.com/file/d/${file.id}`,
+							drive_document_id: file.id,
 						},
 					},
-					include: { documentMetadata: true },
 				})
 
 				await documentLoadAndStore(profile_id, createdDocument)

@@ -5,8 +5,7 @@ import client from './client.js'
 import findDocuments from '../../document/findDocuments.js'
 import scrapeArticle from '../../processing/scrapeArticle.js'
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
-
-import { Document } from '../../../utils/initializers/prisma.js'
+import createDocument from '../../document/createDocument.js'
 
 /**
  * A function that syncs Pocket bookmarks
@@ -50,20 +49,17 @@ const pocketSync = async (profile_id) => {
 					article.resolved_url
 				).catch((error) => new Error(error))
 
-				const createdDocument = await Document.create({
-					data: {
-						body: articleData.content,
-						heading: articleData.title,
-						profile_id: profile_id,
-						documentMetadata: {
-							create: {
-								source: 'pocket',
-								pocket_article_id: article.item_id,
-								url: article.resolved_url,
-							},
+				const createdDocument = await createDocument(profile_id, {
+					body: articleData.content,
+					heading: articleData.title,
+					profile_id: profile_id,
+					documentMetadata: {
+						create: {
+							source: 'pocket',
+							pocket_article_id: article.item_id,
+							url: article.resolved_url,
 						},
 					},
-					include: { documentMetadata: true },
 				})
 
 				await documentLoadAndStore(profile_id, createdDocument)
