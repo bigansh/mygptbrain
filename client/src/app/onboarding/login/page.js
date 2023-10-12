@@ -3,6 +3,7 @@ import { authenticateUser, authenticateUserByGoogle, verifyEmail } from '@/api'
 import { logtail } from '@/app/providers'
 import { OnboardingBanner } from '@/assets'
 import { useColors } from '@/utils/colors'
+import { removeTokens } from '@/utils/helpers'
 import {
 	Heading,
 	Box,
@@ -80,6 +81,13 @@ const Login = () => {
 				})
 			}
 			localStorage.setItem('x-session-token', res.data.sessionToken)
+			console.log('here')
+			console.log(
+				'sessionToken',
+				res.data.sessionToken,
+				process.env.NEXT_PUBLIC_PRODUCTION
+			)
+			document.cookie = `x-session-token=${res.data.sessionToken}; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
 			router.push('/app/dashboard')
 		} catch (error) {
 			toast({
@@ -89,7 +97,7 @@ const Login = () => {
 				status: 'error',
 				duration: 3000,
 			})
-			localStorage.removeItem('x-session-token')
+			removeTokens()
 			logtail.info('Error logging in', error)
 			logtail.flush()
 		}

@@ -3,6 +3,7 @@ import { authenticateUser, authenticateUserByGoogle, verifyEmail } from '@/api'
 import { logtail } from '@/app/providers'
 import { OnboardingBanner } from '@/assets'
 import { useColors } from '@/utils/colors'
+import { removeTokens } from '@/utils/helpers'
 import {
 	Heading,
 	Box,
@@ -71,6 +72,7 @@ const Signup = () => {
 			}
 			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
+			document.cookie = `x-session-token=${res.data.sessionToken}; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
 			router.push('/app/dashboard')
 		} catch (error) {
 			toast({
@@ -81,7 +83,7 @@ const Signup = () => {
 				duration: 3000,
 			})
 			console.log(error)
-			localStorage.removeItem('x-session-token')
+			removeTokens()
 			logtail.info('Error signing up', error)
 			logtail.flush()
 		}

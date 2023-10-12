@@ -17,3 +17,14 @@ export function getSourceFromArray(arr) {
 	// Return the array of sources
 	return sources
 }
+
+export const removeTokens = () => {
+	if (typeof window !== 'undefined') {
+		localStorage.removeItem('x-session-token')
+		localStorage.removeItem('modal-display')
+		document.cookie =
+			'x-session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+		document.cookie =
+			'x-session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.mygptbrain.xyz'
+	}
+}

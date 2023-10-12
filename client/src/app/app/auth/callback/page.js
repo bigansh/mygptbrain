@@ -13,6 +13,7 @@ const Callback = () => {
 
 	useEffect(() => {
 		localStorage.setItem('x-session-token', sessionToken)
+		document.cookie = `x-session-token=${sessionToken}; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
 		syncDoc()
 		router.push('/app/dashboard')
 	}, [])
