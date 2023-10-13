@@ -9,7 +9,6 @@ const checkSubscription = async (profile_id) => {
 	try {
 		const user = await User.findFirst({
 			where: { profile_id: profile_id },
-			include: { userMetadata: true },
 			select: { userMetadata: true },
 		})
 
