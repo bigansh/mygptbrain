@@ -22,6 +22,8 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 			data.source = 'twitter'
 		} else if (
 			url.includes('https://youtube.com') ||
+			url.includes('https://www.youtube.com') ||
+			url.includes('https://www.youtu.be') ||
 			url.includes('https://youtu.be')
 		) {
 			data = await scrapeYT(url)
