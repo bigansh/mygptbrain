@@ -144,6 +144,13 @@ export const createChat = async (prompt) => {
 	return response.data
 }
 
+export const createDocumentChat = async (data) => {
+	const response = await apiClient.post(`/chat/create`, {
+		chatQueryObject: data,
+	})
+	return response.data
+}
+
 export const readChat = async (data) => {
 	//{ prompt?, chat_name?, chat_id?, profile_id }
 

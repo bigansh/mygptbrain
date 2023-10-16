@@ -15,7 +15,7 @@ const updateChat = async (chatQueryObject) => {
 
 		return await Chat.update({
 			where: { chat_id: chatQueryObject.chat_id },
-			data: chatQueryObject,
+			data: { preferences: chatQueryObject.preferences },
 			include: { preferences: true },
 		})
 	} catch (error) {

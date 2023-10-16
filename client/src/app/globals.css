@@ -106,3 +106,6 @@ textarea {
 .break-spaces {
 	white-space: break-spaces;
 }
+.break-spaces pre code {
+	text-wrap: balance;
+}
