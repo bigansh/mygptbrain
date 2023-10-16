@@ -19,7 +19,7 @@ const createChat = async (chatQueryObject) => {
 				chat_history: chatQueryObject.chat_history,
 				preferences: {
 					create: {
-						document_id: chatQueryObject.preferences.document_id,
+						document_id: chatQueryObject?.preferences?.document_id,
 					},
 				},
 			},
