@@ -14,6 +14,7 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 			chat_name: 'untitled',
 			chat_history: '',
 			profile_id: profile_id,
+			preferences: chatQueryObject.preferences,
 		})
 
 		const promptResult = await promptQuery(
