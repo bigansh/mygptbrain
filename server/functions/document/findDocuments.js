@@ -11,12 +11,12 @@ const findDocuments = async (documentQueryObject, selectObject = undefined) => {
 		if (selectObject)
 			return await Document.findMany({
 				where: documentQueryObject,
-				include: { documentMetadata: true },
+				select: { documentMetadata: true, ...selectObject },
 			})
 		else
 			return await Document.findMany({
 				where: documentQueryObject,
-				select: { documentMetadata: true, ...selectObject },
+				include: { documentMetadata: true },
 			})
 	} catch (error) {
 		throw error
