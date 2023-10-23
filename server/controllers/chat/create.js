@@ -19,8 +19,6 @@ const create = async (req, res) => {
 
 		const data = await chatCreateAndQuery(profile_id, chatQueryObject)
 
-		console.log(data);
-
 		res.status(200).send(data)
 	} catch (error) {
 		throw error

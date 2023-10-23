@@ -11,4 +11,5 @@ export default googleClient
 
 export const palm = new ChatGooglePaLM({
 	apiKey: process.env.PALM_ID,
+	temperature: 0
 })
