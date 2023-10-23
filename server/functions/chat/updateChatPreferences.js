@@ -19,7 +19,8 @@ const updateChatPreferences = async (profile_id, chatPreferencesObject) => {
 		}
 
 		if (
-			chatPreferencesObject.llm_model ||
+			chatPreferencesObject.llm_model !== 'PaLM' ||
+			chatPreferencesObject.llm_model !== 'ChatGPT' ||
 			chatPreferencesObject.data_sources ||
 			chatPreferencesObject.send_type
 		) {
