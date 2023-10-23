@@ -22,8 +22,6 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 			createdChat
 		)
 
-		console.log(promptResult)
-
 		chatQueryObject.chat_name = chatQueryObject.prompt
 		chatQueryObject.chat_history = `user input: ${chatQueryObject.prompt}\ngenerated result: ${promptResult.response}`
 		chatQueryObject.chat_array = [
@@ -33,8 +31,6 @@ const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 			...new Set(promptResult.sourceDocumentIds),
 		]
 		chatQueryObject.prompt = undefined
-
-		console.log(chatQueryObject)
 
 		return await updateChat({
 			...chatQueryObject,
