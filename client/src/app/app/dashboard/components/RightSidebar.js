@@ -176,37 +176,41 @@ const RightSideBar = () => {
 						overflowY='auto'
 						overflowX='hidden'
 					>
-						{filteredThreads?.map((item, index) => (
-							<Button
-								index={index}
-								display={'grid'}
-								justifyContent={'flex-start'}
-								key={item.chat_id}
-								gridTemplateColumns={'24px 1fr'}
-								background={
-									currentThread === item.chat_id
-										? base700
-										: base800
-								}
-								_hover={{ background: base700 }}
-								cursor={'pointer'}
-								onClick={() => {
-									setCurrentThread(item.chat_id)
-									setCurrentView('chat')
-									//onClose()
-								}}
-								py={4}
-								px='10px'
-								gap={2}
-								fontWeight={'400'}
-								alignContent={'center'}
-							>
-								<ThreadIcon fill={text} />
-								<Text textAlign={'initial'} isTruncated>
-									{item.chat_name}
-								</Text>
-							</Button>
-						))}
+						{filteredThreads
+							?.filter(
+								(item) => item?.preferences?.document_id == null
+							)
+							?.map((item, index) => (
+								<Button
+									index={index}
+									display={'grid'}
+									justifyContent={'flex-start'}
+									key={item.chat_id}
+									gridTemplateColumns={'24px 1fr'}
+									background={
+										currentThread === item.chat_id
+											? base700
+											: base800
+									}
+									_hover={{ background: base700 }}
+									cursor={'pointer'}
+									onClick={() => {
+										setCurrentThread(item.chat_id)
+										setCurrentView('chat')
+										//onClose()
+									}}
+									py={4}
+									px='10px'
+									gap={2}
+									fontWeight={'400'}
+									alignContent={'center'}
+								>
+									<ThreadIcon fill={text} />
+									<Text textAlign={'initial'} isTruncated>
+										{item.chat_name}
+									</Text>
+								</Button>
+							))}
 					</Flex>
 				))}
 			{sidebarTopic == 'documents' && (
