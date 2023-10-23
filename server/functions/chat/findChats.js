@@ -5,13 +5,24 @@ import { Chat } from '../../utils/initializers/prisma.js'
  *
  * @param {import("../../utils/types/chatQueryObject").chatQueryObject} chatQueryObject
  * @param {Boolean} wantPref
+ * @param {Object} selectObject
  */
-const findChats = async (chatQueryObject, wantPref = false) => {
+const findChats = async (
+	chatQueryObject,
+	wantPref = false,
+	selectObject = undefined
+) => {
 	try {
-		return await Chat.findMany({
-			where: chatQueryObject,
-			include: { preferences: wantPref },
-		})
+		if (selectObject)
+			return await Chat.findMany({
+				where: chatQueryObject,
+				select: { preferences: wantPref, ...selectObject },
+			})
+		else
+			return await Chat.findMany({
+				where: chatQueryObject,
+				include: { preferences: wantPref },
+			})
 	} catch (error) {
 		throw error
 	}

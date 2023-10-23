@@ -11,7 +11,7 @@ const read = async (req, res) => {
 		/**
 		 * @type {{chatQueryObject: import('../../utils/types/chatQueryObject.js').chatQueryObject}}
 		 */
-		const { chatQueryObject } = req.body
+		const { chatQueryObject, selectObject } = req.body
 
 		const { profile_id } = req.user
 
@@ -23,7 +23,7 @@ const read = async (req, res) => {
 			throw new Error("You aren't authorized to read this document.")
 		}
 
-		const data = await findChats(chatQueryObject, true)
+		const data = await findChats(chatQueryObject, true, selectObject)
 
 		res.status(200).send(data)
 	} catch (error) {
