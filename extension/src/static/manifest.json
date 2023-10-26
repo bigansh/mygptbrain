@@ -1,0 +1,34 @@
+{
+  "name": "MyGPTBrain",
+  "description": "Share the web!",
+  "version": "1.0.0",
+  "manifest_version": 3,
+
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MyGPTBrain",
+    "default_icon": "logo.png"
+  },
+  "host_permissions": [
+    "https://api-testing.mygptbrain.com/",
+    "http://testing.mygptbrain.com/",
+    "https://mygptbrain.com/"
+  ],
+  "permissions": [
+    "storage",
+    "tabs",
+    "action",
+    "activeTab",
+    "webNavigation",
+    "cookies"
+  ],
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  }
+}
