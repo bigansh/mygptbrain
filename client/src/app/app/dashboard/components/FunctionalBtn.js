@@ -27,13 +27,14 @@ const FunctionalBtn = ({
 				{isPro && (
 					<Text
 						fontStyle={'italic'}
+						px={2}
+						fontWeight={'500'}
 						style={{
 							background:
 								'linear-gradient(243deg, #D4AF37 8.38%, rgba(212, 175, 55, 0.46) 101.34%)',
 							'background-clip': 'text',
 							'-webkit-background-clip': 'text',
 							'-webkit-text-fill-color': 'transparent',
-							'backdrop-filter': 'blur(2.5px)',
 						}}
 					>
 						pro

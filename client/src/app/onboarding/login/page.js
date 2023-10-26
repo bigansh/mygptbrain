@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 
@@ -36,6 +36,8 @@ const Login = () => {
 
 	const toast = useToast()
 	const router = useRouter()
+	const searchParams = useSearchParams()
+	const redirectUrl = searchParams.get('redirect')
 
 	const handleChange = (e) => {
 		setUserDetails({
@@ -88,7 +90,20 @@ const Login = () => {
 				process.env.NEXT_PUBLIC_PRODUCTION
 			)
 			document.cookie = `x-session-token=${res.data.sessionToken}; path=/; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
-			router.push('/app/dashboard')
+
+			if (redirectUrl && typeof redirectUrl === 'string') {
+				toast({
+					title: 'Logged in successfully',
+					description: 'Redirecting to the page you were on...',
+					position: 'top',
+					variant: 'solid',
+					status: 'error',
+					duration: 3000,
+				})
+				router.push(decodeURIComponent(redirectUrl))
+			} else {
+				router.push('/app/dashboard')
+			}
 		} catch (error) {
 			toast({
 				title: 'Error while logging in',
@@ -156,7 +171,16 @@ const Login = () => {
 						</Button>
 
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/onboarding/signup'>or sign up</Link>
+							<Link
+								href={
+									redirectUrl &&
+									typeof redirectUrl === 'string'
+										? `/onboarding/signup?redirect=${redirectUrl}`
+										: '/onboarding/signup'
+								}
+							>
+								or sign up
+							</Link>
 						</Text>
 					</Flex>
 				) : (

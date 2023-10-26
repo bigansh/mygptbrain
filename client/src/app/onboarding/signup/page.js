@@ -20,12 +20,15 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 const Signup = () => {
 	const router = useRouter()
 	const toast = useToast()
+	const searchParams = useSearchParams()
+	const redirectUrl = searchParams.get('redirect')
+
 	const { base, base800, base700, base600, text } = useColors()
 
 	const [userDetails, setUserDetails] = useState({
@@ -73,7 +76,20 @@ const Signup = () => {
 			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
 			document.cookie = `x-session-token=${res.data.sessionToken}; path=/; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
-			router.push('/app/dashboard')
+
+			if (redirectUrl && typeof redirectUrl === 'string') {
+				toast({
+					title: 'Signed in successfully',
+					description: 'Redirecting to the page you were on...',
+					position: 'top',
+					variant: 'solid',
+					status: 'error',
+					duration: 3000,
+				})
+				router.push(decodeURIComponent(redirectUrl))
+			} else {
+				router.push('/app/dashboard')
+			}
 		} catch (error) {
 			toast({
 				title: 'Error while signing up',
@@ -153,7 +169,16 @@ const Signup = () => {
 							signup
 						</Button>
 						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link href='/onboarding/login'>or login</Link>
+							<Link
+								href={
+									redirectUrl &&
+									typeof redirectUrl === 'string'
+										? `/onboarding/login?redirect=${redirectUrl}`
+										: '/onboarding/login'
+								}
+							>
+								or login
+							</Link>
 						</Text>
 					</>
 				) : (
