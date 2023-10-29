@@ -1,4 +1,5 @@
 //import { ColorModeScript } from '@chakra-ui/react'
+import { TourProvider } from '@reactour/tour'
 import './globals.css'
 import { Providers } from './providers'
 import { Metadata } from 'next'
@@ -22,7 +23,7 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
 			<body>
-				<Providers> {children}</Providers>
+				<Providers>{children}</Providers>
 				{/* <ColorModeScript initialColorMode={'light'} /> */}
 			</body>
 		</html>

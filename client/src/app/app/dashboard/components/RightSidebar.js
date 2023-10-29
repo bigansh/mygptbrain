@@ -39,6 +39,7 @@ import {
 	useUploadDoc,
 	useUserData,
 } from '@/app/query-hooks'
+import { useTour } from '@reactour/tour'
 
 const RightSideBar = () => {
 	const { isOpen, onToggle, onClose } = useDisclosure()
@@ -112,6 +113,8 @@ const RightSideBar = () => {
 
 	// UI funcs
 
+	const { setIsOpen } = useTour()
+
 	const filteredThreads = threadsData
 		?.filter((e) =>
 			e.chat_name.toLowerCase().includes(threadInput.toLowerCase())
@@ -149,6 +152,7 @@ const RightSideBar = () => {
 					/>
 					<FunctionalBtn
 						title='new thread'
+						className={'first-step'}
 						cursor={'pointer'}
 						onClick={() => {
 							setCurrentThread('new')
@@ -156,6 +160,7 @@ const RightSideBar = () => {
 						}}
 						icon={<AddIcon fill={text} />}
 					/>
+					<button onClick={() => setIsOpen(true)}>Open Tour</button>
 					<Box
 						borderTop='2px'
 						borderColor='black.900'

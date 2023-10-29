@@ -55,6 +55,7 @@ import {
 	useUploadDoc,
 	useUserData,
 } from '@/app/query-hooks'
+import { TourProvider } from '@reactour/tour'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -119,81 +120,118 @@ const Dashboard = () => {
 			setIsSidebarOpen(false)
 		}
 	}, [currentView])
+	const steps = [
+		{
+			selector: '.threads',
+			content:
+				'This is the threads section. You can create new threads here.',
+		},
+		{
+			selector: '.documents',
+			content:
+				'This is the documents section. You can view and documents here.',
+		},
+		{
+			selector: '.documentadd',
+			content: 'Click here to add a new document',
+			highlightedSelectors: ['.documentadd'],
+			mutationObservables: ['#documentadd'],
+		},
+		// ...
+	]
 
 	return (
-		<Flex
-			w={'100vw'}
-			maxW={'100vw'}
-			h={'100vh'}
-			color={text}
-			pos={'relative'}
+		<TourProvider
+			styles={{
+				popover: (base) => ({
+					...base,
+					borderRadius: 4,
+					backgroundColor: base800,
+					textColor: text,
+				}),
+				maskWrapper: (base) => ({
+					...base,
+					color: base700,
+				}),
+
+				badge: (base) => ({ ...base, color: 'blue' }),
+			}}
+			steps={steps}
 		>
-			<Box
-				display={['flex', 'none']}
-				w={'100%'}
-				h={'50px'}
-				pos={'absolute'}
-				top={0}
-				left={0}
-				p={'20px'}
-				bg={base}
-				borderBottom={'1px solid #2c2c2c'}
-				alignItems={'center'}
-				justifyContent={'space-between'}
+			<Flex
+				w={'100vw'}
+				maxW={'100vw'}
+				h={'100vh'}
+				color={text}
+				pos={'relative'}
 			>
-				<AiOutlineMenu onClick={onOpenDrawer} />
-				{currentThread !== 'new' &&
-					currentView == 'chat' &&
-					threadData && (
-						<Text maxW={'60%'} isTruncated fontSize={'md'}>
-							{threadData[0]?.chat_name}
-						</Text>
-					)}
-				<AiOutlinePlus
-					onClick={() => {
-						setCurrentThread('new')
-						setCurrentView('chat')
-					}}
-				/>
-			</Box>
-			<RightSideBar />
-			{currentView == 'chat' ? (
-				<ChatWrapper isSidebarOpen={isSidebarOpen} />
-			) : (
-				<DocumentWrapper isSidebarOpen={isSidebarOpen} />
-			)}
-			<LeftSidebar
-				isSidebarOpen={isSidebarOpen}
-				setIsSidebarOpen={setIsSidebarOpen}
-			/>
-			{currentView == 'chat' && currentThread !== 'new' && (
 				<Box
-					cursor={'pointer'}
-					p={['8px', '10px']}
-					onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-					position={'absolute'}
-					right={'0'}
-					bottom={['50px', 0]}
-					borderLeftRadius={4}
-					borderRightRadius={0}
-					background={base700}
-					display={isSidebarOpen ? 'none' : 'flex'}
+					display={['flex', 'none']}
+					w={'100%'}
+					h={'50px'}
+					pos={'absolute'}
+					top={0}
+					left={0}
+					p={'20px'}
+					bg={base}
+					borderBottom={'1px solid #2c2c2c'}
+					alignItems={'center'}
+					justifyContent={'space-between'}
 				>
-					{' '}
-					<BsLayoutSidebarInsetReverse fontSize={[22, 24]} />
+					<AiOutlineMenu onClick={onOpenDrawer} />
+					{currentThread !== 'new' &&
+						currentView == 'chat' &&
+						threadData && (
+							<Text maxW={'60%'} isTruncated fontSize={'md'}>
+								{threadData[0]?.chat_name}
+							</Text>
+						)}
+					<AiOutlinePlus
+						onClick={() => {
+							setCurrentThread('new')
+							setCurrentView('chat')
+						}}
+					/>
 				</Box>
-			)}
-			<OnboardingModal
-				isOpenOnboarding={isOpenOnboarding}
-				onOpenOnboarding={onOpenOnboarding}
-				onCloseOnboarding={onCloseOnboarding}
-			/>
-			<RightSideBarDrawer
-				isOpenDrawer={isOpenDrawer}
-				onCloseDrawer={onCloseDrawer}
-				onOpenDrawer={onOpenDrawer}
-			/>
-		</Flex>
+				<RightSideBar />
+				{currentView == 'chat' ? (
+					<ChatWrapper isSidebarOpen={isSidebarOpen} />
+				) : (
+					<DocumentWrapper isSidebarOpen={isSidebarOpen} />
+				)}
+				<LeftSidebar
+					isSidebarOpen={isSidebarOpen}
+					setIsSidebarOpen={setIsSidebarOpen}
+				/>
+				{currentView == 'chat' && currentThread !== 'new' && (
+					<Box
+						cursor={'pointer'}
+						p={['8px', '10px']}
+						onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+						position={'absolute'}
+						right={'0'}
+						bottom={['50px', 0]}
+						borderLeftRadius={4}
+						borderRightRadius={0}
+						background={base700}
+						display={isSidebarOpen ? 'none' : 'flex'}
+					>
+						{' '}
+						<BsLayoutSidebarInsetReverse fontSize={[22, 24]} />
+					</Box>
+				)}
+				<OnboardingModal
+					isOpenOnboarding={isOpenOnboarding}
+					onOpenOnboarding={onOpenOnboarding}
+					onCloseOnboarding={onCloseOnboarding}
+				/>
+				<RightSideBarDrawer
+					isOpenDrawer={isOpenDrawer}
+					onCloseDrawer={onCloseDrawer}
+					onOpenDrawer={onOpenDrawer}
+				/>
+			</Flex>
+		</TourProvider>
 	)
 }
 
@@ -219,14 +257,14 @@ const OnboardingModal = ({
 		}
 		localStorage.setItem('modal-display', true)
 	}, [])
-	
+
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
 		useUploadDoc()
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
 
 		if (file && file.size > 10 * 1024 * 1024) {
-// 10MB in bytes
+			// 10MB in bytes
 			toast({
 				title: 'File is too large',
 				description: 'Please select a file less than 10MB.',
