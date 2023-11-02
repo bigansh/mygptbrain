@@ -10,4 +10,5 @@ export interface chatQueryObject {
 		llm: string
 	}[]
 	preferences?: object
+	author?: string
 }

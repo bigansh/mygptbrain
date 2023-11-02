@@ -1,9 +1,9 @@
 {
-  "name": "MyGPTBrain",
-  "description": "Share the web!",
+  "name": "myGPTBrain",
+  "description": "Knowledge consumption made easier with myGPTBrain. Use the extension easily bookmark pages.",
   "version": "1.0.0",
+  "author": "myGPTBrain",
   "manifest_version": 3,
-
   "icons": {
     "16": "logo.png",
     "48": "logo.png",
@@ -11,12 +11,13 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "MyGPTBrain",
+    "default_title": "myGPTBrain",
     "default_icon": "logo.png"
   },
   "host_permissions": [
     "https://api-testing.mygptbrain.com/",
-    "http://testing.mygptbrain.com/",
+    "https://api.mygptbrain.com/",
+    "https://testing.mygptbrain.com/",
     "https://mygptbrain.com/"
   ],
   "permissions": [

@@ -1,12 +1,14 @@
 {
-  "name": "mygptbrain-extension",
+  "name": "extension",
   "version": "1.0.0",
-  "description": "MyGPTBrain Extension",
+  "description": "Extension for myGPTBrain",
+  "private": "true",
+  "author": "myGPTBrain",
+  "license": "UNLICENSED",
   "scripts": {
     "start": "webpack --watch --progress --config webpack.dev.js",
     "build": "webpack --progress --config webpack.prod.js"
   },
-  "author": "",
   "devDependencies": {
     "@chakra-ui/react": "^2.4.6",
     "@emotion/react": "^11.10.5",
