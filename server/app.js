@@ -37,8 +37,8 @@ app.register(cors, {
 	methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 	origin: [
 		process.env.CLIENT,
-		'http://localhost:3001',
-		'http://localhost:3000',
+		'http://localhost:3001/',
+		'http://localhost:3000/',
 		process.env.EXTENSION,
 	],
 })
