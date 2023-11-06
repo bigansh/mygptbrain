@@ -30,7 +30,7 @@
     "@logtail/pino": "^0.4.2",
     "@notionhq/client": "^2.2.4",
     "@pinecone-database/pinecone": "^0.1.6",
-    "@prisma/client": "^5.3.1",
+    "@prisma/client": "5.5.2",
     "@prisma/extension-accelerate": "^0.6.2",
     "@sendgrid/client": "^7.7.0",
     "@sendgrid/mail": "^7.7.0",
@@ -63,6 +63,6 @@
   },
   "devDependencies": {
     "pino-pretty": "^10.0.0",
-    "prisma": "5"
+    "prisma": "5.5.2"
   }
 }

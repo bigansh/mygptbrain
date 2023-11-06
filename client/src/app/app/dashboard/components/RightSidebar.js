@@ -41,10 +41,11 @@ import {
 } from '@/app/query-hooks'
 import { useTour } from '@reactour/tour'
 
-const RightSideBar = () => {
+const RightSideBar = ({}) => {
+	const { sidebarTopic, setSidebarTopic } = useThreads()
 	const { isOpen, onToggle, onClose } = useDisclosure()
 	const toast = useToast()
-	const [sidebarTopic, setSidebarTopic] = useState('threads')
+
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
 	const [link, setLink] = useState('')
@@ -69,7 +70,13 @@ const RightSideBar = () => {
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
-
+	const {
+		isOpen: isOpenTour,
+		currentStep,
+		steps,
+		setIsOpen,
+		setCurrentStep,
+	} = useTour()
 	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
@@ -113,8 +120,6 @@ const RightSideBar = () => {
 
 	// UI funcs
 
-	const { setIsOpen } = useTour()
-
 	const filteredThreads = threadsData
 		?.filter((e) =>
 			e.chat_name.toLowerCase().includes(threadInput.toLowerCase())
@@ -132,6 +137,7 @@ const RightSideBar = () => {
 			minW={'20vw'}
 			maxW={'20vw'}
 			maxH={'100vh'}
+			className='documents'
 			display={['none', 'flex']}
 		>
 			{sidebarTopic == 'threads' && (
@@ -152,7 +158,7 @@ const RightSideBar = () => {
 					/>
 					<FunctionalBtn
 						title='new thread'
-						className={'first-step'}
+						className={'threads'}
 						cursor={'pointer'}
 						onClick={() => {
 							setCurrentThread('new')
@@ -240,12 +246,18 @@ const RightSideBar = () => {
 						isOpen={isOpen}
 						matchWidth
 						returnFocusOnClose={false}
-						onClose={onClose}
+						onClose={() => {
+							onClose()
+							setIsOpen(false)
+						}}
 					>
 						<PopoverTrigger>
 							<Button
 								cursor={'pointer'}
-								onClick={onToggle}
+								onClick={() => {
+									onToggle()
+									setCurrentStep(4)
+								}}
 								_hover={{ bg: base600 }}
 								bg={base700}
 								w={'100%'}
@@ -253,6 +265,7 @@ const RightSideBar = () => {
 								fontWeight={'400'}
 								borderBottomRadius={isOpen && '0px'}
 								isTruncated
+								className='documentadd'
 							>
 								<Text textAlign={'initial'} isTruncated>
 									new document
@@ -268,6 +281,7 @@ const RightSideBar = () => {
 							background={base700}
 							w={'100%'}
 							style={{ 'backdrop-filter': 'blur(5px)' }}
+							className='documentupload'
 						>
 							<FunctionalBtn
 								title={'upload document'}
@@ -392,6 +406,8 @@ const RightSideBar = () => {
 								onClick={() => {
 									setCurrentDocument(item.document_id)
 									setCurrentView('document')
+									setIsOpen(true)
+									setCurrentStep(5)
 								}}
 								py={4}
 								px='10px'
@@ -439,7 +455,10 @@ const RightSideBar = () => {
 					fontSize={'2xl'}
 					fontWeight={'400'}
 					cursor={'pointer'}
+					className='document'
 					onClick={() => {
+						sidebarTopic !== 'documents' && setCurrentStep(2)
+
 						setSidebarTopic(
 							sidebarTopic !== 'documents'
 								? 'documents'

@@ -22,6 +22,7 @@ export const removeTokens = () => {
 	if (typeof window !== 'undefined') {
 		localStorage.removeItem('x-session-token')
 		localStorage.removeItem('modal-display')
+		localStorage.removeItem('tour')
 		document.cookie =
 			'x-session-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
 		document.cookie =

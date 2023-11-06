@@ -9,6 +9,7 @@ import {
 	Textarea,
 	CircularProgress,
 	useToast,
+	CloseButton,
 } from '@chakra-ui/react'
 import {
 	ChatLogoIcon,
@@ -36,11 +37,20 @@ import { useDocumentsData, useUserData } from '@/app/query-hooks'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useThreads } from '@/context'
+import { useTour } from '@reactour/tour'
 
 const DocumentWrapper = ({ isSidebarOpen }) => {
+	const {
+		isOpen: isOpenTour,
+		currentStep,
+		steps,
+		setIsOpen,
+		setCurrentStep,
+	} = useTour()
 	const [inputValue, setInputValue] = useState('')
 	const toast = useToast()
-	const [isChatOpen, setIsChatOpen] = useState(null)
+	const [docChat, setdocChat] = useState(null)
+	const [isChatOpen, setChatOpen] = useState(null)
 
 	const divRef = useRef()
 	const { base, text, base700 } = useColors()
@@ -63,13 +73,11 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 				},
 			}),
 		enabled:
-			userData?.profile_id &&
-			currentDocument !== '' &&
-			isChatOpen == 'new'
+			userData?.profile_id && currentDocument !== '' && isChatOpen == true
 				? true
 				: false,
 		onSuccess: (data) => {
-			//setIsChatOpen(data.length > 0 ? data[0].chat_id : 'new')
+			setdocChat(data.length > 0 ? data[0].chat_id : 'new')
 		},
 		onError: (error) => {
 			logtail.info('Error getting threads', error)
@@ -77,15 +85,12 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 		},
 	})
 
+	useEffect(() => {
+		setChatOpen(false)
+	}, [currentDocument])
 	// useEffect(() => {
 	// 	divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 	// }, [threadsData[0]])
-
-	useEffect(() => {
-		if (threadsData?.length > 0 && threadsData[0].chat_id) {
-			setIsChatOpen(threadsData[0].chat_id)
-		}
-	}, [threadsData])
 
 	const placeholderData = {
 		chat_array: [
@@ -108,7 +113,6 @@ feel free to customize your experience by changing the thread's name, the model 
 				document_id: currentDocument,
 			}),
 		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
-
 		onError: (error) => {
 			logtail.info('Error getting document', error)
 			logtail.flush()
@@ -152,24 +156,28 @@ feel free to customize your experience by changing the thread's name, the model 
 
 	return documentData ? (
 		<Flex
-			transition={'all 0.5s ease-in'}
 			background={base}
-			h={'100vh'}
+			h={['95vh', '100vh']}
 			overflowY='auto'
 			overflowX='hidden'
-			w={['100%', isSidebarOpen ? '60vw' : '80vw']}
-			maxW={['100%', isSidebarOpen ? '60vw' : '80vw']}
+			w={['100vw', isSidebarOpen ? '60vw' : '80vw']}
+			maxW={['100vw', isSidebarOpen ? '60vw' : '80vw']}
 			margin={'auto'}
 			mt={['50px', 'auto']}
+			className='documentview'
+			flexDir={['column', 'row']}
 		>
 			<Flex
 				p={6}
 				flexDir={'column'}
 				//w={['100%', '65vw']}
-				minW={isChatOpen !== null ? '50%' : '100%'}
+				minW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '80%']}
+				maxW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '80%']}
 				//maxW={['100%', '65vw']}
-				h={'100vh'}
+				h={[isChatOpen ? '0vh' : '100vh', '100vh']}
+				display={[isChatOpen ? 'none' : 'flex', 'flex']}
 				mx={'auto'}
+				className='documentview'
 				overflowY={'auto'}
 			>
 				{' '}
@@ -188,19 +196,18 @@ feel free to customize your experience by changing the thread's name, the model 
 					</Heading>
 					<Flex gap={3} alignItems={'center'}>
 						<Tooltip
-							label='Chat with single document'
+							label='Chat with this document'
 							aria-label='A tooltip'
 						>
 							<Flex
 								cursor={'pointer'}
 								onClick={() => {
-									setIsChatOpen(
-										isChatOpen == null ? 'new' : null
-									)
+									setChatOpen(!isChatOpen)
 								}}
+								className='docthread'
 							>
 								<ThreadIcon
-									fill={isChatOpen == null ? text : 'green'}
+									fill={!isChatOpen ? text : 'green'}
 								/>
 							</Flex>
 						</Tooltip>
@@ -218,13 +225,18 @@ feel free to customize your experience by changing the thread's name, the model 
 												?.url
 										)
 									}
+									className='doclink'
 								>
 									<LinkIcon fill={text} />
 								</Flex>
 							</Tooltip>
 						)}
 						<Tooltip label='Delete document' aria-label='A tooltip'>
-							<Flex cursor={'pointer'} onClick={deleteDocMutate}>
+							<Flex
+								cursor={'pointer'}
+								onClick={deleteDocMutate}
+								className='docdelete'
+							>
 								{deleteDocIsLoading ? (
 									<Spinner />
 								) : (
@@ -243,17 +255,19 @@ feel free to customize your experience by changing the thread's name, the model 
 				</Markdown>
 			</Flex>
 
-			{isChatOpen !== null && (
+			{isChatOpen && (
 				<Flex
 					p={4}
 					flexDir={'column'}
 					h={'100vh'}
-					borderLeft={`1px solid ${text}`}
-					minW={isChatOpen !== null ? '50%' : '100%'}
+					borderLeft={['', `1px solid ${text}`]}
+					minW={['100%', '50%']}
+					maxW={['100%', '50%']}
 					//maxW={['100vw', isSidebarOpen ? '60vw' : '80vw']}
 					transition={'all 0.5s ease-in'}
 					background={base}
 					overflowY={'auto'}
+					pos={'relative'}
 				>
 					{threadsIsLoading ? (
 						<Flex
@@ -293,12 +307,19 @@ feel free to customize your experience by changing the thread's name, the model 
 							<Flex ref={divRef}></Flex>
 						</Flex>
 					)}
-
+					<Flex
+						position={'absolute'}
+						top={6}
+						right={6}
+						onClick={() => setChatOpen(!isChatOpen)}
+					>
+						<CloseButton />
+					</Flex>
 					<ChatInput
 						inputValue={inputValue}
 						setInputValue={setInputValue}
 						divRef={divRef}
-						isChatOpen={isChatOpen}
+						docChat={docChat}
 					/>
 				</Flex>
 			)}
@@ -377,7 +398,7 @@ const SingleChatComponent = ({ message }) => {
 	)
 }
 
-const ChatInput = ({ inputValue, setInputValue, divRef, isChatOpen }) => {
+const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 	const queryClient = useQueryClient()
 	const ref = useRef()
 	const { currentDocument } = useThreads()
@@ -439,7 +460,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, isChatOpen }) => {
 		mutationFn: () =>
 			updateChat({
 				prompt: inputValue,
-				chat_id: isChatOpen,
+				chat_id: docChat,
 				preferences: {
 					document_id: currentDocument,
 				},
@@ -481,7 +502,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, isChatOpen }) => {
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
-			isChatOpen == 'new' ? addMutate() : updateMutate()
+			docChat == 'new' ? addMutate() : updateMutate()
 		}
 	}
 
@@ -542,7 +563,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, isChatOpen }) => {
 				<Box
 					cursor={'pointer'}
 					onClick={() => {
-						isChatOpen == 'new' ? addMutate() : updateMutate()
+						docChat == 'new' ? addMutate() : updateMutate()
 					}}
 				>
 					{updateIsLoading || addIsLoading ? (

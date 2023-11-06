@@ -55,7 +55,7 @@ import {
 	useUploadDoc,
 	useUserData,
 } from '@/app/query-hooks'
-import { TourProvider } from '@reactour/tour'
+import { TourProvider, useTour } from '@reactour/tour'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -66,7 +66,8 @@ const Dashboard = () => {
 	const toast = useToast()
 	const [platformModal, setPlatformModal] = useState(false)
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
+	const { isOpen, currentStep, setIsOpen, setCurrentStep, setSteps } =
+		useTour()
 	const {
 		isOpen: isOpenDrawer,
 		onOpen: onOpenDrawer,
@@ -78,7 +79,8 @@ const Dashboard = () => {
 		setThreads,
 		currentThread,
 		setCurrentThread,
-
+		sidebarTopic,
+		setSidebarTopic,
 		currentView,
 		setCurrentView,
 	} = useThreads()
@@ -91,7 +93,7 @@ const Dashboard = () => {
 		},
 	})
 
-	const { base, base800, base700, text } = useColors()
+	const { base, base800, base600, base700, text } = useColors()
 	const {
 		isOpen: isOpenOnboarding,
 		onOpen: onOpenOnboarding,
@@ -127,15 +129,41 @@ const Dashboard = () => {
 				'This is the threads section. You can create new threads here.',
 		},
 		{
+			selector: '.document',
+			content: 'This is the documents section. Click to get started',
+			actionAfter: () => {
+				setSidebarTopic('documents')
+			},
+		},
+		{
 			selector: '.documents',
-			content:
-				'This is the documents section. You can view and documents here.',
+			highlightedSelectors: ['.documents'],
+			mutationObservables: ['.documents'],
+			content: ' You can view all your documents here. ',
 		},
 		{
 			selector: '.documentadd',
-			content: 'Click here to add a new document',
-			highlightedSelectors: ['.documentadd'],
-			mutationObservables: ['#documentadd'],
+			content: 'Click here to add a new document.',
+		},
+		{
+			selector: '.documentupload',
+			content:
+				'upload any office files, pdfs, links to articles or yt videos. you can also sync files from different platforms.',
+			position: 'right',
+			highlightedSelectors: ['.documentadd', '.documentupload'],
+		},
+		{
+			selector: '.docthread',
+			content: 'chat with document. get all your questions answered.',
+			mutationObservables: ['.documentview', '.docthread'],
+		},
+		{
+			selector: '.doclink',
+			content: 'you can also visit the original source of the document.',
+		},
+		{
+			selector: '.docdelete',
+			content: 'or if you no longer need this document, delete it.',
 		},
 		// ...
 	]
@@ -145,9 +173,10 @@ const Dashboard = () => {
 			styles={{
 				popover: (base) => ({
 					...base,
-					borderRadius: 4,
+					borderRadius: 8,
 					backgroundColor: base800,
 					textColor: text,
+					border: `1px solid ${text}`,
 				}),
 				maskWrapper: (base) => ({
 					...base,
@@ -155,8 +184,12 @@ const Dashboard = () => {
 				}),
 
 				badge: (base) => ({ ...base, color: 'blue' }),
+				close: (close) => ({ ...close, top: '14px', right: '14px' }),
 			}}
+			showBadge={false}
 			steps={steps}
+			showDots={false}
+			disableDotsNavigation={true}
 		>
 			<Flex
 				w={'100vw'}
@@ -193,7 +226,7 @@ const Dashboard = () => {
 						}}
 					/>
 				</Box>
-				<RightSideBar />
+				<RightSideBar setCurrentStep={setCurrentStep} />
 				{currentView == 'chat' ? (
 					<ChatWrapper isSidebarOpen={isSidebarOpen} />
 				) : (
@@ -250,6 +283,9 @@ const OnboardingModal = ({
 	const { data, isLoading } = useUserData()
 
 	useEffect(() => {
+		// if (localStorage.getItem('tour') == 'true') {
+
+		// }
 		if (localStorage.getItem('modal-display') == 'true') {
 			onCloseOnboarding()
 		} else {
