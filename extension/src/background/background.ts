@@ -7,9 +7,10 @@ chrome.runtime.onInstalled.addListener(async () => {
   function checkCookie() {
     return new Promise((resolve, reject) => {
       chrome.cookies.get({
-        url: "http://testing.mygptbrain.com/",
+        url: "https://testing.mygptbrain.com/",
         name: "x-session-token",
       }, (cookie) => {
+
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {
@@ -23,8 +24,10 @@ chrome.runtime.onInstalled.addListener(async () => {
     const cookie = await checkCookie();
 
     if (!cookie) {
+
       chrome.tabs.create({ url: 'https://testing.mygptbrain.com/onboarding/login' });
     } else {
+
       setStoredUser({});
       setStoredLinks([]);
       chrome.action.setBadgeBackgroundColor({ color: '#50C878' });
@@ -32,7 +35,7 @@ chrome.runtime.onInstalled.addListener(async () => {
       const user = await getUser().then(res => res.json());
 
       const links = await getLinks({ profileId: user.profile_id }).then(res => res.json());
-
+      console.log(links)
       setStoredUser(user);
       setStoredLinks(links.filter(link => link.documentMetadata.url !== null));
     }
@@ -70,6 +73,7 @@ chrome.tabs.onActivated.addListener(
   async ({ tabId }) => {
     const tab = await getCurrentTab(tabId)
     const links: any = await getStoredLinks()
+    console.log(links)
     const isCurrentTabBookmarked = links.find(e => e.documentMetadata.url == tab.url)
     if (isCurrentTabBookmarked) {
       chrome.action.setBadgeText({ text: ' ', tabId: tab.id });
@@ -83,6 +87,7 @@ chrome.tabs.onUpdated.addListener(
   async (tabId, changeInfo, tab) => {
     if (changeInfo.status == "complete") {
       const links: any = await getStoredLinks()
+      console.log(links)
       const isCurrentTabBookmarked = links.find(e => e.documentMetadata.url == tab.url)
       if (isCurrentTabBookmarked) {
         chrome.action.setBadgeText({ text: ' ', tabId: tab.id });
