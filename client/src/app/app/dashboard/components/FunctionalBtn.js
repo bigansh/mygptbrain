@@ -6,6 +6,7 @@ const FunctionalBtn = ({
 	onClick,
 	icon,
 	disabled,
+	className = "",
 	enabled = false,
 	isPro = false,
 }) => {
@@ -21,6 +22,7 @@ const FunctionalBtn = ({
 			justifyContent={'space-between'}
 			fontWeight={'400'}
 			isTruncated
+			className={className}
 		>
 			<Text textAlign={'initial'} isTruncated display={'flex'} gap={2}>
 				{title}

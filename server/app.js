@@ -38,6 +38,7 @@ app.register(cors, {
 	origin: [
 		process.env.CLIENT,
 		'http://localhost:3001',
+		'http://localhost:3000',
 		process.env.EXTENSION,
 	],
 })
