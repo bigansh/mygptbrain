@@ -14,7 +14,7 @@ const createDocument = async (profile_id, documentQueryObject) => {
 			select: { document_id: true },
 		})
 
-		if (foundDocuments.length > 10) {
+		if (foundDocuments.length > 5) {
 			await checkSubscription(profile_id)
 		}
 

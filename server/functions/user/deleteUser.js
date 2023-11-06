@@ -11,7 +11,7 @@ const deleteUser = async (profile_id) => {
 	try {
 		await User.delete({ where: { profile_id: profile_id } })
 
-		await pineconeIndex._delete({
+		await pineconeIndex._deleteMany({
 			deleteRequest: {
 				filter: {
 					profile_id: profile_id,

@@ -39,7 +39,7 @@ const deleteDocument = async ({ document_id }, profile_id) => {
 				}
 			}),
 
-			pineconeIndex._delete({
+			pineconeIndex._deleteMany({
 				deleteRequest: {
 					filter: {
 						document_id: document_id,

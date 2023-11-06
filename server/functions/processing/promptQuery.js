@@ -56,7 +56,7 @@ const promptQuery = async (prompt, chat) => {
 		}
 
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-			pineconeIndex,
+			pineconeIndex: pineconeIndex,
 		})
 
 		const chain = ConversationalRetrievalQAChain.fromLLM(
