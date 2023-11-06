@@ -85,6 +85,15 @@ export const deleteUser = async (id) => {
 export const getDoc = async (data) => {
 	const response = await apiClient.post(`/document/read`, {
 		documentQueryObject: data,
+		selectObject: {
+			document_id: true,
+			profile_id: true,
+			body: data?.document_id !== undefined ? true : false,
+			heading: true,
+			createdAt: true,
+			updatedAt: true,
+			documentMetadata: true,
+		},
 	})
 	return response.data
 }
@@ -156,6 +165,17 @@ export const readChat = async (data) => {
 
 	const response = await apiClient.post(`/chat/read`, {
 		chatQueryObject: data,
+		selectObject: {
+			chat_id: true,
+			chat_name: true,
+			profile_id: true,
+			chat_array: data?.chat_id !== undefined ? true : false,
+			source_documents: true,
+			chat_history: data?.chat_id !== undefined ? true : false,
+			createdAt: true,
+			updatedAt: true,
+			preferences: true,
+		},
 	})
 
 	return response.data

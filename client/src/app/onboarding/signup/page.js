@@ -44,8 +44,6 @@ const Signup = () => {
 		})
 	}
 
-	const [isEmailFocused, setIsEmailFocused] = useState(false)
-
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault()
 		if (!verifyEmail(userDetails.email)) {
@@ -134,91 +132,51 @@ const Signup = () => {
 					type='email'
 					value={userDetails.email}
 					onChange={handleChange}
-					onFocus={(e) => setIsEmailFocused(true)}
 					placeholder='brain@human.com'
 				/>
-				{isEmailFocused || userDetails.email !== '' ? (
-					<>
-						<FormLabel
-							fontSize={'2xl'}
-							fontWeight={'400'}
-							mb={0}
-							mt={2}
-						>
-							password
-						</FormLabel>
-						<Input
-							id='password'
-							type='password'
-							value={userDetails.password}
-							onChange={handleChange}
-							placeholder='********'
-						/>
-						<Button
-							title='login'
-							fontWeight={'400'}
-							bg={base700}
-							_hover={{
-								bg: base600,
-							}}
-							color={text}
-							cursor={'pointer'}
-							onClick={handleLoginSubmit}
-							mt={2}
-						>
-							signup
-						</Button>
-						<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
-							<Link
-								href={
-									redirectUrl &&
-									typeof redirectUrl === 'string'
-										? `/onboarding/login?redirect=${redirectUrl}`
-										: '/onboarding/login'
-								}
-							>
-								or login
-							</Link>
-						</Text>
-					</>
-				) : (
-					<>
-						<Box position='relative' py='4' fontSize={'18px'}>
-							<Divider
-								bg={text}
-								borderColor={text}
-								rounded={'md'}
-								borderWidth={'1px'}
-							/>
-							<AbsoluteCenter px='4' bg={base}>
-								or
-							</AbsoluteCenter>
-						</Box>
 
-						<Button
-							fontWeight={'400'}
-							bg={base}
-							mt={2}
-							px={4}
-							py={2}
-							border={'1px solid #e0e0e0'}
-							gap={2}
-							rounded={'lg'}
-							color={text}
-							cursor={'pointer'}
-							onClick={() => authenticateUserByGoogle()}
+				<>
+					<FormLabel
+						fontSize={'2xl'}
+						fontWeight={'400'}
+						mb={0}
+						mt={2}
+					>
+						password
+					</FormLabel>
+					<Input
+						id='password'
+						type='password'
+						value={userDetails.password}
+						onChange={handleChange}
+						placeholder='********'
+					/>
+					<Button
+						title='login'
+						fontWeight={'400'}
+						bg={base700}
+						_hover={{
+							bg: base600,
+						}}
+						color={text}
+						cursor={'pointer'}
+						onClick={handleLoginSubmit}
+						mt={2}
+					>
+						signup
+					</Button>
+					<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
+						<Link
+							href={
+								redirectUrl && typeof redirectUrl === 'string'
+									? `/onboarding/login?redirect=${redirectUrl}`
+									: '/onboarding/login'
+							}
 						>
-							<Img
-								w={6}
-								h={6}
-								src='https://www.svgrepo.com/show/475656/google-color.svg'
-								loading='lazy'
-								alt='google logo'
-							/>
-							<span>Continue with Google</span>
-						</Button>
-					</>
-				)}
+							or login
+						</Link>
+					</Text>
+				</>
 			</Flex>
 			<Flex flexDir={'column'} p={5} gap={5} justifyContent={'center'}>
 				<Heading fontSize={'2xl'} fontWeight={'400'}>
