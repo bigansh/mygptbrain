@@ -11,19 +11,14 @@ import { gpt_turbo } from '../../utils/api/openai.js'
  */
 const query = async (chatQueryObject) => {
 	try {
-		const CUSTOM_QUESTION_GENERATOR_CHAIN_PROMPT = `Given the following conversation and a follow up question, return the conversation history excerpt that includes any relevant context to the question if it exists and rephrase the follow up question to be a standalone question.
-		Chat History:
-		{chat_history}
+		const promptTemplate = `Emulate the style and tone of the conversation while maintaining a clear and informative approach. When drawing upon specific elements from the context, ensure to directly quote those elements before providing your explanation. This will enhance the transparency and traceability of your responses. For instance, if referencing a particular line from the conversation, quote the line verbatim and then proceed to explain its significance or meaning. Similarly, if citing a passage from a blog or article, directly quote the relevant excerpt before offering your analysis or interpretation. By adhering to this principle of explicit quotation, you will strengthen the coherence and credibility of your responses, making them more informative and engaging for the user. 
+		Chat History: {chat_history}
 		Follow Up Input: {question}
-		Your answer should follow the following format:
-		\`\`\`
-		Use the following pieces of context to answer the users question.
-		If you don't know the answer, just say that you don't know, don't try to make up an answer. Don't try to be too smart. Don't make things up. Only answer if you have enough context. Don't answer from your learnings.
-		----------------
-		<Relevant chat history excerpt as context here>
-		Standalone question: <Rephrased question here>
-		\`\`\`
-		Your answer:`
+		Input Documents: {context}`
+		// const promptTemplate = `Provide the most accurate response. The response should primarily rely on quoting specific text from the context and then explaining the meaning or relevance of that quoted text. Avoid generating entirely new content; instead, use the existing conversation or context. If the context is a conversation between people, quote the relevant parts of the conversation and provide insights based on those quotes. If the context feels like a blog/article, quote the text that you used to generate the response from and elucidate the meaning or significance of those quotes. The response should emulate the delivery and style of the context passed.
+		// Chat History: {chat_history}
+		// Follow Up Input: {question}
+		// Input Documents: {context}`
 
 		const chain = ConversationalRetrievalQAChain.fromLLM(
 			gpt_turbo,
@@ -31,9 +26,7 @@ const query = async (chatQueryObject) => {
 			{
 				returnSourceDocuments: true,
 				verbose: true,
-				questionGeneratorChainOptions: {
-					template: CUSTOM_QUESTION_GENERATOR_CHAIN_PROMPT,
-				},
+				qaTemplate: promptTemplate,
 			}
 		)
 

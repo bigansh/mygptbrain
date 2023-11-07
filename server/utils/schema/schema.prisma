@@ -27,6 +27,7 @@ model UserMetadata {
   profile_id          String   @id @unique
   subscription_status Boolean  @default(false)
   createdAt           DateTime @default(now())
+  chat_prompt         String?  @default("You are a helpful assistant that answers questions only with the data and the context at hand. You don't generate random answers or hallucinate based on your base model. You provide concise answers to every question with no filler words. If an answer is much better represented in bullet points, answer in bullet points. If an answer to a question requires detailed paragraphs, use paragraphs to answer the question.")
   updatedAt           DateTime @updatedAt
   user                User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
 }
@@ -142,12 +143,13 @@ model Chat {
 }
 
 model ChatPreferences {
-  chat_id      String   @id @unique
-  llm_model    String   @default("ChatGPT")
-  data_sources String[] @default(["All"])
-  send_type    String   @default("Stuff")
-  document_id  String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  chat         Chat     @relation(fields: [chat_id], references: [chat_id], onDelete: Cascade)
+  chat_id             String   @id @unique
+  llm_model           String   @default("ChatGPT")
+  data_sources        String[] @default(["All"])
+  send_type           String   @default("Stuff")
+  document_id         String?
+  prompt_instructions String?  @default("You are a helpful assistant that answers questions only with the data and the context at hand. You don't generate random answers or hallucinate based on your base model. You provide concise answers to every question with no filler words. If an answer is much better represented in bullet points, answer in bullet points. If an answer to a question requires detailed paragraphs, use paragraphs to answer the question.")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  chat                Chat     @relation(fields: [chat_id], references: [chat_id], onDelete: Cascade)
 }

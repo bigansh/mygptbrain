@@ -15,6 +15,8 @@ const checkSubscription = async (profile_id) => {
 		if (!user.userMetadata.subscription_status) {
 			throw new Error('User is not authorized')
 		}
+
+		return user
 	} catch (error) {
 		throw error
 	}

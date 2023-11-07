@@ -47,13 +47,19 @@ const promptQuery = async (prompt, chat) => {
 			}
 		}
 
-		if (preferences.send_type === 'Stuff') {
-			send_type = 'stuff'
-		} else if (preferences.send_type === 'Map Reduce') {
-			send_type = 'map_reduce'
-		} else if (preferences.send_type === 'Refine') {
-			send_type = 'refine'
-		}
+		// if (preferences.send_type === 'Stuff') {
+		// 	send_type = 'stuff'
+		// } else if (preferences.send_type === 'Map Reduce') {
+		// 	send_type = 'map_reduce'
+		// } else if (preferences.send_type === 'Refine') {
+		// 	send_type = 'refine'
+		// }
+
+		const promptTemplate = `Given the following conversation and a follow up question, provide the most accurate response. ${preferences.prompt_instructions}
+		Chat History: {chat_history}
+		Follow Up Input: {question}
+		Input Documents: {context}
+		`
 
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
 			pineconeIndex: pineconeIndex,
@@ -64,7 +70,8 @@ const promptQuery = async (prompt, chat) => {
 			vectorStore.asRetriever(5, pineconeQuery),
 			{
 				returnSourceDocuments: true,
-				qaChainOptions: { type: send_type },
+				// qaChainOptions: { type: send_type },
+				qaTemplate: promptTemplate,
 			}
 		)
 

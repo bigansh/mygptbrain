@@ -9,28 +9,32 @@ import { Chat } from '../../utils/initializers/prisma.js'
  * A function that creates a chat object in the DB
  *
  * @param {import('../../utils/types/chatQueryObject.js').chatQueryObject} chatQueryObject
+ * @param {String} profile_id
  */
-const createChat = async (chatQueryObject) => {
+const createChat = async (chatQueryObject, profile_id) => {
 	try {
+		let user
+
 		const foundChats = await Chat.findMany({
-			where: { profile_id: chatQueryObject.profile_id },
+			where: { profile_id: profile_id },
 			select: { chat_id: true },
 		})
 
 		if (foundChats.length >= 5) {
-			await checkSubscription(chatQueryObject.profile_id)
+			user = await checkSubscription(profile_id)
 		}
 
 		chatQueryObject.chat_history = xss(chatQueryObject.chat_history)
 
 		const createdChat = await Chat.create({
 			data: {
-				profile_id: chatQueryObject.profile_id,
+				profile_id: profile_id,
 				chat_name: chatQueryObject.chat_name,
 				chat_history: chatQueryObject.chat_history,
 				preferences: {
 					create: {
 						document_id: chatQueryObject?.preferences?.document_id,
+						prompt_instructions: user.userMetadata.chat_prompt,
 					},
 				},
 			},
@@ -38,11 +42,13 @@ const createChat = async (chatQueryObject) => {
 		})
 
 		mixpanel.track('create_chat', {
-			distinct_id: chatQueryObject.profile_id,
+			distinct_id: profile_id,
 		})
 
 		return createdChat
-	} catch (error) {}
+	} catch (error) {
+		throw error
+	}
 }
 
 export default createChat
