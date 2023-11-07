@@ -9,10 +9,12 @@ export default async (jsonData) => {
 				source: jsonData.url,
 				title: jsonData.title,
 				author: jsonData.author,
-				date: jsonData.date,
+				// date: jsonData.date,
 				id: jsonData.id,
 			},
 		})
+
+		return vectorDocument
 
 		const splitter = new TokenTextSplitter({
 			chunkSize: 400,
@@ -36,7 +38,7 @@ export default async (jsonData) => {
 						id: chunk.metadata.id,
 						title: jsonData.title,
 						author: jsonData.author,
-						date: jsonData.date,
+						// date: jsonData.date,
 						vector_id: `${chunk.metadata.id}-${i}`,
 					},
 				})
