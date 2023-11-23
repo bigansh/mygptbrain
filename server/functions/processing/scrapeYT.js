@@ -23,6 +23,4 @@ const scrapeYT = async (url) => {
 	}
 }
 
-await scrapeYT('https://youtu.be/KZA_BIa8e7I?si=WYNEfITdn7hc6bJ_')
-
 export default scrapeYT
