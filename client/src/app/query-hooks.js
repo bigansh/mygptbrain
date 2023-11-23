@@ -68,7 +68,7 @@ export const useUploadDoc = ({ onSuccess }) => {
 			toast({
 				title: 'Document uploaded successfully',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})
@@ -78,7 +78,7 @@ export const useUploadDoc = ({ onSuccess }) => {
 			toast({
 				title: 'Error uploading document',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'error',
 				duration: 3000,
 			})
@@ -96,7 +96,7 @@ export const useSyncDoc = (onSuccess = () => {}) => {
 			toast({
 				title: 'Data synced successfully',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})
@@ -106,7 +106,7 @@ export const useSyncDoc = (onSuccess = () => {}) => {
 			toast({
 				title: 'Error syncing data',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'error',
 				duration: 3000,
 			})
@@ -127,7 +127,7 @@ export const useScrapeLink = ({ link, onSuccess }) => {
 			toast({
 				title: 'Link scraped successfully',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})
@@ -137,7 +137,7 @@ export const useScrapeLink = ({ link, onSuccess }) => {
 			toast({
 				title: 'Error uploading link',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'error',
 				duration: 3000,
 			})
@@ -160,7 +160,7 @@ export const useChatPreferences = ({ currentThread, onSuccess }) => {
 			toast({
 				title: 'Chat preference updated successfully',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})

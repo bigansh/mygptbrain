@@ -52,7 +52,7 @@ const AccountComponent = () => {
 				toast({
 					title: 'Account deleted successfully!',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'success',
 					duration: 3000,
 				})
@@ -64,7 +64,7 @@ const AccountComponent = () => {
 				toast({
 					title: 'Error deleting account!',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'error',
 					duration: 3000,
 				})

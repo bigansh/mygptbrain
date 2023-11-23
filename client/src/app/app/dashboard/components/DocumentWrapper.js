@@ -123,7 +123,7 @@ feel free to customize your experience by changing the thread's name, the model 
 				toast({
 					title: 'Document deleted',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'success',
 					duration: 3000,
 				})
@@ -137,7 +137,7 @@ feel free to customize your experience by changing the thread's name, the model 
 				toast({
 					title: 'Error deleting document',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'error',
 					duration: 3000,
 				})
@@ -424,7 +424,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 			toast({
 				title: 'New chat created',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})
@@ -433,7 +433,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 			toast({
 				title: 'Error creating document chat',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'error',
 				duration: 3000,
 			})

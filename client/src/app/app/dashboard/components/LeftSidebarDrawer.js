@@ -120,7 +120,7 @@ const LeftSideBarDrawer = ({
 				title: 'More than 5 files upload are paid',
 				description: 'Please upgrade your plan.',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'info',
 				duration: 3000,
 			})
@@ -138,7 +138,7 @@ const LeftSideBarDrawer = ({
 				title: 'Files larger than 10MB are paid',
 				description: 'Please select a file less than 10MB.',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'info',
 				duration: 3000,
 			})
@@ -383,7 +383,7 @@ const LeftSideBarDrawer = ({
 															description:
 																'Please upgrade your plan.',
 															position: 'Top',
-															variant: 'solid',
+															variant: 'subtle',
 															status: 'info',
 															duration: 3000,
 														})

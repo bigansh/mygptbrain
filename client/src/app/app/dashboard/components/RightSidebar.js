@@ -126,7 +126,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				toast({
 					title: 'Name updated successfully',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'success',
 					duration: 3000,
 				})
@@ -150,7 +150,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				toast({
 					title: 'Thread deleted',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'success',
 					duration: 3000,
 				})
@@ -165,7 +165,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				toast({
 					title: 'Error deleting thread',
 					position: 'top',
-					variant: 'solid',
+					variant: 'subtle',
 					status: 'error',
 					duration: 3000,
 				})

@@ -29,7 +29,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
-	
+
 	const {
 		data,
 		isLoading: addIsLoading,
@@ -57,7 +57,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'New chat created',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})
@@ -66,7 +66,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 			toast({
 				title: 'Error creating chat',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'error',
 				duration: 3000,
 			})
@@ -154,7 +154,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 							toast({
 								title: 'Add a document to get started',
 								position: 'top',
-								variant: 'solid',
+								variant: 'subtle',
 								status: 'warning',
 								duration: 3000,
 							})
@@ -197,7 +197,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 							? toast({
 									title: 'Add a document to get started',
 									position: 'top',
-									variant: 'solid',
+									variant: 'subtle',
 									status: 'warning',
 									duration: 3000,
 							  })

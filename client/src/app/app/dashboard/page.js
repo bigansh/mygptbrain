@@ -74,7 +74,7 @@ const Dashboard = () => {
 			toast({
 				title: 'No auth token found',
 				position: 'top',
-				variant: 'solid',
+				variant: 'subtle',
 				status: 'success',
 				duration: 3000,
 			})

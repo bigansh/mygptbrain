@@ -375,7 +375,7 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 														description:
 															'Please upgrade your plan.',
 														position: 'Top',
-														variant: 'solid',
+														variant: 'subtle',
 														status: 'info',
 														duration: 3000,
 													})
