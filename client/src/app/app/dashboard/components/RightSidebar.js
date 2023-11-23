@@ -124,7 +124,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 					return [data]
 				})
 				toast({
-					title: 'Name updated successfully',
+					title: 'Name updated',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',

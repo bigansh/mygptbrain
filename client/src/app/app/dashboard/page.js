@@ -72,10 +72,10 @@ const Dashboard = () => {
 	useEffect(() => {
 		if (!localStorage.getItem('x-session-token')) {
 			toast({
-				title: 'No auth token found',
+				title: 'Login to continue',
 				position: 'top',
 				variant: 'subtle',
-				status: 'success',
+				status: 'info',
 				duration: 3000,
 			})
 			router.push('/onboarding/signup')

@@ -421,13 +421,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 					return [data]
 				}
 			)
-			toast({
-				title: 'New chat created',
-				position: 'top',
-				variant: 'subtle',
-				status: 'success',
-				duration: 3000,
-			})
 		},
 		onError: (error) => {
 			toast({

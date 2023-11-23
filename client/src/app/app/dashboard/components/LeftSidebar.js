@@ -385,7 +385,7 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 												toast({
 													title: 'Invalid Link',
 													position: 'top',
-													variant: 'left-accent',
+													variant: 'subtle',
 													status: 'error',
 													duration: 3000,
 												})
