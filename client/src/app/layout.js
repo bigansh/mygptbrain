@@ -1,5 +1,3 @@
-//import { ColorModeScript } from '@chakra-ui/react'
-import { TourProvider } from '@reactour/tour'
 import './globals.css'
 import { Providers } from './providers'
 import { Metadata } from 'next'
@@ -22,6 +20,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
+			<head>
+				<script
+					async
+					src='https://js.stripe.com/v3/pricing-table.js'
+				></script>
+			</head>
 			<body>
 				<Providers>{children}</Providers>
 				{/* <ColorModeScript initialColorMode={'light'} /> */}

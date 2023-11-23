@@ -1,3 +1,14 @@
+import { Button, useDisclosure } from '@chakra-ui/react'
+import {
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	ModalCloseButton,
+} from '@chakra-ui/react'
+
 function isValidHttpUrl(str) {
 	const pattern = new RegExp(
 		'^(https?:\\/\\/)?' + // protocol
@@ -12,3 +23,32 @@ function isValidHttpUrl(str) {
 }
 
 export default isValidHttpUrl
+
+export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
+	status == true ? onOpen() : usernextFunc()
+}
+
+export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
+	return (
+		<Modal
+			onClose={onPaymentModalClose}
+			isOpen={isPaymentModalOpen}
+			isCentered
+		>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalHeader>Pay Pay</ModalHeader>
+				<ModalCloseButton />
+				<ModalBody>
+					<stripe-pricing-table
+						pricing-table-id='prctbl_1NuDELSItRikWRCiwkkTpwBo'
+						publishable-key='pk_live_51N456YSItRikWRCiUrt8boF6w21p5R164Rog5R34A3M9b8uHiMwYiKEH35MCZZHU9vuC4P0LdNI2DYCkDeO9tybn00KTSj3dAb'
+					></stripe-pricing-table>
+				</ModalBody>
+				<ModalFooter>
+					<Button onClick={onPaymentModalClose}>Close</Button>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
+	)
+}

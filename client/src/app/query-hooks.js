@@ -7,6 +7,7 @@ import {
 	scrapeLink,
 	syncDoc,
 	updateChatPreferences,
+	updatePersona,
 	uploadDoc,
 } from '@/api'
 import { useToast } from '@chakra-ui/react'
@@ -57,24 +58,12 @@ export const useDocumentsData = ({ enabled, funcArgs }) => {
 	})
 }
 
-// export const useDocumentData = ({ currentDocument, enabled, funcArgs }) => {
-// 	return useQuery({
-// 		queryKey: ['documents',],
-// 		queryFn: () => getDoc(funcArgs),
-// 		enabled: enabled,
-// 		onError: (error) => {
-// 			logtail.info('Error getting thread', error)
-// 			logtail.flush()
-// 		},
-// 	})
-// }
-
-export const useUploadDoc = () => {
+export const useUploadDoc = ({ onSuccess }) => {
 	const queryClient = useQueryClient()
 	const toast = useToast()
 
 	return useMutation((file) => uploadDoc(file), {
-		onSuccess: () => {
+		onSuccess: (data) => {
 			queryClient.invalidateQueries(['documents'])
 			toast({
 				title: 'Document uploaded successfully',
@@ -83,6 +72,7 @@ export const useUploadDoc = () => {
 				status: 'success',
 				duration: 3000,
 			})
+			onSuccess(data)
 		},
 		onError: (error) => {
 			toast({
@@ -184,55 +174,14 @@ export const useChatPreferences = ({ currentThread, onSuccess }) => {
 	})
 }
 
-export const useFilterPreferences = ({ currentThread, onSuccess }) => {
-	const toast = useToast()
+export const usePersonas = ({ onSuccess }) => {
 	return useMutation({
-		mutationFn: (sourceDocs) =>
-			updateChatPreferences({
-				chat_id: currentThread,
-				data_sources: sourceDocs,
-			}),
-
+		mutationFn: (newPersona) => updatePersona(newPersona),
 		onSuccess: (data) => {
-			toast({
-				title: 'Chat preference updated successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			onSuccess(data.data_sources)
+			onSuccess(data)
 		},
-
 		onError: (error) => {
-			logtail.info('Error updating chat preference', error)
-			logtail.flush()
-		},
-	})
-}
-
-export const useSendTypePreferences = ({ currentThread, onSuccess }) => {
-	const toast = useToast()
-	return useMutation({
-		mutationFn: (sendType) =>
-			updateChatPreferences({
-				chat_id: currentThread,
-				send_type: sendType,
-			}),
-
-		onSuccess: (data) => {
-			toast({
-				title: 'Chat preference updated successfully',
-				position: 'top',
-				variant: 'solid',
-				status: 'success',
-				duration: 3000,
-			})
-			onSuccess(data.send_type)
-		},
-
-		onError: (error) => {
-			logtail.info('Error updating chat preference', error)
+			logtail.info('Error posting persona', error)
 			logtail.flush()
 		},
 	})

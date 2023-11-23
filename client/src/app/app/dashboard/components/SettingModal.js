@@ -18,8 +18,9 @@ import {
 	AccountComponent,
 	PlatformComponent,
 	BillingComponent,
+	PreferencesComponent,
 } from '@/app/app/dashboard/components'
-import { BillingIcon, PlatformIcon, UserIcon } from '@/icons'
+import { BillingIcon, PlatformIcon, UserIcon, PreferencesIcon } from '@/icons'
 const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	const { base, base800, text } = useColors()
 	const [activeButton, setActiveButton] = useState('account')
@@ -36,6 +37,9 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 		case 'platform':
 			childComponent = <PlatformComponent />
 			break
+		case 'preferences':
+			childComponent = <PreferencesComponent />
+			break
 		case 'billing':
 			childComponent = <BillingComponent />
 			break
@@ -45,7 +49,6 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	return (
 		<Modal
 			size={['2xl', '6xl']}
-			
 			isOpen={isOpenSetting}
 			onClose={onCloseSetting}
 		>
@@ -74,13 +77,22 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 							<Heading fontSize={'2xl'} fontWeight={'500'} mb={4}>
 								setting
 							</Heading>
-							<Flex flexDir={['row', 'column']} gap={[0,2]}>
+							<Flex flexDir={['row', 'column']} gap={[0, 2]}>
 								<SidebarItem
 									activeButton={activeButton}
 									cursor={'pointer'}
 									onClick={() => handleButtonClick('account')}
 									title='account'
 									icon={<UserIcon fill={text} />}
+								/>
+								<SidebarItem
+									activeButton={activeButton}
+									cursor={'pointer'}
+									onClick={() =>
+										handleButtonClick('preferences')
+									}
+									title='preferences'
+									icon={<PreferencesIcon fill={text} />}
 								/>
 								<SidebarItem
 									activeButton={activeButton}
@@ -134,7 +146,9 @@ const SidebarItem = ({
 			textAlign={['center', 'left']}
 			m={'auto'}
 		>
-			<Text textAlign={['center', 'left']} margin={['auto' , 'unset']}>{title}</Text>
+			<Text textAlign={['center', 'left']} margin={['auto', 'unset']}>
+				{title}
+			</Text>
 			<Box display={['none', 'block']}>{icon}</Box>
 		</Button>
 	)

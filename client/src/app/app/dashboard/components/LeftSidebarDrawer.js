@@ -47,7 +47,11 @@ import {
 	useUserData,
 } from '@/app/query-hooks'
 
-const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
+const LeftSideBarDrawer = ({
+	isOpenDrawer,
+	onCloseDrawer,
+	onPaymentModalOpen,
+}) => {
 	const toast = useToast()
 	const [sidebarTopic, setSidebarTopic] = useState('threads')
 	const [threadInput, setThreadInput] = useState('')
@@ -83,7 +87,12 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	})
 
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
-		useUploadDoc()
+		useUploadDoc({
+			onSuccess: (data) => {
+				setCurrentDocument(data?.document_id)
+				setCurrentView('document')
+			},
+		})
 
 	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc(
 		() => onToggle()
@@ -100,14 +109,37 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
+		console.log(userData?.userMetadata?.subscription_status ? true : false)
 
-		if (file && file.size > 10 * 1024 * 1024) {
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			docData?.length >= 5
+		) {
+			onPaymentModalOpen()
 			toast({
-				title: 'File is too large',
+				title: 'More than 5 files upload are paid',
+				description: 'Please upgrade your plan.',
+				position: 'top',
+				variant: 'solid',
+				status: 'info',
+				duration: 3000,
+			})
+			onToggle()
+			event.target.value = ''
+			return
+		}
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			file &&
+			file.size > 10 * 1024 * 1024
+		) {
+			onPaymentModalOpen()
+			toast({
+				title: 'Files larger than 10MB are paid',
 				description: 'Please select a file less than 10MB.',
 				position: 'top',
 				variant: 'solid',
-				status: 'error',
+				status: 'info',
 				duration: 3000,
 			})
 			onToggle()
@@ -117,6 +149,7 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 
 		// Invoke the mutation here, passing the file
 		uploadDocMutate(file)
+		onToggle()
 	}
 	// UI funcs
 
@@ -262,7 +295,13 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 									<Text textAlign={'initial'} isTruncated>
 										new document
 									</Text>
-									<AddIcon fill={text} />
+									{uploadDocIsLoading ||
+									syncDocIsLoading ||
+									scrapeLinkIsLoading ? (
+										<Spinner fill={text} />
+									) : (
+										<AddIcon fill={text} />
+									)}
 								</Button>
 							</PopoverTrigger>
 							<PopoverContent
@@ -324,20 +363,45 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 												: 'red',
 										}}
 										//onChange={e => e.target.val}
-										onKeyDown={(e) =>
-											e.key === 'Enter'
-												? isValidHttpUrl(e.target.value)
-													? scrapeLinkMutate()
-													: toast({
-															title: 'Invalid Link',
-															position: 'top',
-															variant:
-																'left-accent',
-															status: 'error',
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												if (
+													isValidHttpUrl(
+														e.target.value
+													)
+												) {
+													if (
+														userData?.userMetadata
+															?.subscription_status ||
+														docData?.length < 5
+													) {
+														scrapeLinkMutate()
+													} else {
+														onPaymentModalOpen()
+														toast({
+															title: 'More than 5 files/link upload are paid',
+															description:
+																'Please upgrade your plan.',
+															position: 'Top',
+															variant: 'solid',
+															status: 'info',
 															duration: 3000,
-													  })
-												: console.log('')
-										}
+														})
+														setLink('')
+													}
+												} else {
+													toast({
+														title: 'Invalid Link',
+														position: 'top',
+														variant: 'left-accent',
+														status: 'error',
+														duration: 3000,
+													})
+												}
+											} else {
+												console.log('')
+											}
+										}}
 										background={base700}
 										_hover={{ background: base700 }}
 									/>
@@ -477,4 +541,4 @@ const RightSideBarDrawer = ({ isOpenDrawer, onCloseDrawer }) => {
 	)
 }
 
-export default RightSideBarDrawer
+export default LeftSideBarDrawer

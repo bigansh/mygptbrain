@@ -1,71 +1,62 @@
-'use client'
-import React, { useState } from 'react'
-import { BsCheck2, BsLayoutSidebarInsetReverse } from 'react-icons/bs'
-import { useColors } from '@/utils/colors'
+import { useRef, useState } from 'react'
+import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
+import { useThreads } from '@/context'
 import {
-	Button,
 	Flex,
 	Heading,
-	InputGroup,
-	Input,
-	Text,
-	InputRightElement,
-	Spinner,
 	Box,
+	useColorMode,
+	Button,
+	useDisclosure,
+	Text,
+	Input,
+	Spinner,
 	useToast,
+	InputGroup,
+	InputRightElement,
 	Popover,
 	PopoverTrigger,
-	useDisclosure,
 	PopoverContent,
-	Img,
 } from '@chakra-ui/react'
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
-import { useThreads } from '@/context'
-import { deleteChat, readChat, updateChat } from '@/api'
-import { IoMdClose } from 'react-icons/io'
+import Search from './Search'
 import FunctionalBtn from './FunctionalBtn'
+import SettingModal from './SettingModal'
+import { useColors } from '@/utils/colors'
 import {
-	CheckCircleFilledIcon,
-	CheckCircleIcon,
-	ChevIcon,
-	ChevRevIcon,
-	DeleteIcon,
-	EditIcon,
-	FilterIcon,
+	AddIcon,
+	CloudUploadIcon,
+	RotateIcon,
+	ThreadIcon,
+	DocumentIcon,
+	LinkIcon,
 } from '@/icons'
-import { logtail } from '@/app/providers'
+import isValidHttpUrl from '@/utils/valid-http-check'
 import {
-	useChatPreferences,
 	useDocumentsData,
-	useFilterPreferences,
-	useSendTypePreferences,
+	useScrapeLink,
+	useSyncDoc,
+	useThreadsData,
+	useUploadDoc,
 	useUserData,
 } from '@/app/query-hooks'
-import { filterButtons, llmButtons, sendTypeButtons } from '@/data'
-const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-	const { base800, base700, base600, text, redbg } = useColors()
-	const [llmType, setLlmType] = useState('chatGPT')
-	const [sendType, setSendType] = useState('Stuff')
-	const [sourceDoc, setSourceDoc] = useState(['All'])
+import { useToastManager } from '@/utils/customToasts'
 
-	const {
-		isOpen: isOpenLLM,
-		onToggle: onToggleLLM,
-		onClose: onCloseLLM,
-	} = useDisclosure()
-	const {
-		isOpen: isOpenFilter,
-		onToggle: onToggleFilter,
-		onClose: onCloseFilter,
-	} = useDisclosure()
+const LeftSidebar = ({ onPaymentModalOpen }) => {
+	const { sidebarTopic, setSidebarTopic } = useThreads()
+	const { isOpen, onToggle, onClose } = useDisclosure()
+	const showToast = useToastManager()
 
+	const [threadInput, setThreadInput] = useState('')
+	const [documentInput, setDocumentInput] = useState('')
+	const [link, setLink] = useState('')
 	const {
-		isOpen: isOpenSendType,
-		onToggle: onToggleSendType,
-		onClose: onCloseSendType,
+		isOpen: isOpenSetting,
+		onOpen: onOpenSetting,
+		onClose: onCloseSetting,
 	} = useDisclosure()
-	const toast = useToast()
-	const queryClient = useQueryClient()
+	const uploadRef = useRef(null)
+	const { colorMode, toggleColorMode } = useColorMode()
+	const { base800, base600, base700, text } = useColors()
 	const {
 		currentThread,
 		setCurrentThread,
@@ -75,226 +66,411 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	} = useThreads()
 
 	const { data: userData } = useUserData()
-
-	const socialMediaKeys = [
-		{
-			title: 'Reddit',
-			key: 'reddit_id',
-		},
-		{
-			title: 'Pocket',
-			key: 'pocket_id',
-		},
-		{
-			title: 'Google',
-			key: 'google_id',
-		},
-		{
-			title: 'Notion',
-			key: 'notion_id',
-		},
-	]
-
-	const { data: threadData } = useQuery({
-		queryKey: ['threads', currentThread],
-		queryFn: () =>
-			readChat({
-				profile_id: userData?.profile_id,
-				chat_id: currentThread,
-			}),
-		enabled:
-			currentThread !== '' &&
-			currentThread !== 'new' &&
-			userData?.profile_id
-				? true
-				: false,
-		onSuccess: (data) => {
-			console.log(data)
-			setEditName(data[0].chat_name)
-			setLlmType(data[0].preferences.llm_model || 'ChatGPT')
-			setSourceDoc(data[0].preferences.data_sources || ['All'])
-			setSendType(data[0].preferences.send_type || 'Stuff')
-		},
-		onError: (error) => {
-			logtail.info('Error getting thread', error)
-			logtail.flush()
-		},
+	const { data: threadsData, isLoading: threadsIsLoading } = useThreadsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
 
-	const [editName, setEditName] = useState('')
-	const [isNameEditing, setNameEditing] = useState(false)
-
-	const { data: documentData } = useDocumentsData({
-		enabled: currentDocument !== '' && userData?.profile_id ? true : false,
-		funcArgs: {
-			profile_id: userData?.profile_id,
-			document_id: currentDocument,
-		},
+	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
 	})
 
-	const { isLoading: updateNameIsLoading, mutate: updateNameMutate } =
-		useMutation({
-			mutationFn: () =>
-				updateChat({ chat_id: currentThread, chat_name: editName }),
-
+	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
+		useUploadDoc({
 			onSuccess: (data) => {
-				setNameEditing(false)
-				setEditName(data.chat_name)
-				queryClient.invalidateQueries(['threads'])
-				queryClient.setQueryData(['threads', currentThread], () => {
-					return [data]
-				})
-				toast({
-					title: 'Name updated successfully',
-					position: 'top',
-					variant: 'solid',
-					status: 'success',
-					duration: 3000,
-				})
-			},
-
-			onError: (error) => {
-				logtail.info('Error editng name', error)
-				logtail.flush()
+				setCurrentDocument(data?.document_id)
+				setCurrentView('document')
 			},
 		})
 
-	const { isLoading: deleteThreadIsLoading, mutate: deleteThreadMutate } =
-		useMutation({
-			mutationFn: () =>
-				deleteChat({
-					chat_id: currentThread,
-					profile_id: userData?.profile_id,
-				}),
-			onSuccess: (data) => {
-				queryClient.invalidateQueries(['threads'])
-				toast({
-					title: 'Thread deleted',
-					position: 'top',
-					variant: 'solid',
-					status: 'success',
-					duration: 3000,
-				})
-				setCurrentDocument('')
-				setCurrentThread('new')
-				setCurrentView('chat')
-			},
+	const handleFileChange = (event) => {
+		const file = event.target.files[0]
+		console.log(userData?.userMetadata?.subscription_status ? true : false)
 
-			onError: (error) => {
-				logtail.info('Error deleting thread', error)
-				logtail.flush()
-				toast({
-					title: 'Error deleting thread',
-					position: 'top',
-					variant: 'solid',
-					status: 'error',
-					duration: 3000,
-				})
+		// Check for subscription status and number of documents
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			docData?.length >= 5
+		) {
+			onPaymentModalOpen()
+			showToast('UPLOAD_LIMIT_REACHED')
+			onToggle()
+			event.target.value = ''
+			return
+		}
+
+		// Check for file size larger than 10MB
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			file &&
+			file.size > 10 * 1024 * 1024
+		) {
+			onPaymentModalOpen()
+			showToast('FILE_TOO_LARGE')
+			onToggle()
+			event.target.value = ''
+			return
+		}
+
+		// Check if the uploaded file is an image and payment is false
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			file &&
+			file.type.startsWith('image/')
+		) {
+			onPaymentModalOpen()
+			showToast('PAID_IMAGE_UPLOAD')
+			onToggle()
+			event.target.value = ''
+			return
+		}
+
+		// Invoke the mutation here, passing the file
+		uploadDocMutate(file)
+		onToggle()
+	}
+
+	const { mutate: syncDocMutate, isLoading: syncDocIsLoading } = useSyncDoc(
+		() => onToggle()
+	)
+
+	const { mutate: scrapeLinkMutate, isLoading: scrapeLinkIsLoading } =
+		useScrapeLink({
+			link,
+			onSuccess: () => {
+				onToggle()
+				setLink('')
 			},
 		})
-	console.log(documentData)
-	const {
-		isLoading: isLoadingChatPreferences,
-		mutate: mutateChatPreferences,
-	} = useChatPreferences({
-		currentThread,
-		onSuccess: (data) => {
-			setLlmType(data)
-			onToggleLLM()
-		},
-	})
 
-	const {
-		isLoading: isLoadingFilterPreferences,
-		mutate: mutateFilterPreferences,
-	} = useFilterPreferences({
-		currentThread,
-		onSuccess: (data) => {
-			setSourceDoc(data)
-		},
-	})
+	// UI funcs
 
-	const {
-		isLoading: isLoadingSendTypePreferences,
-		mutate: mutateSendTypePreferences,
-	} = useSendTypePreferences({
-		currentThread,
-		onSuccess: (data) => {
-			setSendType(data)
-			onToggleSendType()
-		},
-	})
+	const filteredThreads = threadsData
+		?.filter((e) =>
+			e.chat_name.toLowerCase().includes(threadInput.toLowerCase())
+		)
+		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+	const filteredDocuments = docData
+		?.filter((e) =>
+			e?.heading?.toLowerCase().includes(documentInput.toLowerCase())
+		)
+		.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 	return (
 		<Flex
-			transition={'all 0.5s ease-in'}
-			pos={['fixed', 'relative']}
-			top={0}
-			right={0}
-			background={base800}
-			minW={['100vw', isSidebarOpen ? '20vw' : '']}
-			maxW={['100vw', isSidebarOpen ? '20vw' : '']}
-			minH={['100vh', '']}
-			display={isSidebarOpen ? 'flex' : 'none'}
-			maxH={'100vh'}
-			py={6}
 			flexDir={'column'}
+			background={base800}
+			minW={'20vw'}
+			maxW={'20vw'}
+			maxH={'100vh'}
+			className='documents'
+			display={['none', 'flex']}
 		>
-			<Flex flexDir={'column'} gap={2} w={'100%'} px={6}>
-				<Box
-					display={['block', 'none']}
-					onClick={() => setIsSidebarOpen(false)}
-					position={'absolute'}
-					top={'20px'}
-					right={'20px'}
-				>
-					<IoMdClose />
-				</Box>
-				<Heading fontSize={'2xl'} fontWeight={'400'}>
-					sources
-				</Heading>
-				{threadData && (
-					<Flex flexDir={'column'} gap={2} mt={2}>
-						{threadData[0]?.source_documents
-							?.filter((item) =>
-								documentData?.some(
-									(idItem) => idItem.document_id === item
-								)
+			{sidebarTopic == 'threads' && (
+				<Flex flexDir={'column'} gap={2} p={6}>
+					<Heading fontSize={'2xl'} fontWeight={'400'}>
+						threads
+					</Heading>
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+
+					<Search
+						title='search threads'
+						searchTerm={threadInput}
+						setSearchTerm={setThreadInput}
+					/>
+					<FunctionalBtn
+						title='new thread'
+						className={'threads'}
+						cursor={'pointer'}
+						onClick={() => {
+							setCurrentThread('new')
+							setCurrentView('chat')
+						}}
+						icon={<AddIcon fill={text} />}
+					/>
+
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+				</Flex>
+			)}
+
+			{sidebarTopic == 'threads' &&
+				(threadsIsLoading ? (
+					<Spinner m={'auto'} mt={4} />
+				) : (
+					<Flex
+						flexDir={'column'}
+						gap={2}
+						px={6}
+						//maxH={'400px'}
+						overflowY='auto'
+						overflowX='hidden'
+					>
+						{filteredThreads
+							?.filter(
+								(item) => item?.preferences?.document_id == null
 							)
-							.map((item, index) => (
+							?.map((item, index) => (
 								<Button
-									display={'flex'}
-									overflow={'hidden'}
+									index={index}
+									display={'grid'}
 									justifyContent={'flex-start'}
 									key={item.chat_id}
+									gridTemplateColumns={'24px 1fr'}
 									background={
-										currentDocument === item
+										currentThread === item.chat_id
 											? base700
 											: base800
 									}
 									_hover={{ background: base700 }}
 									cursor={'pointer'}
 									onClick={() => {
-										setCurrentDocument(item)
-										setCurrentView('document')
+										setCurrentThread(item.chat_id)
+										setCurrentView('chat')
+										//onClose()
 									}}
 									py={4}
 									px='10px'
 									gap={2}
 									fontWeight={'400'}
+									alignContent={'center'}
 								>
-									<Text isTruncated>
-										{index + 1}.{' '}
-										{
-											documentData?.find(
-												(e) => e.document_id == item
-											)?.heading
-										}
+									<ThreadIcon fill={text} />
+									<Text textAlign={'initial'} isTruncated>
+										{item.chat_name}
 									</Text>
 								</Button>
 							))}
 					</Flex>
-				)}
-			</Flex>
+				))}
+			{sidebarTopic == 'documents' && (
+				<Flex flexDir={'column'} gap={2} p={6} pos={'relative'}>
+					<Heading fontSize={'2xl'} fontWeight={'400'}>
+						documents
+					</Heading>
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+
+					<Search
+						title='search documents'
+						searchTerm={documentInput}
+						setSearchTerm={setDocumentInput}
+					/>
+
+					<Popover
+						placement='bottom-start'
+						isOpen={isOpen}
+						matchWidth
+						returnFocusOnClose={false}
+						onClose={onClose}
+					>
+						<PopoverTrigger>
+							<Button
+								cursor={'pointer'}
+								onClick={onToggle}
+								_hover={{ bg: base600 }}
+								bg={base700}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								borderBottomRadius={isOpen && '0px'}
+								isTruncated
+								className='documentadd'
+							>
+								<Text textAlign={'initial'} isTruncated>
+									new document
+								</Text>
+								{uploadDocIsLoading ||
+								syncDocIsLoading ||
+								scrapeLinkIsLoading ? (
+									<Spinner fill={text} />
+								) : (
+									<AddIcon fill={text} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							boxShadow={'0px'}
+							mt={'-0.5rem'}
+							borderTopRadius={'0px'}
+							borderTop={`1px solid ${text}`}
+							background={base700}
+							w={'100%'}
+							style={{ 'backdrop-filter': 'blur(5px)' }}
+							className='documentupload'
+						>
+							<FunctionalBtn
+								title={'upload document'}
+								cursor={'pointer'}
+								onClick={() => {
+									uploadRef.current.click()
+								}}
+								icon={
+									uploadDocIsLoading ? (
+										<Spinner />
+									) : (
+										<CloudUploadIcon fill={text} />
+									)
+								}
+							/>
+							<FunctionalBtn
+								title='sync documents'
+								cursor={'pointer'}
+								onClick={() => {
+									syncDocMutate()
+								}}
+								icon={
+									syncDocIsLoading ? (
+										<Spinner />
+									) : (
+										<RotateIcon fill={text} />
+									)
+								}
+							/>
+							<InputGroup border={'0px solid transparent'}>
+								<Input
+									py={2}
+									pr={12}
+									h={'100%'}
+									type='text'
+									value={link}
+									placeholder='paste a link'
+									onChange={(e) => setLink(e.target.value)}
+									_focus={{
+										borderColor: isValidHttpUrl(link)
+											? 'green'
+											: 'red',
+									}}
+									_focusVisible={{
+										borderColor: isValidHttpUrl(link)
+											? 'green'
+											: 'red',
+									}}
+									//onChange={e => e.target.val}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter') {
+											if (
+												isValidHttpUrl(e.target.value)
+											) {
+												if (
+													userData?.userMetadata
+														?.subscription_status ||
+													docData?.length < 5
+												) {
+													scrapeLinkMutate()
+												} else {
+													onPaymentModalOpen()
+													toast({
+														title: 'More than 5 files/link upload are paid',
+														description:
+															'Please upgrade your plan.',
+														position: 'Top',
+														variant: 'solid',
+														status: 'info',
+														duration: 3000,
+													})
+													setLink('')
+												}
+											} else {
+												toast({
+													title: 'Invalid Link',
+													position: 'top',
+													variant: 'left-accent',
+													status: 'error',
+													duration: 3000,
+												})
+											}
+										} else {
+											console.log('')
+										}
+									}}
+									background={base700}
+									_hover={{ background: base700 }}
+								/>
+								<InputRightElement
+									mr={2}
+									ml={2}
+									display={'flex'}
+									justifyContent={'center'}
+									alignItems={'center'}
+								>
+									{scrapeLinkIsLoading ? (
+										<Spinner />
+									) : (
+										<LinkIcon fill={text} />
+									)}
+								</InputRightElement>
+							</InputGroup>
+							<Input
+								type='file'
+								ref={uploadRef}
+								onChange={(e) => handleFileChange(e)}
+								display={'none'}
+							/>
+						</PopoverContent>
+					</Popover>
+
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+				</Flex>
+			)}
+			{sidebarTopic == 'documents' &&
+				(docsIsLoading ? (
+					<Spinner m={'auto'} mt={4} />
+				) : (
+					<Flex
+						flexDir={'column'}
+						gap={2}
+						px={6}
+						//maxH={'400px'}
+						overflowY='auto'
+						overflowX='hidden'
+					>
+						{filteredDocuments?.map((item, index) => (
+							<Button
+								index={index}
+								display={'grid'}
+								gridTemplateColumns={'24px 1fr'}
+								justifyContent={'flex-start'}
+								key={item.document_id}
+								background={
+									currentDocument === item.document_id
+										? base700
+										: base800
+								}
+								_hover={{ background: base700 }}
+								cursor={'pointer'}
+								onClick={() => {
+									setCurrentDocument(item.document_id)
+									setCurrentView('document')
+								}}
+								py={4}
+								px='10px'
+								gap={2}
+								fontWeight={'400'}
+								alignContent={'center'}
+							>
+								<DocumentIcon fill={text} />
+								<Text textAlign={'initial'} isTruncated>
+									{item?.heading}
+								</Text>
+							</Button>
+						))}
+					</Flex>
+				))}
 			<Box
 				borderTop='2px'
 				borderColor='black.900'
@@ -303,295 +479,60 @@ const LeftSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 				pt={4}
 				mt={'auto'}
 			></Box>
-			<Flex flexDir={'column'} gap={2} w={'100%'} px={6}>
-				<Heading fontSize={'2xl'} fontWeight={'400'} pb={2}>
-					preferences
-				</Heading>
-				<Flex flexDir={'column'} gap={2}>
-					{isNameEditing ? (
-						<InputGroup
-							cursor={'pointer'}
-							bg={base700}
-							w={'100%'}
-							overflow={'hidden'}
-							rounded={'md'}
-							justifyContent={'space-between'}
-							fontWeight={'400'}
-						>
-							<Input
-								value={editName}
-								onChange={(e) => setEditName(e.target.value)}
-								border={0}
-								placeholder='Enter name'
-							/>
-							<InputRightElement mr={1}>
-								{updateNameIsLoading ? (
-									<Spinner />
-								) : (
-									<BsCheck2
-										onClick={() => updateNameMutate()}
-										fontSize={20}
-										fill='#187f1e'
-										stroke='#187f1e'
-										strokeWidth='0.5'
-									/>
-								)}
-							</InputRightElement>
-						</InputGroup>
-					) : (
-						<FunctionalBtn
-							title={editName}
-							icon={<EditIcon fill={text} />}
-							onClick={() => setNameEditing(true)}
-						/>
-					)}
-
-					<Popover
-						placement='bottom-start'
-						isOpen={isOpenLLM}
-						matchWidth
-						returnFocusOnClose={false}
-						onClose={onCloseLLM}
-					>
-						<PopoverTrigger>
-							<Button
-								onClick={onToggleLLM}
-								_hover={{ bg: base600 }}
-								bg={base700}
-								w={'100%'}
-								justifyContent={'space-between'}
-								fontWeight={'400'}
-								borderTopRadius={isOpenLLM && '0px'}
-								isTruncated
-							>
-								<Text textAlign={'initial'} isTruncated>
-									{!isLoadingChatPreferences ? (
-										llmType
-									) : (
-										<Spinner />
-									)}
-								</Text>
-								<Img
-									ml={2}
-									mr={'auto'}
-									src={
-										llmButtons.find(
-											(e) => e.llmTypeValue == llmType
-										)?.iconSrc
-									}
-								/>
-
-								{isOpenLLM ? (
-									<ChevRevIcon fill={text} />
-								) : (
-									<ChevIcon fill={text} />
-								)}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							boxShadow={'0px'}
-							mb={'-0.5rem'}
-							borderBottomRadius={'0px'}
-							borderBottom={`1px solid ${text}`}
-							background={base700}
-							w={'100%'}
-							style={{ 'backdrop-filter': 'blur(5px)' }}
-						>
-							{llmButtons.map(
-								({ title, llmTypeValue, iconSrc, isPro }) => (
-									<FunctionalBtn
-										title={title}
-										isPro={isPro}
-										enabled={llmType == llmTypeValue}
-										cursor={'pointer'}
-										onClick={() => {
-											mutateChatPreferences(llmTypeValue)
-										}}
-										icon={<img src={iconSrc} />}
-									/>
-								)
-							)}
-						</PopoverContent>
-					</Popover>
-
-					<Popover
-						placement='bottom-start'
-						isOpen={isOpenSendType}
-						matchWidth
-						returnFocusOnClose={false}
-						onClose={onCloseSendType}
-					>
-						<PopoverTrigger>
-							<Button
-								onClick={onToggleSendType}
-								_hover={{ bg: base600 }}
-								bg={base700}
-								w={'100%'}
-								justifyContent={'space-between'}
-								fontWeight={'400'}
-								isTruncated
-								borderTopRadius={isOpenSendType && '0px'}
-							>
-								<Text textAlign={'initial'} isTruncated>
-									{isLoadingSendTypePreferences ? (
-										<Spinner />
-									) : (
-										'send type'
-									)}
-								</Text>
-								{isOpenSendType ? (
-									<ChevRevIcon fill={text} />
-								) : (
-									<ChevIcon fill={text} />
-								)}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							boxShadow={'0px'}
-							mb={'-0.5rem'}
-							borderBottomRadius={'0px'}
-							borderBottom={`1px solid ${text}`}
-							background={base700}
-							w={'100%'}
-							style={{ 'backdrop-filter': 'blur(5px)' }}
-						>
-							{sendTypeButtons.map(({ title }) => (
-								<FunctionalBtn
-									title={title}
-									enabled={llmType == title}
-									cursor={'pointer'}
-									onClick={() => {
-										mutateSendTypePreferences(title)
-									}}
-									icon={
-										sendType == title ? (
-											<CheckCircleFilledIcon
-												fill={text}
-											/>
-										) : (
-											<CheckCircleIcon fill={text} />
-										)
-									}
-								/>
-							))}
-						</PopoverContent>
-					</Popover>
-
-					<Popover
-						placement='bottom-start'
-						isOpen={isOpenFilter}
-						matchWidth
-						returnFocusOnClose={false}
-						onClose={() => {
-							onCloseFilter()
-							isOpenFilter && mutateFilterPreferences(sourceDoc)
-						}}
-					>
-						<PopoverTrigger>
-							<Button
-								onClick={() => {
-									onToggleFilter()
-									isOpenFilter &&
-										mutateFilterPreferences(sourceDoc)
-								}}
-								_hover={{ bg: base600 }}
-								bg={base700}
-								w={'100%'}
-								justifyContent={'space-between'}
-								fontWeight={'400'}
-								isTruncated
-								borderTopRadius={isOpenFilter && '0px'}
-							>
-								<Text textAlign={'initial'} isTruncated>
-									{isLoadingFilterPreferences ? (
-										<Spinner />
-									) : (
-										'filter documents'
-									)}
-								</Text>
-								<FilterIcon fill={text} />
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent
-							boxShadow={'0px'}
-							mb={'-0.5rem'}
-							borderBottomRadius={'0px'}
-							borderBottom={`1px solid ${text}`}
-							background={base700}
-							w={'100%'}
-							style={{ 'backdrop-filter': 'blur(5px)' }}
-						>
-							{filterButtons.map(({ title }) => (
-								<FunctionalBtn
-									title={title}
-									cursor={'pointer'}
-									onClick={() => {
-										sourceDoc.includes(title)
-											? setSourceDoc(
-													sourceDoc.filter(
-														(e) => e !== title
-													)
-											  )
-											: title == 'All'
-											? setSourceDoc([title])
-											: setSourceDoc(
-													[
-														...sourceDoc,
-														title,
-													].filter((e) => e !== 'All')
-											  )
-										// onToggleFilter()
-									}}
-									icon={
-										sourceDoc.includes(title) ? (
-											<CheckCircleFilledIcon
-												fill={text}
-											/>
-										) : (
-											<CheckCircleIcon fill={text} />
-										)
-									}
-								/>
-							))}
-						</PopoverContent>
-					</Popover>
+			<Flex flexDir={'column'} gap={4} p={6} pt={4}>
+				<Flex alignItems={'center'}>
+					<Heading fontSize={'2xl'} fontWeight={'400'}>
+						{colorMode === 'light' ? 'dark mode' : 'light mode'}
+					</Heading>
 					<Button
+						h={'auto'}
 						cursor={'pointer'}
-						onClick={() => {
-							deleteThreadMutate()
-						}}
-						bg={redbg}
-						_hover={{ opacity: '80%' }}
-						ho
-						w={'100%'}
-						justifyContent={'space-between'}
-						fontWeight={'400'}
+						onClick={toggleColorMode}
+						bg={'transparent'}
+						ml={'auto'}
+						_hover={{ bg: 'transparent' }}
 					>
-						delete thread
-						{deleteThreadIsLoading ? (
-							<Spinner />
+						{colorMode === 'light' ? (
+							<HiOutlineMoon fontSize={24} />
 						) : (
-							<DeleteIcon fill={'rgba(255, 0, 0, 1)'} />
+							<HiOutlineSun fontSize={24} />
 						)}
 					</Button>
 				</Flex>
+				<Heading
+					fontSize={'2xl'}
+					fontWeight={'400'}
+					cursor={'pointer'}
+					className='document'
+					onClick={() => {
+						setSidebarTopic(
+							sidebarTopic !== 'documents'
+								? 'documents'
+								: 'threads'
+						)
+						if (sidebarTopic === 'documents') {
+							setCurrentView('chat')
+						}
+					}}
+				>
+					{sidebarTopic !== 'documents' ? 'documents' : 'threads'}
+				</Heading>
+				<Heading
+					fontSize={'2xl'}
+					fontWeight={'400'}
+					cursor={'pointer'}
+					onClick={onOpenSetting}
+				>
+					settings
+				</Heading>
 			</Flex>
-			<Button
-				p={'10px'}
-				cursor={'pointer'}
-				onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-				position={'absolute'}
-				right={'100%'}
-				bottom={0}
-				borderLeftRadius={4}
-				borderRightRadius={0}
-				background={base700}
-				// display={isSidebarOpen ? "none" : "flex"}
-			>
-				{' '}
-				<BsLayoutSidebarInsetReverse fontSize={24} />
-			</Button>
+
+			<SettingModal
+				isOpenSetting={isOpenSetting}
+				onCloseSetting={onCloseSetting}
+			/>
 		</Flex>
 	)
 }
+
 export default LeftSidebar

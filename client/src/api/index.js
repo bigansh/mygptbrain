@@ -24,6 +24,26 @@ apiClient.interceptors.request.use(
 	(error) => Promise.reject(error)
 )
 
+const personaApiClient = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_URL,
+	withCredentials: true,
+	headers: {
+		Accept: 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		'Content-Type': 'application/json',
+	},
+})
+
+personaApiClient.interceptors.request.use(
+	(config) => {
+		config.headers[
+			'Authorization'
+		] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg`
+		return config
+	},
+	(error) => Promise.reject(error)
+)
+
 /**
  ** Auth EndPoints
  **/
@@ -169,9 +189,17 @@ export const readChat = async (data) => {
 			chat_id: true,
 			chat_name: true,
 			profile_id: true,
-			chat_array: data?.chat_id !== undefined ? true : false,
+			chat_array:
+				data?.chat_id !== undefined ||
+				data?.preferences?.document_id !== undefined
+					? true
+					: false,
 			source_documents: true,
-			chat_history: data?.chat_id !== undefined ? true : false,
+			chat_history:
+				data?.chat_id !== undefined ||
+				data?.preferences?.document_id !== undefined
+					? true
+					: false,
 			createdAt: true,
 			updatedAt: true,
 			preferences: true,
@@ -218,4 +246,13 @@ export const verifyEmail = async (email) => {
 		`https://disposable.debounce.io/?email=${email}`
 	)
 	return res.data.disposable
+}
+
+export const updatePersona = async (data) => {
+	// { prompt, chat_id }
+	const response = await personaApiClient.post(`/persona/chat`, {
+		chatQueryObject: data,
+	})
+
+	return response.data
 }

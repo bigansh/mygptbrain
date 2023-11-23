@@ -37,16 +37,8 @@ import { useDocumentsData, useUserData } from '@/app/query-hooks'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useThreads } from '@/context'
-import { useTour } from '@reactour/tour'
 
 const DocumentWrapper = ({ isSidebarOpen }) => {
-	const {
-		isOpen: isOpenTour,
-		currentStep,
-		steps,
-		setIsOpen,
-		setCurrentStep,
-	} = useTour()
 	const [inputValue, setInputValue] = useState('')
 	const toast = useToast()
 	const [docChat, setdocChat] = useState(null)
@@ -171,8 +163,8 @@ feel free to customize your experience by changing the thread's name, the model 
 				p={6}
 				flexDir={'column'}
 				//w={['100%', '65vw']}
-				minW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '80%']}
-				maxW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '80%']}
+				minW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '65vw']}
+				maxW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '65vw']}
 				//maxW={['100%', '65vw']}
 				h={[isChatOpen ? '0vh' : '100vh', '100vh']}
 				display={[isChatOpen ? 'none' : 'flex', 'flex']}
@@ -257,7 +249,6 @@ feel free to customize your experience by changing the thread's name, the model 
 
 			{isChatOpen && (
 				<Flex
-					p={4}
 					flexDir={'column'}
 					h={'100vh'}
 					borderLeft={['', `1px solid ${text}`]}
@@ -307,14 +298,14 @@ feel free to customize your experience by changing the thread's name, the model 
 							<Flex ref={divRef}></Flex>
 						</Flex>
 					)}
-					<Flex
+					{/* <Flex
 						position={'absolute'}
-						top={6}
-						right={6}
+						top={4}
+						right={4}
 						onClick={() => setChatOpen(!isChatOpen)}
 					>
 						<CloseButton />
-					</Flex>
+					</Flex> */}
 					<ChatInput
 						inputValue={inputValue}
 						setInputValue={setInputValue}

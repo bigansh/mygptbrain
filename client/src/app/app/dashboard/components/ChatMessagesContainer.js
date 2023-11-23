@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
 import SingleChatComponent from './SingleChatComponent'
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { getUser, readChat } from '@/api'
+import { readChat } from '@/api'
 import { Flex, Spinner } from '@chakra-ui/react'
 import { logtail } from '@/app/providers'
-import { useDocumentsData, useThreadsData, useUserData } from '@/app/query-hooks'
+import { useUserData } from '@/app/query-hooks'
+import { placeholderData } from '@/data'
 
 const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
-	const queryClient = useQueryClient()
 	const { currentThread } = useThreads()
 	const { data: userData } = useUserData()
 
@@ -36,18 +36,6 @@ const ChatMessagesContainer = ({ inputValue, setInputValue, divRef }) => {
 	useEffect(() => {
 		divRef?.current?.scrollIntoView({ behavior: 'smooth' })
 	}, [threadData])
-	const placeholderData = {
-		chat_array: [
-			{
-				llm: `hey there! i'm here to make your life easier. i can provide you with summaries, bullet points, definitions, whatever, based on the data you give me. think of me as your personal chatgpt assistant, ready to answer all your questions within your context. ask me anything you want!
-
-to make sure i give you accurate results, please keep in mind that my knowledge is limited to what you provide. unfortunately, i can't access the internet, but you can enhance my capabilities by connecting additional platforms using this link. you can also fine-tune my performance by filtering the documents i should refer to in the settings menu on the right.
-
-feel free to customize your experience by changing the thread's name, the model i use to answer, and a few other settings. let's get started and make the most out of our conversation!`,
-				user: 'hey mygptbrain, what all can you do?',
-			},
-		],
-	}
 
 	return threadIsLoading && currentThread !== 'new' ? (
 		<Flex
