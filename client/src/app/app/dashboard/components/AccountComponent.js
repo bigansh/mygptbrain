@@ -49,13 +49,13 @@ const AccountComponent = () => {
 		useMutation({
 			mutationFn: () => deleteUser(data?.profile_id),
 			onSuccess: (data) => {
-				toast({
-					title: 'Account deleted successfully!',
-					position: 'top',
-					variant: 'subtle',
-					status: 'success',
-					duration: 3000,
-				})
+				// toast({
+				// 	title: 'Account deleted successfully!',
+				// 	position: 'top',
+				// 	variant: 'subtle',
+				// 	status: 'success',
+				// 	duration: 3000,
+				// })
 				onCloseDelete()
 				removeTokens()
 				router.push('/')

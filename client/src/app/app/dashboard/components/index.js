@@ -1,4 +1,4 @@
-import RightSidebar from './RightSideBar'
+import RightSidebar from './RightSidebar'
 import Search from './Search'
 import AccountComponent from './AccountComponent'
 import BillingComponent from './BillingComponent'

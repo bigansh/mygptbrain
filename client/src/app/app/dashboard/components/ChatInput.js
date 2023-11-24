@@ -54,13 +54,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				return []
 			})
 			setCurrentThread(data.chat_id)
-			toast({
-				title: 'New chat created',
-				position: 'top',
-				variant: 'subtle',
-				status: 'success',
-				duration: 3000,
-			})
+			
 		},
 		onError: (error) => {
 			toast({
