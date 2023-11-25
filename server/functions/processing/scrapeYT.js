@@ -1,4 +1,5 @@
-import { YoutubeTranscript } from 'youtube-transcript'
+import getVideoId from 'get-video-id'
+import { getVideoDetails } from 'youtube-caption-extractor'
 
 /**
  * A function that will scrape a YT video
@@ -7,20 +8,19 @@ import { YoutubeTranscript } from 'youtube-transcript'
  */
 const scrapeYT = async (url) => {
 	try {
-		const [script, title] = await Promise.all([
-			YoutubeTranscript.fetchTranscript(url).then((scenes) =>
-				scenes.map(({ text }) => text).join(' ')
-			),
-			// ytdl.getInfo(url).then((info) => info.videoDetails.title),
-		])
+		const { id } = getVideoId(url)
+
+		const video = await getVideoDetails({ videoID: id })
 
 		return {
-			title: url,
-			content: script,
+			title: video.title,
+			content: video.subtitles.map(({ text }) => text).join(' '),
 		}
 	} catch (error) {
 		throw error
 	}
 }
+
+await scrapeYT('https://www.youtube.com/watch?v=kZ77X67GUfk')
 
 export default scrapeYT

@@ -4,5 +4,5 @@ export interface chatPreferencesObject {
 	send_type?: string
 	llm_model?: string
 	chat_id: string
-	prompt_instructions?: string
+	prompt_template?: string
 }

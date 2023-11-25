@@ -17,7 +17,7 @@ const promptQuery = async (prompt, chat) => {
 	try {
 		if (!chat) throw new Error('No chat with that chat_id found.')
 
-		const { preferences, chat_history } = chat
+		const { preferences, chat_history, user } = chat
 
 		let model,
 			send_type,
@@ -55,7 +55,9 @@ const promptQuery = async (prompt, chat) => {
 		// 	send_type = 'refine'
 		// }
 
-		const promptTemplate = `Given the following conversation and a follow up question, provide the most accurate response. ${preferences.prompt_instructions}
+		const promptTemplate = `Given the following conversation and a follow up question, provide the most accurate response. ${
+			user.userMetadata.prompt_templates[preferences.prompt_template]
+		}
 		Chat History: {chat_history}
 		Follow Up Input: {question}
 		Input Documents: {context}

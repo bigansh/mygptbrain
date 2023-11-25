@@ -11,6 +11,8 @@ const chatQueryAndUpdate = async (chatQueryObject) => {
 	try {
 		const foundChat = await findChats(
 			{ chat_id: chatQueryObject.chat_id },
+			true,
+			undefined,
 			true
 		)
 

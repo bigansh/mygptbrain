@@ -34,11 +34,19 @@ const createChat = async (chatQueryObject, profile_id) => {
 				preferences: {
 					create: {
 						document_id: chatQueryObject?.preferences?.document_id,
-						prompt_instructions: user.userMetadata.chat_prompt,
+						prompt_template:
+							user.userMetadata.default_prompt_template,
 					},
 				},
 			},
-			include: { preferences: true },
+			include: {
+				preferences: true,
+				user: {
+					select: {
+						userMetadata: { select: { prompt_templates: true } },
+					},
+				},
+			},
 		})
 
 		mixpanel.track('create_chat', {
