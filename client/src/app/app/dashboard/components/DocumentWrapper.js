@@ -152,15 +152,15 @@ feel free to customize your experience by changing the thread's name, the model 
 			h={['95vh', '100vh']}
 			overflowY='auto'
 			overflowX='hidden'
-			w={['100vw', isSidebarOpen ? '60vw' : '80vw']}
-			maxW={['100vw', isSidebarOpen ? '60vw' : '80vw']}
+			w={['100vw', '80vw']}
+			maxW={['100vw', '80vw']}
 			margin={'auto'}
 			mt={['50px', 'auto']}
 			className='documentview'
 			flexDir={['column', 'row']}
 		>
 			<Flex
-				p={6}
+				py={6}
 				flexDir={'column'}
 				//w={['100%', '65vw']}
 				minW={[isChatOpen ? '0%' : '100%', isChatOpen ? '50%' : '65vw']}
@@ -170,7 +170,7 @@ feel free to customize your experience by changing the thread's name, the model 
 				display={[isChatOpen ? 'none' : 'flex', 'flex']}
 				mx={'auto'}
 				className='documentview'
-				overflowY={'auto'}
+				overflowY={isChatOpen ? 'auto' : 'unset'}
 			>
 				{' '}
 				<Flex
@@ -239,7 +239,7 @@ feel free to customize your experience by changing the thread's name, the model 
 					</Flex>
 				</Flex>
 				<Markdown
-					className='break-spaces'
+					className='break-spaces pb-4'
 					//disallowedElements={['img']}
 					remarkPlugins={[remarkGfm]}
 				>
@@ -298,14 +298,6 @@ feel free to customize your experience by changing the thread's name, the model 
 							<Flex ref={divRef}></Flex>
 						</Flex>
 					)}
-					{/* <Flex
-						position={'absolute'}
-						top={4}
-						right={4}
-						onClick={() => setChatOpen(!isChatOpen)}
-					>
-						<CloseButton />
-					</Flex> */}
 					<ChatInput
 						inputValue={inputValue}
 						setInputValue={setInputValue}
@@ -503,10 +495,9 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 				pos={'sticky'}
 				bottom={0}
 				mt={'auto'}
-				my={1}
-				mx={'auto'}
-				minW={'100%'}
-				maxW={'100%'}
+				my={4}
+				mx={4}
+				w={'100%'}
 				alignItems={'center'}
 				bg={base700}
 				rounded={'md'}
@@ -514,7 +505,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 				<Textarea
 					placeholder={['ask your second brain, a question!']}
 					value={inputValue}
-					on
 					onChange={(e) => setInputValue(e.target.value)}
 					border={'transparent'}
 					bg={'transparent'}
@@ -540,6 +530,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 					ref={ref}
 					minRows={1}
 					maxRows={10}
+					mx={2}
 					as={ResizeTextarea}
 					transition='height none'
 					fontSize={['sm', 'md']}
