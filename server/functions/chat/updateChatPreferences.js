@@ -24,7 +24,7 @@ const updateChatPreferences = async (profile_id, chatPreferencesObject) => {
 			chatPreferencesObject.llm_model !== 'ChatGPT' ||
 			chatPreferencesObject.data_sources ||
 			chatPreferencesObject.send_type ||
-			chatPreferencesObject.prompt_instructions
+			chatPreferencesObject.prompt_template
 		) {
 			await checkSubscription(profile_id)
 		}

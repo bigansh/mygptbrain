@@ -11,7 +11,7 @@ const updateUser = async ({ personalDetails }, profile_id) => {
 	try {
 		const user = await User.update({
 			data: personalDetails,
-			where: { profile_id: profile_id },
+			where: { profile_id: profile_id || personalDetails.profile_id },
 		})
 
 		mixpanel.people.set(user.profile_id, {
