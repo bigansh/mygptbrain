@@ -45,7 +45,7 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 	const [isChatOpen, setChatOpen] = useState(null)
 
 	const divRef = useRef()
-	const { base, text, base700 } = useColors()
+	const { base, text, base700, base800 } = useColors()
 	const {
 		setCurrentThread,
 		currentDocument,
@@ -160,6 +160,7 @@ feel free to customize your experience by changing the thread's name, the model 
 			flexDir={['column', 'row']}
 		>
 			<Flex
+				p={[6, isChatOpen ? 6 : 6]}
 				py={6}
 				flexDir={'column'}
 				//w={['100%', '65vw']}
@@ -258,7 +259,9 @@ feel free to customize your experience by changing the thread's name, the model 
 					transition={'all 0.5s ease-in'}
 					background={base}
 					overflowY={'auto'}
-					pos={'relative'}
+					top={[0, 'unset']}
+					pos={['absolute', 'relative']}
+					pt={[16, 0]}
 				>
 					{threadsIsLoading ? (
 						<Flex
@@ -304,6 +307,19 @@ feel free to customize your experience by changing the thread's name, the model 
 						divRef={divRef}
 						docChat={docChat}
 					/>
+					<Flex
+						display={['block', 'none']}
+						cursor={'pointer'}
+						pos={'absolute'}
+						top={4}
+						right={4}
+						onClick={() => {
+							setChatOpen(!isChatOpen)
+						}}
+						bg={base800}
+					>
+						<CloseButton fill={!isChatOpen ? text : 'green'} />
+					</Flex>
 				</Flex>
 			)}
 		</Flex>
@@ -327,7 +343,7 @@ feel free to customize your experience by changing the thread's name, the model 
 export default DocumentWrapper
 
 const SingleChatComponent = ({ message }) => {
-	const { base700, text } = useColors()
+	const { base700, base800, text } = useColors()
 	return (
 		<>
 			<Flex flexDir={'column'}>
@@ -342,7 +358,7 @@ const SingleChatComponent = ({ message }) => {
 						<Box w={['40px', 'auto']}>
 							<ChatUserIcon fill={text} size={30} />
 						</Box>
-						<Text marginBlock={'auto'} fontSize={['sm', 'md']}>
+						<Text marginBlock={'auto'} fontSize={'md'}>
 							{message.user}
 						</Text>
 					</Flex>
@@ -497,6 +513,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 				mt={'auto'}
 				my={4}
 				mx={4}
+				mb={1}
 				w={'100%'}
 				alignItems={'center'}
 				bg={base700}

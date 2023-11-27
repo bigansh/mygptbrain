@@ -272,6 +272,7 @@ const ChatLogoIcon = ({ fill, size = 51 }) => (
 		height={size}
 		viewBox='0 0 51 51'
 		fill='none'
+		style={{ transform: 'rotate(180deg)' }}
 		xmlns='http://www.w3.org/2000/svg'
 	>
 		<path
