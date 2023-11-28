@@ -306,6 +306,7 @@ feel free to customize your experience by changing the thread's name, the model 
 						setInputValue={setInputValue}
 						divRef={divRef}
 						docChat={docChat}
+						setdocChat={setdocChat}
 					/>
 					<Flex
 						display={['block', 'none']}
@@ -397,7 +398,13 @@ const SingleChatComponent = ({ message }) => {
 	)
 }
 
-const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
+const ChatInput = ({
+	inputValue,
+	setInputValue,
+	divRef,
+	docChat,
+	setdocChat,
+}) => {
 	const queryClient = useQueryClient()
 	const ref = useRef()
 	const { currentDocument } = useThreads()
@@ -417,12 +424,14 @@ const ChatInput = ({ inputValue, setInputValue, divRef, docChat }) => {
 		mutationFn: () =>
 			createDocumentChat({
 				prompt: inputValue,
+				chat_id: docChat,
 				preferences: {
 					document_id: currentDocument,
 				},
 			}),
 
 		onSuccess: (data) => {
+			setdocChat(data.chat_id)
 			queryClient.setQueryData(
 				['doc-threads', currentDocument],
 				(prev) => {
