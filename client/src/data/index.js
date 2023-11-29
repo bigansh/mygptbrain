@@ -72,8 +72,8 @@ export const personalDirectory = [
 		name: 'Paul Graham',
 		image: '/paul.png',
 		placeholder: {
-			user: 'what does he say?',
-			llm: 'He suggests that instead of setting long-term goals and working towards them, it is more effective to focus on the options available in the present moment and choose those that will provide the most promising range of opportunities in the future. He also advises writing in spoken language and being aware of the conventions of being ingratiating in print, which can be more dangerous as they can manipulate ideas and lead to real lies.',
+			user: 'what do you say?',
+			llm: 'hey, i will answer your queries',
 		},
 	},
 	{
@@ -81,26 +81,26 @@ export const personalDirectory = [
 		name: 'Taylor Swift',
 		image: '/taylor.png',
 		placeholder: {
-			user: 'what does she say?',
-			llm: 'She suggests that instead of setting long-term goals and working towards them, it is more effective to focus on the options available in the present moment and choose those that will provide the most promising range of opportunities in the future. She also advises writing in spoken language and being aware of the conventions of being ingratiating in print, which can be more dangerous as they can manipulate ideas and lead to real lies.',
+			user: 'what do you say?',
+			llm: 'hey, i will answer your queries',
 		},
 	},
 	{
 		key: 3,
 		name: 'Wait But Why',
-		image: '/paul.png',
+		image: '/wbw.png',
 		placeholder: {
-			user: 'what does he say?',
-			llm: 'He suggests that instead of setting long-term goals and working towards them, it is more effective to focus on the options available in the present moment and choose those that will provide the most promising range of opportunities in the future. He also advises writing in spoken language and being aware of the conventions of being ingratiating in print, which can be more dangerous as they can manipulate ideas and lead to real lies.',
+			user: 'what do you say?',
+			llm: 'hey, i will answer your queries',
 		},
 	},
 	{
 		key: 4,
 		name: 'Lex Friedman',
-		image: '/paul.png',
+		image: '/lex.png',
 		placeholder: {
-			user: 'what does he say?',
-			llm: 'He suggests that instead of setting long-term goals and working towards them, it is more effective to focus on the options available in the present moment and choose those that will provide the most promising range of opportunities in the future. He also advises writing in spoken language and being aware of the conventions of being ingratiating in print, which can be more dangerous as they can manipulate ideas and lead to real lies.',
+			user: 'what do you say?',
+			llm: 'hey, i will answer your queries',
 		},
 	},
 ]

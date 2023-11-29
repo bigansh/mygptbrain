@@ -10,6 +10,7 @@ import {
 	useColorMode,
 	Textarea,
 	CircularProgress,
+	Img,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { BsLayoutSidebarInsetReverse } from 'react-icons/bs'
@@ -540,7 +541,7 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 						display={'grid'}
 						justifyContent={'flex-start'}
 						key={item.key}
-						gridTemplateColumns={'24px 1fr'}
+						gridTemplateColumns={'30px 1fr'}
 						background={
 							currentThread === item.key ? base700 : base800
 						}
@@ -555,7 +556,11 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 						fontWeight={'400'}
 						alignContent={'center'}
 					>
-						<img src={item.image} />
+						<Img
+							borderRadius={'20px'}
+							w={'30px'}
+							src={item.image}
+						/>
 						<Text textAlign={'initial'} isTruncated>
 							{item.name}
 						</Text>
