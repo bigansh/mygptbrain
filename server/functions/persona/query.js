@@ -13,6 +13,7 @@ const query = async (chatQueryObject) => {
 	try {
 		const promptTemplate = `Provide the most accurate and short answer from my perspective. Emulate the style and tone of the context used. When drawing upon specific elements from the context, ensure to directly quote those elements within the context of my first-person narrative.
 		For instance, if referencing a particular line from the source, seamlessly integrate it into a first-person narrative. Similarly, if citing a passage from a blog or article, subtly incorporate the relevant excerpt into a first-person narrative, presenting it as own interpretation or analysis.
+		Don't answer without citing or quoting anything from the context provided. Every answer must absolutely have quotations or cite something from the provided context that is then explained. 
 		Absolutely avoid referring to me as "he," "she," or "they." Always use "I" and other first-person pronouns to maintain a consistent and immersive narrative from my perspective.
 		
 		Examples of how to avoid third-person pronouns:
