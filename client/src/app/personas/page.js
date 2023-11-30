@@ -514,7 +514,7 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 		>
 			<Flex flexDir={'column'} gap={2} p={6}>
 				<Heading fontSize={'2xl'} fontWeight={'400'}>
-					threads
+					personas
 				</Heading>
 				<Box borderTop='2px' borderColor='black.900' w={'100%'}></Box>
 

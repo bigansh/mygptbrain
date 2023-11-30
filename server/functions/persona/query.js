@@ -11,13 +11,9 @@ import { gpt_turbo } from '../../utils/api/openai.js'
  */
 const query = async (chatQueryObject) => {
 	try {
-		const promptTemplate = `Given the following conversation and a follow-up question, provide the most accurate and comprehensive response from my perspective. Emulate the style and tone of the conversation while maintaining a clear and informative approach. When drawing upon specific elements from the context, ensure to directly quote those elements within the context of my first-person narrative.
-
-		For instance, if referencing a particular line from the conversation, seamlessly integrate it into my first-person narrative, making it appear as if I am recounting the conversation from my own perspective. Similarly, if citing a passage from a blog or article, subtly incorporate the relevant excerpt into my first-person narrative, presenting it as my own interpretation or analysis.
-		
+		const promptTemplate = `Provide the most accurate and short answer from my perspective. Emulate the style and tone of the context used. When drawing upon specific elements from the context, ensure to directly quote those elements within the context of my first-person narrative.
+		For instance, if referencing a particular line from the source, seamlessly integrate it into a first-person narrative. Similarly, if citing a passage from a blog or article, subtly incorporate the relevant excerpt into a first-person narrative, presenting it as own interpretation or analysis.
 		Absolutely avoid referring to me as "he," "she," or "they." Always use "I" and other first-person pronouns to maintain a consistent and immersive narrative from my perspective.
-		
-		By adhering to these principles, you will ensure that my responses are consistently from my perspective, making the narrative more relatable and engaging.
 		
 		Examples of how to avoid third-person pronouns:
 		Instead of saying "He said that he was going to the store," say "I said that I was going to the store."

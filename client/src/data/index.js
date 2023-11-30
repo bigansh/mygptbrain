@@ -72,8 +72,8 @@ export const personalDirectory = [
 		name: 'Paul Graham',
 		image: '/paul.png',
 		placeholder: {
-			user: 'what do you say?',
-			llm: 'hey, i will answer your queries',
+			user: 'hey paul, can you teach me something?',
+			llm: 'hey buddy, sure! what do you wanna learn about? i will quote some of my blogs to help you learn better.',
 		},
 	},
 	{
@@ -81,8 +81,8 @@ export const personalDirectory = [
 		name: 'Taylor Swift',
 		image: '/taylor.png',
 		placeholder: {
-			user: 'what do you say?',
-			llm: 'hey, i will answer your queries',
+			user: 'hey taylor, can you answer something for me?',
+			llm: 'sure, babe! what would you like to know? i will take references from my songs and then help you answer your question. ',
 		},
 	},
 	{
@@ -90,8 +90,8 @@ export const personalDirectory = [
 		name: 'Wait But Why',
 		image: '/wbw.png',
 		placeholder: {
-			user: 'what do you say?',
-			llm: 'hey, i will answer your queries',
+			user: 'hey tim, can you tell me something?',
+			llm: 'sure, what would you like to know? i will add some cues from my blog & answer your query better.',
 		},
 	},
 	{
@@ -99,8 +99,8 @@ export const personalDirectory = [
 		name: 'Lex Friedman',
 		image: '/lex.png',
 		placeholder: {
-			user: 'what do you say?',
-			llm: 'hey, i will answer your queries',
+			user: 'hey, tell me something...',
+			llm: 'what should we discuss? i will try to reference my conversation in various podcasts so we can make this interesting.',
 		},
 	},
 ]
