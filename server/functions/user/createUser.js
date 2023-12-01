@@ -1,5 +1,4 @@
 import mixpanel from '../../utils/api/mixpanel.js'
-import stripe from '../../utils/api/stripe.js'
 import { User } from '../../utils/initializers/prisma.js'
 
 /**
@@ -18,19 +17,10 @@ const createUser = async ({ authDetails, personalDetails }) => {
 			include: { auth: true },
 		})
 
-		const stripeProfile = await stripe.customers.create({
-			name: user.name,
-			email: user.email,
-			metadata: {
-				profile_id: user.profile_id,
-			},
-		})
-
 		mixpanel.people.set(user.profile_id, {
 			$name: user.name,
 			$email: user.email,
 			subscription_status: false,
-			stripe_id: stripeProfile.id,
 		})
 
 		mixpanel.track('signup', {

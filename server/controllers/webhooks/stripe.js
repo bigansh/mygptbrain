@@ -1,3 +1,6 @@
+import subscriptionDelete from '../../functions/payment/subscriptionDelete.js'
+import subscriptionUpdate from '../../functions/payment/subscriptionUpdate.js'
+
 /**
  * A controller for the Stripe webhook
  *
@@ -8,18 +11,19 @@ const stripe = async (req, res) => {
 	try {
 		const { data, type } = req.body
 
-		console.log(data.object.status, type)
+		if (
+			type === 'invoice.payment_succeeded' &&
+			data.object.status === 'paid'
+		) {
+			await subscriptionUpdate(data.object)
+		} else if (
+			type === 'customer.subscription.deleted' &&
+			data.object.status === 'canceled'
+		) {
+			await subscriptionDelete(data.object)
+		}
 
 		return
-
-		if (type === 'customer.subscription.created') {
-			console.log(data.object.status, type, 'hi')
-		} else if (
-			type ===
-			('customer.subscription.paused' || 'customer.subscription.deleted')
-		) {
-			console.log(data.object)
-		}
 	} catch (error) {
 		throw error
 	}
