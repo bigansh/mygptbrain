@@ -30,7 +30,7 @@ const Signup = () => {
 	const redirectUrl = searchParams.get('redirect')
 
 	const { base, base800, base700, base600, text } = useColors()
-
+	const [loading, setLoading] = useState(false)
 	const [userDetails, setUserDetails] = useState({
 		name: '',
 		email: '',
@@ -45,6 +45,7 @@ const Signup = () => {
 	}
 
 	const handleLoginSubmit = async (e) => {
+		setLoading(true)
 		e.preventDefault()
 		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
@@ -74,7 +75,7 @@ const Signup = () => {
 			// TODO : err 500 user already there
 			localStorage.setItem('x-session-token', res.data.sessionToken)
 			document.cookie = `x-session-token=${res.data.sessionToken}; path=/; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
-
+			setLoading(false)
 			if (redirectUrl && typeof redirectUrl === 'string') {
 				toast({
 					title: 'Signed in successfully',
@@ -86,9 +87,11 @@ const Signup = () => {
 				})
 				router.push(decodeURIComponent(redirectUrl))
 			} else {
+				setLoading(false)
 				router.push('/app/dashboard')
 			}
 		} catch (error) {
+			setLoading(false)
 			toast({
 				title: 'Error while signing up',
 				position: 'top',
@@ -101,6 +104,7 @@ const Signup = () => {
 			logtail.info('Error signing up', error)
 			logtail.flush()
 		}
+		setLoading(false)
 	}
 
 	return (
@@ -163,7 +167,7 @@ const Signup = () => {
 						onClick={handleLoginSubmit}
 						mt={2}
 					>
-						signup
+						{loading ? <Spinner /> : 'signup'}
 					</Button>
 					<Text color='#E5A79F' fontSize='16px' ml={'auto'}>
 						<Link

@@ -6,21 +6,28 @@ const toasts = {
 		title: 'Upload Limit Reached',
 		description: 'Upgrade to upload more files.',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	FILE_TOO_LARGE: {
 		title: 'File Too Large',
 		description: 'Files over 10MB require a premium plan.',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	PAID_IMAGE_UPLOAD: {
 		title: 'Uploading images requires a paid plan',
 		description: 'Please upgrade your plan to upload images.',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	EMPTY_INPUT: {
 		title: 'Empty Input',
 		description: 'Please enter a valid input.',
 		status: 'error',
+		duration: 5000,
 	},
 	// ... add more predefined toasts here
 }
@@ -41,6 +48,8 @@ export const useToastManager = () => {
 			duration: 3000,
 			...toastConfig,
 			...options,
+
+			variant: 'subtle',
 		})
 	}
 

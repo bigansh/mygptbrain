@@ -189,6 +189,7 @@ const PreferencesComponent = () => {
 					cursor={'pointer'}
 					onClick={onOpenDelete}
 					bg={redbg}
+					color={base800}
 					justifyContent={'space-between'}
 					fontWeight={'400'}
 				>

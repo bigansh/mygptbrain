@@ -44,6 +44,9 @@ import storeDocumentEmbeddings from './functions/storeDocumentEmbeddings.js'
 const tsLyrics = await csv().fromFile(
 	'/Users/bigansh/Programming/myGPTBrain/helpers/personas/data/ts.csv'
 )
+csv().fromFile(csv)
+
+// taylor swift
 
 for await (const song of tsLyrics) {
 	const modifiedName = song['Song Name']

@@ -21,13 +21,18 @@ import {
 	PreferencesComponent,
 } from '@/app/app/dashboard/components'
 import { BillingIcon, PlatformIcon, UserIcon, PreferencesIcon } from '@/icons'
+import { useRouter } from 'next/navigation'
+import { useUserData } from '@/app/query-hooks'
 const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	const { base, base800, text } = useColors()
+	const router = useRouter()
 	const [activeButton, setActiveButton] = useState('account')
 
 	const handleButtonClick = (button) => {
 		setActiveButton(button)
 	}
+
+	const { data: userData } = useUserData()
 
 	let childComponent
 	switch (activeButton) {
@@ -104,10 +109,16 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 									icon={<PlatformIcon fill={text} />}
 								/>
 								<SidebarItem
-									disabled={true}
 									activeButton={activeButton}
 									cursor={'pointer'}
-									onClick={() => handleButtonClick('billing')}
+									onClick={() =>
+										!userData?.userMetadata
+											?.subscription_status
+											? handleButtonClick('billing')
+											: router.push(
+													`https://billing.stripe.com/p/login/test_3cs29PciO4B2aWY000?prefilled_email=${userData.email}`
+											  )
+									}
 									title='billing'
 									icon={<BillingIcon fill={text} />}
 								/>

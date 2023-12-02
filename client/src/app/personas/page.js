@@ -27,6 +27,7 @@ import { IoMdClose } from 'react-icons/io'
 import { usePersonas } from '../query-hooks'
 import { personalDirectory } from '@/data'
 import { useToastManager } from '@/utils/customToasts'
+import { useRouter } from 'next/navigation'
 
 const Personas = () => {
 	const { base, base700, text } = useColors()
@@ -299,7 +300,7 @@ const ChatInput = ({
 				>
 					{isLoadingPersonas ? (
 						<CircularProgress
-							size={30}
+							size={'20px'}
 							thickness={4}
 							trackColor={'transparent'}
 							color={text}
@@ -396,6 +397,31 @@ const RightSidebar = ({
 		setInputValue('')
 	}
 
+	const generateSources = (sd) => {
+		switch (currentThread) {
+			case 1:
+				return { title: sd.title, url: sd.url }
+			case 2:
+				return {
+					title: sd.title,
+					url: `https://genius.com/Taylor-swift-${sd.title.replace(
+						/ /g,
+						'-'
+					)}-lyrics`,
+				}
+			case 3:
+				return { title: '', url: '' }
+			case 4:
+				return {
+					title: sd.title,
+					url: `https://youtube.com/watch?v=${sd.id}`,
+				}
+
+			default:
+				return { title: '', url: '' }
+		}
+	}
+	const router = useRouter()
 	return (
 		<Flex
 			transition={'all 0.5s ease-in'}
@@ -426,26 +452,31 @@ const RightSidebar = ({
 				</Heading>
 				{currentChats.source_documents && (
 					<Flex flexDir={'column'} gap={2} mt={2}>
-						{currentChats?.source_documents.map((item, index) => (
-							<Button
-								display={'flex'}
-								overflow={'hidden'}
-								justifyContent={'flex-start'}
-								key={item.chat_id}
-								cursor={'pointer'}
-								// onClick={() => {
-								// 	setCurrentDocument(item)
-								// }}
-								py={4}
-								px='10px'
-								gap={2}
-								fontWeight={'400'}
-							>
-								<Text isTruncated>
-									{index + 1}. {item.title}{' '}
-								</Text>
-							</Button>
-						))}
+						{currentChats?.source_documents.map((item, index) => {
+							const link = generateSources(item)
+							return (
+								<Button
+									display={'flex'}
+									overflow={'hidden'}
+									justifyContent={'flex-start'}
+									key={index}
+									cursor={'pointer'}
+									onClick={() => {
+										router.push(link?.url)
+									}}
+									background={base800}
+									_hover={{ background: base700 }}
+									py={4}
+									px='10px'
+									gap={2}
+									fontWeight={'400'}
+								>
+									<Text isTruncated>
+										{index + 1}. {link?.title}{' '}
+									</Text>
+								</Button>
+							)
+						})}
 					</Flex>
 				)}
 			</Flex>
@@ -466,8 +497,8 @@ const RightSidebar = ({
 						cursor={'pointer'}
 						onClick={() => deleteThread(currentThread)}
 						bg={redbg}
+						color={base800}
 						_hover={{ opacity: '80%' }}
-						ho
 						w={'100%'}
 						justifyContent={'space-between'}
 						fontWeight={'400'}
@@ -502,6 +533,9 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 
 	const [searchTerm, setSearchTerm] = useState('')
 
+	const filteredPersonas = personalDirectory?.filter((e) =>
+		e.name.toLowerCase().includes(searchTerm.toLowerCase())
+	)
 	return (
 		<Flex
 			flexDir={'column'}
@@ -535,7 +569,7 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 				overflowY='auto'
 				overflowX='hidden'
 			>
-				{personalDirectory?.map((item, index) => (
+				{filteredPersonas?.map((item, index) => (
 					<Button
 						index={index}
 						display={'grid'}

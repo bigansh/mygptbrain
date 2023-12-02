@@ -26,7 +26,7 @@ import { useState } from 'react'
 const AccountComponent = () => {
 	const router = useRouter()
 	const toast = useToast()
-	const { base, base800, base700, text, redbg } = useColors()
+	const { base, base800, base900, text, redbg } = useColors()
 	const {
 		isOpen: isOpenDelete,
 		onOpen: onOpenDelete,
@@ -176,7 +176,7 @@ const AccountComponent = () => {
 					/>
 				</>
 			)}
-			<Flex gap={5} mt={5}>
+			<Flex gap={5} mt={8}>
 				{/* <Button
 					//cursor={'pointer'} onClick={cursor={'pointer'} onClick}
 					bg={base700}
@@ -188,8 +188,29 @@ const AccountComponent = () => {
 				</Button> */}
 				<Button
 					cursor={'pointer'}
+					onClick={() => {
+						localStorage.removeItem('x-session-token')
+						router.push('/onboarding/login')
+						toast({
+							title: 'Logged out',
+							position: 'top',
+							variant: 'subtle',
+							status: 'info',
+							duration: 3000,
+						})
+					}}
+					bg={redbg}
+					color={base800}
+					justifyContent={'space-between'}
+					fontWeight={'400'}
+				>
+					logout
+				</Button>
+				<Button
+					cursor={'pointer'}
 					onClick={onOpenDelete}
 					bg={redbg}
+					color={base800}
 					justifyContent={'space-between'}
 					fontWeight={'400'}
 				>

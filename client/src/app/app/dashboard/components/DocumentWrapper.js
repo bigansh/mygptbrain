@@ -569,7 +569,7 @@ const ChatInput = ({
 				>
 					{updateIsLoading || addIsLoading ? (
 						<CircularProgress
-							size={30}
+							size={'20px'}
 							thickness={4}
 							trackColor={'transparent'}
 							color={text}

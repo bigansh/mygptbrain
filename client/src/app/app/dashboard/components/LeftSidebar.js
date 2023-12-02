@@ -29,6 +29,7 @@ import {
 	ThreadIcon,
 	DocumentIcon,
 	LinkIcon,
+	Setting,
 } from '@/icons'
 import isValidHttpUrl from '@/utils/valid-http-check'
 import {
@@ -493,38 +494,75 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 						_hover={{ bg: 'transparent' }}
 					>
 						{colorMode === 'light' ? (
-							<HiOutlineMoon fontSize={24} />
+							<HiOutlineMoon strokeWidth={1.2} fontSize={24} />
 						) : (
-							<HiOutlineSun fontSize={24} />
+							<HiOutlineSun strokeWidth={1.5} fontSize={24} />
 						)}
 					</Button>
 				</Flex>
-				<Heading
-					fontSize={'2xl'}
-					fontWeight={'400'}
-					cursor={'pointer'}
-					className='document'
-					onClick={() => {
-						setSidebarTopic(
-							sidebarTopic !== 'documents'
-								? 'documents'
-								: 'threads'
-						)
-						if (sidebarTopic === 'documents') {
-							setCurrentView('chat')
-						}
-					}}
-				>
-					{sidebarTopic !== 'documents' ? 'documents' : 'threads'}
-				</Heading>
-				<Heading
-					fontSize={'2xl'}
-					fontWeight={'400'}
-					cursor={'pointer'}
-					onClick={onOpenSetting}
-				>
-					settings
-				</Heading>
+				<Flex alignItems={'center'}>
+					<Heading
+						fontSize={'2xl'}
+						fontWeight={'400'}
+						cursor={'pointer'}
+						className='document'
+						onClick={() => {
+							setSidebarTopic(
+								sidebarTopic !== 'documents'
+									? 'documents'
+									: 'threads'
+							)
+							if (sidebarTopic === 'documents') {
+								setCurrentView('chat')
+							}
+						}}
+					>
+						{sidebarTopic !== 'documents' ? 'documents' : 'threads'}
+					</Heading>
+					<Button
+						h={'auto'}
+						cursor={'pointer'}
+						bg={'transparent'}
+						onClick={() => {
+							setSidebarTopic(
+								sidebarTopic !== 'documents'
+									? 'documents'
+									: 'threads'
+							)
+							if (sidebarTopic === 'documents') {
+								setCurrentView('chat')
+							}
+						}}
+						ml={'auto'}
+						_hover={{ bg: 'transparent' }}
+					>
+						{sidebarTopic !== 'documents' ? (
+							<DocumentIcon fill={text} />
+						) : (
+							<ThreadIcon fill={text} />
+						)}
+					</Button>
+				</Flex>
+				<Flex alignItems={'center'}>
+					<Heading
+						fontSize={'2xl'}
+						fontWeight={'400'}
+						cursor={'pointer'}
+						onClick={onOpenSetting}
+					>
+						settings
+					</Heading>
+					<Button
+						h={'auto'}
+						cursor={'pointer'}
+						bg={'transparent'}
+						onClick={onOpenSetting}
+						ml={'auto'}
+						_hover={{ bg: 'transparent' }}
+					>
+						<Setting fill={text} />
+					</Button>
+				</Flex>
 			</Flex>
 
 			<SettingModal
