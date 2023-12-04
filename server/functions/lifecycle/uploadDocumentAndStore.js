@@ -40,7 +40,7 @@ const uploadDocumentAndStore = async (file, profile_id) => {
 				(type) => type === file.mimetype
 			)
 		) {
-			await checkSubscription(profile_id)
+
 
 			content = await tesseract.recognize(fileBuffer)
 

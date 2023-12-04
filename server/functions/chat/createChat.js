@@ -3,7 +3,7 @@ import xss from 'xss'
 import checkSubscription from '../utility/checkSubscription.js'
 
 import mixpanel from '../../utils/api/mixpanel.js'
-import { Chat } from '../../utils/initializers/prisma.js'
+import { Chat, User } from '../../utils/initializers/prisma.js'
 
 /**
  * A function that creates a chat object in the DB
@@ -13,15 +13,15 @@ import { Chat } from '../../utils/initializers/prisma.js'
  */
 const createChat = async (chatQueryObject, profile_id) => {
 	try {
-		let user
+		const user = await User.findFirst({ where: { profile_id: profile_id } })
 
 		const foundChats = await Chat.findMany({
 			where: { profile_id: profile_id },
 			select: { chat_id: true },
 		})
 
-		if (foundChats.length >= 5) {
-			user = await checkSubscription(profile_id)
+		if (foundChats.length >= 2) {
+			await checkSubscription(profile_id)
 		}
 
 		chatQueryObject.chat_history = xss(chatQueryObject.chat_history)
