@@ -26,7 +26,7 @@ import { useState } from 'react'
 const AccountComponent = () => {
 	const router = useRouter()
 	const toast = useToast()
-	const { base, base800, base900, text, redbg } = useColors()
+	const { base, base800, base900, text, redbg, base700 } = useColors()
 	const {
 		isOpen: isOpenDelete,
 		onOpen: onOpenDelete,
@@ -45,9 +45,49 @@ const AccountComponent = () => {
 		newPassword: '',
 	})
 
+	// {
+	// 	profile_id
+	// 	userObject: {
+	// 		authDetails: {
+	// 			password: ''
+	// 		}
+	// 	}
+	// }
+
 	const { mutate: deleteAcMutate, isLoading: deleteAcIsLoading } =
 		useMutation({
 			mutationFn: () => deleteUser(data?.profile_id),
+			onSuccess: (data) => {
+				// toast({
+				// 	title: 'Account deleted successfully!',
+				// 	position: 'top',
+				// 	variant: 'subtle',
+				// 	status: 'success',
+				// 	duration: 3000,
+				// })
+				onCloseDelete()
+				removeTokens()
+				router.push('/')
+			},
+			onError: (error) => {
+				toast({
+					title: 'Error deleting account!',
+					position: 'top',
+					variant: 'subtle',
+					status: 'error',
+					duration: 3000,
+				})
+
+				removeTokens()
+				logtail.info('Error deleting account', error)
+				logtail.flush()
+				router.push('/')
+			},
+		})
+
+	const { mutate: updatePassMutate, isLoading: updatePassIsLoading } =
+		useMutation({
+			mutationFn: () => updatePassword(data?.profile_id),
 			onSuccess: (data) => {
 				// toast({
 				// 	title: 'Account deleted successfully!',
@@ -85,20 +125,6 @@ const AccountComponent = () => {
 		setOldPassword('')
 		setNewPassword('')
 		setShowDeleteAccount(false)
-	}
-
-	const handleDeleteAccount = () => {
-		setShowDeleteAccount(!showDeleteAccount)
-		setName('')
-		setEmail('')
-		setOldPassword('')
-		setShowUpdatePassword(false)
-	}
-
-	const handleSubmit = (e) => {
-		e.preventDefault()
-		// Submit logic for updating password or deleting account
-		// You can access the updated values from the respective state variables
 	}
 
 	return (
@@ -176,16 +202,18 @@ const AccountComponent = () => {
 					/>
 				</>
 			)}
-			<Flex gap={5} mt={8}>
-				{/* <Button
-					//cursor={'pointer'} onClick={cursor={'pointer'} onClick}
-					bg={base700}
-					justifyContent={'space-between'}
-					fontWeight={'400'}
-					onClick={() => setUpdatePassword(true)}
-				>
-					update password
-				</Button> */}
+			<Button
+				//cursor={'pointer'} onClick={cursor={'pointer'} onClick}
+				bg={base700}
+				justifyContent={'space-between'}
+				fontWeight={'400'}
+				w={'fit-content'}
+				onClick={() => setUpdatePassword(true)}
+				mt={8}
+			>
+				update password
+			</Button>
+			<Flex gap={5} mt={4}>
 				<Button
 					cursor={'pointer'}
 					onClick={() => {
@@ -200,7 +228,7 @@ const AccountComponent = () => {
 						})
 					}}
 					bg={redbg}
-					color={base800}
+					color={'#000'}
 					justifyContent={'space-between'}
 					fontWeight={'400'}
 				>
@@ -210,7 +238,7 @@ const AccountComponent = () => {
 					cursor={'pointer'}
 					onClick={onOpenDelete}
 					bg={redbg}
-					color={base800}
+					color={'#000'}
 					justifyContent={'space-between'}
 					fontWeight={'400'}
 				>

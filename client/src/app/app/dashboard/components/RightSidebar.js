@@ -378,7 +378,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 							deleteThreadMutate()
 						}}
 						bg={redbg}
-						color={base800}
+						color={'#000'}
 						_hover={{ opacity: '80%' }}
 						w={'100%'}
 						justifyContent={'space-between'}

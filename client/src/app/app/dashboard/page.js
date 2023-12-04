@@ -102,7 +102,7 @@ const Dashboard = () => {
 				left={0}
 				p={'20px'}
 				bg={base}
-				borderBottom={'1px solid #2c2c2c'}
+				borderBottom={`1px solid #2c2c2c`}
 				alignItems={'center'}
 				justifyContent={'space-between'}
 			>

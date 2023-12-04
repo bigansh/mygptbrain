@@ -286,7 +286,6 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 								fontWeight={'400'}
 								borderBottomRadius={isOpen && '0px'}
 								isTruncated
-								className='documentadd'
 							>
 								<Text textAlign={'initial'} isTruncated>
 									new document

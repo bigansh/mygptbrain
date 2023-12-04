@@ -174,7 +174,7 @@ const LeftSideBarDrawer = ({
 		>
 			<DrawerOverlay />
 			<DrawerContent bg={base}>
-				<DrawerCloseButton />
+				<DrawerCloseButton zIndex={100} />
 				{sidebarTopic == 'threads' && (
 					<Flex flexDir={'column'} gap={2} p={6}>
 						<Heading fontSize={'2xl'} fontWeight={'400'}>
