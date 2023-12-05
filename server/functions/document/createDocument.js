@@ -14,13 +14,16 @@ const createDocument = async (profile_id, documentQueryObject) => {
 			select: { document_id: true },
 		})
 
-		if (foundDocuments.length > 5) {
+		if (foundDocuments.length > 2) {
 			await checkSubscription(profile_id)
 		}
 
 		return await Document.create({
 			data: documentQueryObject,
-			include: { documentMetadata: true },
+			include: {
+				documentMetadata: true,
+				user: { select: { userMetadata: true } },
+			},
 		})
 	} catch (error) {
 		throw error

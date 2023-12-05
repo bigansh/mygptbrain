@@ -13,7 +13,10 @@ import { Chat, User } from '../../utils/initializers/prisma.js'
  */
 const createChat = async (chatQueryObject, profile_id) => {
 	try {
-		const user = await User.findFirst({ where: { profile_id: profile_id } })
+		const user = await User.findFirst({
+			where: { profile_id: profile_id },
+			include: { userMetadata: true },
+		})
 
 		const foundChats = await Chat.findMany({
 			where: { profile_id: profile_id },
