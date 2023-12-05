@@ -42,9 +42,12 @@ const Popup: React.FC<{}> = () => {
 		heading: '',
 		description: '',
 	})
+	const [error, setError] = useState(false)
+	const [loading, setLoading] = useState(true)
 
 	chrome.storage.onChanged.addListener((changes, namespace) => {
 		if (changes.links?.newValue) {
+			setError(false)
 			if (
 				changes.links.newValue.length !== changes.links.oldValue.length
 			) {
@@ -54,9 +57,12 @@ const Popup: React.FC<{}> = () => {
 							({ id: id2 }) => id2 === id1
 						)
 				)[0]
-
+				setLoading(false)
+				setError(false)
 				setBookmark(currentLink)
 			} else {
+				setLoading(false)
+				setError(false)
 				setBookmark(
 					changes.links.newValue.find((b) => b.id == bookmark.id)
 				)
@@ -65,6 +71,7 @@ const Popup: React.FC<{}> = () => {
 	})
 
 	useEffect(() => {
+		setError(false)
 		saveLinks()
 		getStoredOptions().then((options: any) => {
 			setOptions(options)
@@ -90,6 +97,8 @@ const Popup: React.FC<{}> = () => {
 								payload: { tab: tabs[0] },
 							})
 						} else {
+							setLoading(false)
+							setError(false)
 							setBookmark({
 								id: isSaved.document_id,
 								heading: isSaved?.heading,
@@ -143,27 +152,78 @@ const Popup: React.FC<{}> = () => {
 			})
 	}
 
+	const Error = ({ error }) => {
+		console.log(error, 'mod')
+		return (
+			<Flex w={'300px'} p={2} gap={2} flexDir={'column'}>
+				{error?.subject == 'error' && (
+					<>
+						<h1>{error?.content}</h1>
+						<p>Some error occured while bookmarking</p>
+					</>
+				)}
+				{error?.subject == 'pay' && (
+					<>
+						<h1>Free Tier Exhausted</h1>
+						<p>Upgrade to add unlimited bookmarks</p>
+
+						<a href='https://checkout.stripe.com/c/pay/cs_test_b16bzjrtko4x1G0tUkOdm1cR29eYr76ncIBp1TdWkc7UUMPwXeWZTqM6kr#fidkdWxOYHwnPyd1blpxYHZxWjA0SzEwM1xWTHFXbG5SV0ZsU1wzVXRucnNvYWg8YHU9ZHFQYTNRcEFQbjVsa1B3PWBqYktmV2BgUH1zdG8wUFVcbUQ2fGBnYk4yMlBfNHNgfGlUNE90aTxoNTVNcG9iUFNzRid4JSUl'>
+							Upgrade
+						</a>
+					</>
+				)}
+			</Flex>
+		)
+	}
+
+	chrome.runtime.onMessage.addListener(function (
+		request,
+		sender,
+		sendResponse
+	) {
+		if (request.msg === 'ERROR') {
+			//  To do something
+			setLoading(false)
+			console.log(request)
+			setError(request.data)
+		}
+	})
+
 	getCookie()
 
+	console.log(loading, error, bookmark)
 	return (
 		<ChakraProvider theme={theme}>
-			{cookie && (
-				<Flex className='popup' direction='column' gap={4} m={6}>
-					<Heading lineHeight={1} fontWeight={400} fontSize='2xl'>
-						Bookmark Saved!
-					</Heading>
-					<Text
-						fontSize='md'
-						noOfLines={3}
-						textTransform='capitalize'
+			{cookie &&
+				(loading ? (
+					<Flex w={'400px'} p={2} gap={2} flexDir={'column'}>
+						<h1>loading</h1>
+					</Flex>
+				) : error ? (
+					<Error error={error} />
+				) : (
+					<Flex
+						w={'300px'}
+						className='popup'
+						direction='column'
+						gap={4}
+						m={6}
 					>
-						{bookmark?.heading}
-					</Text>
-					<Text fontSize='sm' noOfLines={3}>
-						{bookmark?.description}
-					</Text>
-				</Flex>
-			)}
+						<Heading lineHeight={1} fontWeight={400} fontSize='2xl'>
+							Bookmark Saved!
+						</Heading>
+						<Text
+							fontSize='md'
+							noOfLines={3}
+							textTransform='capitalize'
+						>
+							{bookmark?.heading}
+						</Text>
+						<Text fontSize='sm' noOfLines={3}>
+							{bookmark?.description}
+						</Text>
+					</Flex>
+				))}
 		</ChakraProvider>
 	)
 }

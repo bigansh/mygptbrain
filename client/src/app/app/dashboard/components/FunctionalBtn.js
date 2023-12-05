@@ -6,22 +6,25 @@ const FunctionalBtn = ({
 	onClick,
 	icon,
 	disabled,
-	className = "",
+	className = '',
 	enabled = false,
 	isPro = false,
+	bg = false,
 }) => {
 	const { base, base800, base700, base600, text } = useColors()
+	const ex = enabled ? base800 : base700
 	return (
 		<Button
 			cursor={'pointer'}
 			onClick={onClick}
-			_hover={{ bg: enabled ? base800 : base600 }}
+			_hover={{ bg: bg ? 'transparent' : ex }}
 			isDisabled={disabled}
-			bg={enabled ? base800 : base700}
+			bg={bg ? 'transparent' : ex}
 			w={'100%'}
 			justifyContent={'space-between'}
 			fontWeight={'400'}
 			isTruncated
+			rounded={'0px'}
 			className={className}
 		>
 			<Text textAlign={'initial'} isTruncated display={'flex'} gap={2}>

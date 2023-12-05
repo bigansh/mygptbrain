@@ -11,6 +11,11 @@ import {
 	Textarea,
 	CircularProgress,
 	Img,
+	Drawer,
+	DrawerBody,
+	DrawerOverlay,
+	DrawerContent,
+	DrawerCloseButton,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { BsLayoutSidebarInsetReverse } from 'react-icons/bs'
@@ -39,7 +44,11 @@ const Personas = () => {
 		chat_array: [],
 	})
 	const divRef = useRef()
-	const { onOpen: onOpenDrawer } = useDisclosure()
+	const {
+		isOpen: isOpenDrawer,
+		onOpen: onOpenDrawer,
+		onClose: onCloseDrawer,
+	} = useDisclosure()
 
 	useEffect(() => {
 		const chats = localStorage.getItem(currentThread)
@@ -153,12 +162,13 @@ const Personas = () => {
 				</Box>
 			)}
 
-			{/* <LeftSideBarDrawer
+			<LeftSideBarDrawer
 				isOpenDrawer={isOpenDrawer}
 				onCloseDrawer={onCloseDrawer}
 				onOpenDrawer={onOpenDrawer}
-				onPaymentModalOpen={onPaymentModalOpen}
-			/> */}
+				currentThread={currentThread}
+				setCurrentThread={setCurrentThread}
+			/>
 		</Flex>
 	)
 }
@@ -633,5 +643,130 @@ const LeftSidebar = ({ currentThread, setCurrentThread }) => {
 				</Flex>
 			</Flex>
 		</Flex>
+	)
+}
+
+const LeftSideBarDrawer = ({
+	isOpenDrawer,
+	onCloseDrawer,
+	currentThread,
+	setCurrentThread,
+}) => {
+	const { base800, base700, base } = useColors()
+	const { colorMode, toggleColorMode } = useColorMode()
+
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const filteredPersonas = personalDirectory?.filter((e) =>
+		e.name.toLowerCase().includes(searchTerm.toLowerCase())
+	)
+
+	return (
+		<Drawer
+			isOpen={isOpenDrawer}
+			placement='left'
+			//initialFocusRef={firstField}
+			onClose={onCloseDrawer}
+			bg={base}
+		>
+			<DrawerOverlay />
+			<DrawerContent bg={base}>
+				<DrawerCloseButton zIndex={100} />
+				<Flex flexDir={'column'} gap={2} p={6}>
+					<Heading fontSize={'2xl'} fontWeight={'400'}>
+						personas
+					</Heading>
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+
+					<Search
+						title='search personas'
+						searchTerm={searchTerm}
+						setSearchTerm={setSearchTerm}
+					/>
+
+					<Box
+						borderTop='2px'
+						borderColor='black.900'
+						w={'100%'}
+					></Box>
+				</Flex>
+
+				<Flex
+					flexDir={'column'}
+					gap={2}
+					px={6}
+					//maxH={'400px'}
+					overflowY='auto'
+					overflowX='hidden'
+				>
+					{filteredPersonas?.map((item, index) => (
+						<Button
+							index={index}
+							display={'grid'}
+							justifyContent={'flex-start'}
+							key={item.key}
+							gridTemplateColumns={'30px 1fr'}
+							background={
+								currentThread === item.key ? base700 : base800
+							}
+							_hover={{ background: base700 }}
+							cursor={'pointer'}
+							onClick={() => {
+								setCurrentThread(item.key)
+							}}
+							py={4}
+							px='10px'
+							gap={2}
+							fontWeight={'400'}
+							alignContent={'center'}
+						>
+							<Img
+								borderRadius={'20px'}
+								w={'30px'}
+								src={item.image}
+							/>
+							<Text textAlign={'initial'} isTruncated>
+								{item.name}
+							</Text>
+						</Button>
+					))}
+				</Flex>
+
+				<Box
+					borderTop='2px'
+					borderColor='black.900'
+					w={'100%'}
+					px={2}
+					pt={4}
+					mt={'auto'}
+				></Box>
+
+				<Flex flexDir={'column'} gap={4} p={6} pt={4}>
+					<Flex alignItems={'center'}>
+						<Heading fontSize={'2xl'} fontWeight={'400'}>
+							{colorMode === 'light' ? 'dark mode' : 'light mode'}
+						</Heading>
+						<Button
+							h={'auto'}
+							cursor={'pointer'}
+							onClick={toggleColorMode}
+							bg={'transparent'}
+							ml={'auto'}
+							_hover={{ bg: 'transparent' }}
+						>
+							{colorMode === 'light' ? (
+								<HiOutlineMoon fontSize={24} />
+							) : (
+								<HiOutlineSun fontSize={24} />
+							)}
+						</Button>
+					</Flex>
+				</Flex>
+			</DrawerContent>
+		</Drawer>
 	)
 }

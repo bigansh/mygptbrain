@@ -174,6 +174,33 @@ export const useChatPreferences = ({ currentThread, onSuccess }) => {
 	})
 }
 
+export const useChatPromptTemplate = ({ currentThread, onSuccess }) => {
+	const toast = useToast()
+	return useMutation({
+		mutationFn: (template) =>
+			updateChatPreferences({
+				chat_id: currentThread,
+				prompt_template: template,
+			}),
+
+		onSuccess: (data) => {
+			toast({
+				title: 'Chat prompt template updated successfully',
+				position: 'top',
+				variant: 'subtle',
+				status: 'success',
+				duration: 3000,
+			})
+			onSuccess(data.prompt_template)
+		},
+
+		onError: (error) => {
+			logtail.info('Error updating chat prompt template', error)
+			logtail.flush()
+		},
+	})
+}
+
 export const usePersonas = ({ onSuccess }) => {
 	return useMutation({
 		mutationFn: (newPersona) => updatePersona(newPersona),

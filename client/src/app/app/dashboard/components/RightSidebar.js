@@ -21,26 +21,40 @@ import {
 } from '@chakra-ui/react'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
 import { useThreads } from '@/context'
-import { deleteChat, readChat, updateChat } from '@/api'
+import { deleteChat, getUser, readChat, updateChat } from '@/api'
 import { IoMdClose } from 'react-icons/io'
 import FunctionalBtn from './FunctionalBtn'
 import { ChevIcon, ChevRevIcon, DeleteIcon, EditIcon } from '@/icons'
 import { logtail } from '@/app/providers'
 import {
 	useChatPreferences,
+	useChatPromptTemplate,
 	useDocumentsData,
 	useUserData,
 } from '@/app/query-hooks'
 import { llmButtons } from '@/data'
+import { FiCheck } from 'react-icons/fi'
 
 const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+	const { data: userData } = useQuery({
+		queryKey: ['user'],
+		queryFn: getUser,
+	})
+
 	const { base800, base700, base600, text, redbg } = useColors()
 	const [llmType, setLlmType] = useState('chatGPT')
+	const [promptTemp, setPromptTemp] = useState()
 
 	const {
 		isOpen: isOpenLLM,
 		onToggle: onToggleLLM,
 		onClose: onCloseLLM,
+	} = useDisclosure()
+
+	const {
+		isOpen: isOpenTemplate,
+		onToggle: onToggleTemplate,
+		onClose: onCloseTemplate,
 	} = useDisclosure()
 
 	const toast = useToast()
@@ -52,8 +66,6 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		setCurrentDocument,
 		setCurrentView,
 	} = useThreads()
-
-	const { data: userData } = useUserData()
 
 	const socialMediaKeys = [
 		{
@@ -91,8 +103,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 			console.log(data)
 			setEditName(data[0].chat_name)
 			setLlmType(data[0].preferences.llm_model || 'ChatGPT')
-			setSourceDoc(data[0].preferences.data_sources || ['All'])
-			setSendType(data[0].preferences.send_type || 'Stuff')
+			setPromptTemp(data[0].preferences.prompt_template || 0)
 		},
 		onError: (error) => {
 			logtail.info('Error getting thread', error)
@@ -182,6 +193,13 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 		},
 	})
 
+	const { isLoading: isLoadingPT, mutate: mutatePT } = useChatPromptTemplate({
+		currentThread,
+		onSuccess: (data) => {
+			setPromptTemp(Number(data))
+			onToggleLLM()
+		},
+	})
 	return (
 		<Flex
 			transition={'all 0.5s ease-in'}
@@ -351,6 +369,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 							mb={'-0.5rem'}
 							borderBottomRadius={'0px'}
 							borderBottom={`1px solid ${text}`}
+							overflow={'hidden'}
 							background={base700}
 							w={'100%'}
 							style={{ 'backdrop-filter': 'blur(5px)' }}
@@ -369,6 +388,63 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 									/>
 								)
 							)}
+						</PopoverContent>
+					</Popover>
+
+					<Popover
+						placement='bottom-start'
+						isOpen={isOpenTemplate}
+						matchWidth
+						returnFocusOnClose={false}
+						onClose={onCloseTemplate}
+					>
+						<PopoverTrigger>
+							<Button
+								onClick={onToggleTemplate}
+								_hover={{ bg: base600 }}
+								bg={base700}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								borderTopRadius={isOpenTemplate && '0px'}
+								isTruncated
+							>
+								<Text textAlign={'initial'} isTruncated>
+									{!isLoadingPT ? (
+										`template ${Number(promptTemp) + 1}`
+									) : (
+										<Spinner />
+									)}
+								</Text>
+
+								{isOpenTemplate ? (
+									<ChevRevIcon fill={text} />
+								) : (
+									<ChevIcon fill={text} />
+								)}
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent
+							boxShadow={'0px'}
+							mb={'-0.5rem'}
+							borderBottomRadius={'0px'}
+							borderBottom={`1px solid ${text}`}
+							overflow={'hidden'}
+							background={base700}
+							w={'100%'}
+							style={{ 'backdrop-filter': 'blur(5px)' }}
+						>
+							{[1, 2, 3].map((n, index) => (
+								<FunctionalBtn
+									title={`template ${n}`}
+									cursor={'pointer'}
+									enabled={index == promptTemp}
+									onClick={() => {
+										mutatePT(String(index))
+									}}
+									icon={index == promptTemp && <FiCheck />}
+								/>
+							))}
 						</PopoverContent>
 					</Popover>
 

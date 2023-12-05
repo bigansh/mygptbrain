@@ -185,6 +185,13 @@ export const createDocumentChat = async (data) => {
 	return response.data
 }
 
+export const updatePromptTemplate = async (data) => {
+	const response = await apiClient.patch('/user/update?query_type=metadata', {
+		userMetadataObject: data,
+	})
+	return response.data
+}
+
 export const readChat = async (data) => {
 	//{ prompt?, chat_name?, chat_id?, profile_id }
 

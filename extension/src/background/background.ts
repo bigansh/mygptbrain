@@ -1,5 +1,5 @@
 import { scrapeLink, getUser, getLinks } from "../components/API"
-import { getStoredLinks, getStoredOptions, setStoredLinks, setStoredOptions, setStoredUser } from "../utils/storage"
+import { getStoredLinks, getStoredOptions, getStoredUser, setStoredLinks, setStoredOptions, setStoredUser } from "../utils/storage"
 
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -51,19 +51,65 @@ chrome.runtime.onMessage.addListener(
     const { tab } = res.payload
 
     if (res.message === 'ADD_TO_DOCUMENTS') {
-      chrome.action.setBadgeText({ text: ' ', tabId: tab.id });
-      chrome.action.setBadgeBackgroundColor(
-        { color: '#50C878' },
-      );
-
       try {
-        const link = await scrapeLink(tab.url).then(res => res.json()).catch(err => console.log(err, 'here'))
-        getStoredLinks().then((links: any) => {
-          setStoredLinks([...links, link])
-        })
 
+        const user = await getStoredUser()
+
+        // if (user?.userMetadata?.subscription_status) {
+        //   const links = await getStoredLinks()
+        //   if (links.length >= 2) {
+        //     chrome.runtime.sendMessage({
+        //       msg: "ERROR",
+        //       data: {
+        //         subject: "pay",
+        //       }
+        //     });
+        //     return; // This will now correctly exit the outer function
+        //   }
+        // }
+
+        const link = await scrapeLink(tab.url).then(res => res.json())
+
+
+        if (!link.error) {
+          getStoredLinks().then((links: any) => {
+            setStoredLinks([...links, link])
+          })
+
+          if (link.user.userMetadata.subscription_status !== user?.userMetadata?.subscription_status) {
+            setStoredUser({ ...user, userMetadata: { ...link.user.userMetadata } })
+          }
+          chrome.action.setBadgeText({ text: ' ', tabId: tab.id });
+          chrome.action.setBadgeBackgroundColor(
+            { color: '#50C878' },
+          );
+        } else {
+          if (link.message == 'User is not authorized') {
+            chrome.runtime.sendMessage({
+              msg: "ERROR",
+              data: {
+                subject: "pay",
+              }
+            });
+          } else {
+            chrome.runtime.sendMessage({
+              msg: "ERROR",
+              data: {
+                subject: "error",
+                content: "Bookmark Error"
+              }
+            });
+          }
+        }
       } catch (err) {
-        console.log(err, "err user");
+        // if(err.message == '"message": "User is not authorized"')
+        chrome.runtime.sendMessage({
+          msg: "ERROR",
+          data: {
+            subject: "error",
+            content: "Some errorr"
+          }
+        });
       }
     }
   })
@@ -73,7 +119,7 @@ chrome.tabs.onActivated.addListener(
   async ({ tabId }) => {
     const tab = await getCurrentTab(tabId)
     const links: any = await getStoredLinks()
-    console.log(links)
+
     const isCurrentTabBookmarked = links.find(e => e.documentMetadata.url == tab.url)
     if (isCurrentTabBookmarked) {
       chrome.action.setBadgeText({ text: ' ', tabId: tab.id });

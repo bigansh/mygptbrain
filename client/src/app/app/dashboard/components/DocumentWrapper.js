@@ -20,12 +20,16 @@ import {
 	PopoverBody,
 	Button,
 	PopoverFooter,
+	Img,
 } from '@chakra-ui/react'
 import {
 	ChatLogoIcon,
 	ChatUserIcon,
+	ChevIcon,
+	ChevRevIcon,
 	DeleteIcon,
 	LinkIcon,
+	PreferencesSetting,
 	Setting,
 	ThreadIcon,
 } from '@/icons'
@@ -45,11 +49,19 @@ import {
 	deleteChat,
 } from '@/api'
 
-import { useDocumentsData, useUserData } from '@/app/query-hooks'
+import {
+	useChatPreferences,
+	useChatPromptTemplate,
+	useDocumentsData,
+	useUserData,
+} from '@/app/query-hooks'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useThreads } from '@/context'
 import { IoClose, IoCloseOutline } from 'react-icons/io5'
+import { llmButtons } from '@/data'
+import FunctionalBtn from './FunctionalBtn'
+import { FiCheck } from 'react-icons/fi'
 
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const [inputValue, setInputValue] = useState('')
@@ -68,6 +80,9 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 	const queryClient = useQueryClient()
 
 	const { data: userData } = useUserData()
+	const [llmType, setLlmType] = useState('chatGPT')
+	const [promptTemp, setPromptTemp] = useState()
+
 	const { data: threadsData, isLoading: threadsIsLoading } = useQuery({
 		queryKey: ['doc-threads', currentDocument],
 		queryFn: () =>
@@ -82,7 +97,12 @@ const DocumentWrapper = ({ isSidebarOpen }) => {
 				? true
 				: false,
 		onSuccess: (data) => {
+			console.log(data)
 			setdocChat(data.length > 0 ? data[0].chat_id : 'new')
+			if (data.length > 0) {
+				setLlmType(data[0].preferences.llm_model || 'ChatGPT')
+				setPromptTemp(data[0].preferences.prompt_template || '0')
+			}
 		},
 		onError: (error) => {
 			logtail.info('Error getting threads', error)
@@ -321,6 +341,11 @@ feel free to customize your experience by changing the thread's name, the model 
 						divRef={divRef}
 						docChat={docChat}
 						setdocChat={setdocChat}
+						llmType={llmType}
+						setLlmType={setLlmType}
+						promptTemp={promptTemp}
+						setPromptTemp={setPromptTemp}
+						setChatOpen={setChatOpen}
 					/>
 					<Flex
 						display={['block', 'none']}
@@ -417,6 +442,11 @@ const ChatInput = ({
 	divRef,
 	docChat,
 	setdocChat,
+	llmType,
+	setLlmType,
+	promptTemp,
+	setPromptTemp,
+	setChatOpen,
 }) => {
 	const queryClient = useQueryClient()
 	const ref = useRef()
@@ -428,6 +458,20 @@ const ChatInput = ({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
+
+	const { isOpen, onToggle, onClose } = useDisclosure()
+
+	const {
+		isOpen: isOpenLLM,
+		onToggle: onToggleLLM,
+		onClose: onCloseLLM,
+	} = useDisclosure()
+
+	const {
+		isOpen: isOpenTemplate,
+		onToggle: onToggleTemplate,
+		onClose: onCloseTemplate,
+	} = useDisclosure()
 
 	const {
 		data,
@@ -445,6 +489,8 @@ const ChatInput = ({
 
 		onSuccess: (data) => {
 			setdocChat(data.chat_id)
+			setLlmType(data.preferences.llm_model || 'ChatGPT')
+			setPromptTemp(data.preferences.prompt_template || '0')
 			queryClient.setQueryData(
 				['doc-threads', currentDocument],
 				(prev) => {
@@ -518,11 +564,11 @@ const ChatInput = ({
 		useMutation({
 			mutationFn: () =>
 				deleteChat({
-					chat_id: currentThread,
+					chat_id: docChat,
 					profile_id: userData?.profile_id,
 				}),
 			onSuccess: (data) => {
-				queryClient.invalidateQueries(['threads'])
+				queryClient.invalidateQueries(['doc-threads', currentDocument])
 				toast({
 					title: 'Thread deleted',
 					position: 'top',
@@ -530,9 +576,8 @@ const ChatInput = ({
 					status: 'success',
 					duration: 3000,
 				})
-				setCurrentDocument('')
-				setCurrentThread('new')
-				setCurrentView('chat')
+				setChatOpen(null)
+				setdocChat('new')
 			},
 
 			onError: (error) => {
@@ -558,7 +603,26 @@ const ChatInput = ({
 			setInputValue('')
 		}
 	}, [updateIsLoading, addIsLoading])
-	const { isOpen, onToggle, onClose } = useDisclosure()
+
+	const {
+		isLoading: isLoadingChatPreferences,
+		mutate: mutateChatPreferences,
+	} = useChatPreferences({
+		currentThread: docChat,
+		onSuccess: (data) => {
+			setLlmType(data)
+			onToggleLLM()
+		},
+	})
+
+	const { isLoading: isLoadingPT, mutate: mutatePT } = useChatPromptTemplate({
+		currentThread: docChat,
+		onSuccess: (data) => {
+			setPromptTemp(Number(data))
+			onToggleLLM()
+		},
+	})
+
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>
 			<Flex
@@ -628,60 +692,209 @@ const ChatInput = ({
 					)}
 				</Box>
 			</Flex>
-			<Popover
-				returnFocusOnClose={false}
-				isOpen={isOpen}
-				onClose={onClose}
-				placement='top-end'
-				closeOnBlur={false}
-				p={0}
-			>
-				<PopoverTrigger>
-					<Button
-						onClick={onToggle}
-						_hover={{ bg: base600 }}
-						bg={base700}
-						px={2}
-						my={4}
-						mb={1}
-					>
-						<Setting fill={text} />
-					</Button>
-				</PopoverTrigger>
+			{docChat !== 'new' && (
+				<Popover
+					returnFocusOnClose={false}
+					isOpen={isOpen}
+					onClose={onClose}
+					placement='top-end'
+					closeOnBlur={false}
+					p={0}
+				>
+					<PopoverTrigger>
+						<Button
+							onClick={onToggle}
+							_hover={{ bg: base600 }}
+							bg={base700}
+							px={2}
+							my={4}
+							mb={1}
+						>
+							<PreferencesSetting fill={text} />
+						</Button>
+					</PopoverTrigger>
 
-				<PopoverContent p={0}>
-					<PopoverArrow />
-
-					<PopoverCloseButton />
-					<PopoverBody
-						p={2}
+					<PopoverContent
+						p={0}
 						background={base700}
-						w={'100%'}
 						style={{ 'backdrop-filter': 'blur(5px)' }}
 					>
-						<Button colorScheme='blue'>Button</Button>
-						<Button
-							cursor={'pointer'}
-							onClick={() => {
-								deleteThreadMutate()
-							}}
-							bg={redbg}
-							color={'#000000'}
-							_hover={{ opacity: '80%' }}
+						<PopoverBody
+							p={2}
+							// pb={2}
+							gap={2}
+							display={'flex'}
+							flexDir={'column'}
 							w={'100%'}
-							justifyContent={'space-between'}
-							fontWeight={'400'}
 						>
-							delete thread
-							{deleteThreadIsLoading ? (
-								<Spinner />
-							) : (
-								<DeleteIcon fill={'rgba(255, 0, 0, 1)'} />
-							)}
-						</Button>
-					</PopoverBody>
-				</PopoverContent>
-			</Popover>
+							<Popover
+								placement='bottom-start'
+								isOpen={isOpenLLM}
+								matchWidth
+								returnFocusOnClose={false}
+								onClose={onCloseLLM}
+							>
+								<PopoverTrigger>
+									<Button
+										onClick={onToggleLLM}
+										_hover={{ bg: base700 }}
+										bg={base700}
+										w={'100%'}
+										justifyContent={'space-between'}
+										fontWeight={'400'}
+										borderTopRadius={isOpenLLM && '0px'}
+										isTruncated
+									>
+										<Text textAlign={'initial'} isTruncated>
+											{!isLoadingChatPreferences ? (
+												llmType
+											) : (
+												<Spinner />
+											)}
+										</Text>
+										<Img
+											ml={2}
+											mr={'auto'}
+											src={
+												llmButtons.find(
+													(e) =>
+														e.llmTypeValue ==
+														llmType
+												)?.iconSrc
+											}
+										/>
+
+										{isOpenLLM ? (
+											<ChevRevIcon fill={text} />
+										) : (
+											<ChevIcon fill={text} />
+										)}
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent
+									boxShadow={'0px'}
+									mb={'-0.5rem'}
+									borderBottomRadius={'0px'}
+									borderBottom={`1px solid ${text}`}
+									background={base600}
+									w={'100%'}
+									style={{ 'backdrop-filter': 'blur(20px)' }}
+								>
+									{llmButtons.map(
+										({
+											title,
+											llmTypeValue,
+											iconSrc,
+											isPro,
+										}) => (
+											<FunctionalBtn
+												title={title}
+												isPro={isPro}
+												enabled={
+													llmType == llmTypeValue
+												}
+												cursor={'pointer'}
+												onClick={() => {
+													mutateChatPreferences(
+														llmTypeValue
+													)
+												}}
+												bg={true}
+												icon={<img src={iconSrc} />}
+											/>
+										)
+									)}
+								</PopoverContent>
+							</Popover>
+							<Popover
+								placement='bottom-start'
+								isOpen={isOpenTemplate}
+								matchWidth
+								returnFocusOnClose={false}
+								onClose={onCloseTemplate}
+							>
+								<PopoverTrigger>
+									<Button
+										onClick={onToggleTemplate}
+										_hover={{ bg: base700 }}
+										bg={base700}
+										w={'100%'}
+										justifyContent={'space-between'}
+										fontWeight={'400'}
+										borderTopRadius={
+											isOpenTemplate && '0px'
+										}
+										isTruncated
+									>
+										<Text textAlign={'initial'} isTruncated>
+											{!isLoadingPT ? (
+												`template ${
+													Number(promptTemp) + 1
+												}`
+											) : (
+												<Spinner />
+											)}
+										</Text>
+
+										{isOpenTemplate ? (
+											<ChevRevIcon fill={text} />
+										) : (
+											<ChevIcon fill={text} />
+										)}
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent
+									boxShadow={'0px'}
+									mb={'-0.5rem'}
+									borderBottomRadius={'0px'}
+									borderBottom={`1px solid ${text}`}
+									overflow={'hidden'}
+									background={base600}
+									w={'100%'}
+									style={{ 'backdrop-filter': 'blur(20px)' }}
+								>
+									{[1, 2, 3].map((n, index) => (
+										<FunctionalBtn
+											title={`template ${n}`}
+											cursor={'pointer'}
+											enabled={index == promptTemp}
+											onClick={() => {
+												mutatePT(String(index))
+											}}
+											bg={true}
+											icon={
+												index == promptTemp && (
+													<FiCheck />
+												)
+											}
+										/>
+									))}
+								</PopoverContent>
+							</Popover>
+							<Button
+								cursor={'pointer'}
+								onClick={() => {
+									deleteThreadMutate()
+								}}
+								bg={redbg}
+								color={'#000000'}
+								_hover={{ opacity: '80%' }}
+								w={'100%'}
+								justifyContent={'space-between'}
+								fontWeight={'400'}
+								// mx={2}
+							>
+								delete thread
+								{deleteThreadIsLoading ? (
+									<Spinner />
+								) : (
+									<DeleteIcon fill={'rgba(255, 0, 0, 1)'} />
+								)}
+							</Button>
+						</PopoverBody>
+					</PopoverContent>
+				</Popover>
+			)}
 		</Flex>
 	)
 }
