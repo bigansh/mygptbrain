@@ -3,23 +3,19 @@ import { useToast } from '@chakra-ui/react'
 // Define all your toasts in an object with keys
 const toasts = {
 	UPLOAD_LIMIT_REACHED: {
-		title: 'Upload Limit Reached',
-		description: 'Upgrade to upload more files.',
+		title: 'document limit exhausted',
 		status: 'info',
 	},
 	FILE_TOO_LARGE: {
-		title: 'File Too Large',
-		description: 'Files over 10MB require a premium plan.',
+		title: 'file size too large',
 		status: 'info',
 	},
 	PAID_IMAGE_UPLOAD: {
 		title: 'Uploading images requires a paid plan',
-		description: 'Please upgrade your plan to upload images.',
 		status: 'info',
 	},
 	EMPTY_INPUT: {
-		title: 'Empty Input',
-		description: 'Please enter a valid input.',
+		title: 'please enter a valid url',
 		status: 'error',
 	},
 	// ... add more predefined toasts here

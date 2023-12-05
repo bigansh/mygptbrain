@@ -37,7 +37,7 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 		>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Pay Pay</ModalHeader>
+				<ModalHeader>please upgrade </ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
 					<stripe-pricing-table
