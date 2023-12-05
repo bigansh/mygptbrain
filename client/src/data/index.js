@@ -96,7 +96,7 @@ export const personalDirectory = [
 	},
 	{
 		key: 4,
-		name: 'Lex Friedman',
+		name: 'Lex Fridman',
 		image: '/lex.png',
 		placeholder: {
 			user: 'hey, tell me something...',

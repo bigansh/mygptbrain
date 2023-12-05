@@ -10,12 +10,23 @@ import {
 	CircularProgress,
 	useToast,
 	CloseButton,
+	useDisclosure,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	PopoverArrow,
+	PopoverHeader,
+	PopoverCloseButton,
+	PopoverBody,
+	Button,
+	PopoverFooter,
 } from '@chakra-ui/react'
 import {
 	ChatLogoIcon,
 	ChatUserIcon,
 	DeleteIcon,
 	LinkIcon,
+	Setting,
 	ThreadIcon,
 } from '@/icons'
 import { useColors } from '@/utils/colors'
@@ -31,12 +42,14 @@ import {
 	createChat,
 	updateChat,
 	createDocumentChat,
+	deleteChat,
 } from '@/api'
 
 import { useDocumentsData, useUserData } from '@/app/query-hooks'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useThreads } from '@/context'
+import { IoClose, IoCloseOutline } from 'react-icons/io5'
 
 const DocumentWrapper = ({ isSidebarOpen }) => {
 	const [inputValue, setInputValue] = useState('')
@@ -261,7 +274,7 @@ feel free to customize your experience by changing the thread's name, the model 
 					overflowY={'auto'}
 					top={[0, 'unset']}
 					pos={['absolute', 'relative']}
-					pt={[16, 0]}
+					pt={['50px', 0]}
 				>
 					{threadsIsLoading ? (
 						<Flex
@@ -279,6 +292,7 @@ feel free to customize your experience by changing the thread's name, the model 
 							overflowY='auto'
 							overflowX='hidden'
 							w={'100%'}
+							borderTop={['1px solid #2c2c2c', '0px']}
 						>
 							{threadsData[0] == undefined ||
 							threadsData[0].length == 0
@@ -313,13 +327,12 @@ feel free to customize your experience by changing the thread's name, the model 
 						cursor={'pointer'}
 						pos={'absolute'}
 						top={4}
-						right={4}
+						right={5}
 						onClick={() => {
 							setChatOpen(!isChatOpen)
 						}}
-						bg={base800}
 					>
-						<CloseButton fill={!isChatOpen ? text : 'green'} />
+						<IoClose />
 					</Flex>
 				</Flex>
 			)}
@@ -344,7 +357,7 @@ feel free to customize your experience by changing the thread's name, the model 
 export default DocumentWrapper
 
 const SingleChatComponent = ({ message }) => {
-	const { base700, base800, text } = useColors()
+	const { base700, base600, text } = useColors()
 	return (
 		<>
 			<Flex flexDir={'column'}>
@@ -408,7 +421,7 @@ const ChatInput = ({
 	const queryClient = useQueryClient()
 	const ref = useRef()
 	const { currentDocument } = useThreads()
-	const { base, base800, base700, text } = useColors()
+	const { base, base600, base700, text, redbg } = useColors()
 	const toast = useToast()
 	const { userData } = useUserData()
 	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
@@ -501,6 +514,39 @@ const ChatInput = ({
 		},
 	})
 
+	const { isLoading: deleteThreadIsLoading, mutate: deleteThreadMutate } =
+		useMutation({
+			mutationFn: () =>
+				deleteChat({
+					chat_id: currentThread,
+					profile_id: userData?.profile_id,
+				}),
+			onSuccess: (data) => {
+				queryClient.invalidateQueries(['threads'])
+				toast({
+					title: 'Thread deleted',
+					position: 'top',
+					variant: 'subtle',
+					status: 'success',
+					duration: 3000,
+				})
+				setCurrentDocument('')
+				setCurrentThread('new')
+				setCurrentView('chat')
+			},
+
+			onError: (error) => {
+				logtail.info('Error deleting thread', error)
+				logtail.flush()
+				toast({
+					title: 'Error deleting thread',
+					position: 'top',
+					variant: 'subtle',
+					status: 'error',
+					duration: 3000,
+				})
+			},
+		})
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
 			docChat == 'new' ? addMutate() : updateMutate()
@@ -512,6 +558,7 @@ const ChatInput = ({
 			setInputValue('')
 		}
 	}, [updateIsLoading, addIsLoading])
+	const { isOpen, onToggle, onClose } = useDisclosure()
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>
 			<Flex
@@ -523,6 +570,7 @@ const ChatInput = ({
 				my={4}
 				mx={4}
 				mb={1}
+				mr={2}
 				w={'100%'}
 				alignItems={'center'}
 				bg={base700}
@@ -569,7 +617,7 @@ const ChatInput = ({
 				>
 					{updateIsLoading || addIsLoading ? (
 						<CircularProgress
-							size={30}
+							size={'20px'}
 							thickness={4}
 							trackColor={'transparent'}
 							color={text}
@@ -580,6 +628,60 @@ const ChatInput = ({
 					)}
 				</Box>
 			</Flex>
+			<Popover
+				returnFocusOnClose={false}
+				isOpen={isOpen}
+				onClose={onClose}
+				placement='top-end'
+				closeOnBlur={false}
+				p={0}
+			>
+				<PopoverTrigger>
+					<Button
+						onClick={onToggle}
+						_hover={{ bg: base600 }}
+						bg={base700}
+						px={2}
+						my={4}
+						mb={1}
+					>
+						<Setting fill={text} />
+					</Button>
+				</PopoverTrigger>
+
+				<PopoverContent p={0}>
+					<PopoverArrow />
+
+					<PopoverCloseButton />
+					<PopoverBody
+						p={2}
+						background={base700}
+						w={'100%'}
+						style={{ 'backdrop-filter': 'blur(5px)' }}
+					>
+						<Button colorScheme='blue'>Button</Button>
+						<Button
+							cursor={'pointer'}
+							onClick={() => {
+								deleteThreadMutate()
+							}}
+							bg={redbg}
+							color={'#000000'}
+							_hover={{ opacity: '80%' }}
+							w={'100%'}
+							justifyContent={'space-between'}
+							fontWeight={'400'}
+						>
+							delete thread
+							{deleteThreadIsLoading ? (
+								<Spinner />
+							) : (
+								<DeleteIcon fill={'rgba(255, 0, 0, 1)'} />
+							)}
+						</Button>
+					</PopoverBody>
+				</PopoverContent>
+			</Popover>
 		</Flex>
 	)
 }

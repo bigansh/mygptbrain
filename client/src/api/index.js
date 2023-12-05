@@ -91,6 +91,11 @@ export const updateUser = async (data) => {
 	return response.data
 }
 
+export const updatePassword = async (data) => {
+	const response = await apiClient.patch(`/auth/update`, data)
+	return response.data
+}
+
 export const deleteUser = async (id) => {
 	const response = await apiClient.delete(`/user/delete`, {
 		chatQueryObject: { chat_id: id },

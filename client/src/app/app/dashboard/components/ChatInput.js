@@ -54,7 +54,6 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				return []
 			})
 			setCurrentThread(data.chat_id)
-			
 		},
 		onError: (error) => {
 			toast({
@@ -205,7 +204,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				>
 					{updateIsLoading || addIsLoading ? (
 						<CircularProgress
-							size={30}
+							size={'20px'}
 							thickness={4}
 							trackColor={'transparent'}
 							color={text}

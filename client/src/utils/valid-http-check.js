@@ -36,18 +36,16 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 			isCentered
 		>
 			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>please upgrade </ModalHeader>
+			<ModalContent pb={4}>
+				<ModalHeader>Pay Pay</ModalHeader>
 				<ModalCloseButton />
-				<ModalBody>
+				<ModalBody mt={0}>
 					<stripe-pricing-table
+						className='green'
 						pricing-table-id='prctbl_1NuDELSItRikWRCiwkkTpwBo'
 						publishable-key='pk_live_51N456YSItRikWRCiUrt8boF6w21p5R164Rog5R34A3M9b8uHiMwYiKEH35MCZZHU9vuC4P0LdNI2DYCkDeO9tybn00KTSj3dAb'
 					></stripe-pricing-table>
 				</ModalBody>
-				<ModalFooter>
-					<Button onClick={onPaymentModalClose}>Close</Button>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	)

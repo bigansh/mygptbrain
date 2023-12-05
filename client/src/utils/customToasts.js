@@ -5,18 +5,25 @@ const toasts = {
 	UPLOAD_LIMIT_REACHED: {
 		title: 'document limit exhausted',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	FILE_TOO_LARGE: {
 		title: 'file size too large',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	PAID_IMAGE_UPLOAD: {
 		title: 'Uploading images requires a paid plan',
 		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
 	},
 	EMPTY_INPUT: {
 		title: 'please enter a valid url',
 		status: 'error',
+		duration: 5000,
 	},
 	// ... add more predefined toasts here
 }
@@ -37,6 +44,8 @@ export const useToastManager = () => {
 			duration: 3000,
 			...toastConfig,
 			...options,
+
+			variant: 'subtle',
 		})
 	}
 
