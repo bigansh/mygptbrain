@@ -3,8 +3,6 @@ import {
 	Modal,
 	ModalOverlay,
 	ModalContent,
-	ModalHeader,
-	ModalFooter,
 	ModalBody,
 	ModalCloseButton,
 } from '@chakra-ui/react'
@@ -37,7 +35,6 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 		>
 			<ModalOverlay />
 			<ModalContent pb={4}>
-				<ModalHeader>Pay Pay</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody mt={0}>
 					<stripe-pricing-table
