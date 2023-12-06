@@ -1,10 +1,10 @@
-const BASEURL = 'https://mygptbrain.com'
+const BASEURL = 'https://api.mygptbrain.com'
 
 async function getSessionTokenCookie() {
 	return new Promise((resolve, reject) => {
 		chrome.cookies.get(
 			{
-				url: 'https://mygptbrain.com/',
+				url: 'https://api.mygptbrain.com/',
 				name: 'x-session-token',
 			},
 			(cookie) => {
