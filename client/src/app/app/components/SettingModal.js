@@ -19,7 +19,7 @@ import {
 	PlatformComponent,
 	BillingComponent,
 	PreferencesComponent,
-} from '@/app/app/dashboard/components'
+} from '@/app/app/components'
 import { BillingIcon, PlatformIcon, UserIcon, PreferencesIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
 import { useUserData } from '@/app/query-hooks'

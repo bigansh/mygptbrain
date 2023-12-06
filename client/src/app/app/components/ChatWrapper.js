@@ -1,9 +1,6 @@
 import { useColors } from '@/utils/colors'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-	ChatMessagesContainer,
-	ChatInput,
-} from '@/app/app/dashboard/components'
+import { ChatMessagesContainer, ChatInput } from '@/app/app/components'
 import { Button, Flex } from '@chakra-ui/react'
 const ChatWrapper = ({ isSidebarOpen }) => {
 	const { base, base800, base700, text } = useColors()

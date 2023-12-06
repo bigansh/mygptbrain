@@ -25,7 +25,7 @@ export default function Home() {
 
 	useEffect(() => {
 		if (localStorage.getItem('x-session-token')) {
-			router.push('/app/dashboard')
+			router.push('/app')
 		}
 		function scrollHandler(e) {
 			const indexToSet = Math.round(

@@ -102,7 +102,7 @@ const Login = () => {
 				})
 				router.push(decodeURIComponent(redirectUrl))
 			} else {
-				router.push('/app/dashboard')
+				router.push('/app')
 			}
 		} catch (error) {
 			toast({

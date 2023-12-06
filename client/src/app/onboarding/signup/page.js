@@ -88,7 +88,7 @@ const Signup = () => {
 				router.push(decodeURIComponent(redirectUrl))
 			} else {
 				setLoading(false)
-				router.push('/app/dashboard')
+				router.push('/app')
 			}
 		} catch (error) {
 			setLoading(false)
