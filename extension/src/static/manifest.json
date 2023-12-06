@@ -1,6 +1,6 @@
 {
 	"name": "myGPTBrain",
-	"description": "Knowledge consumption made easier with myGPTBrain. Use the extension easily bookmark pages.",
+	"description": "Knowledge consumption made easier with myGPTBrain. Use the extension easily save pages.",
 	"version": "1.0.0",
 	"author": "myGPTBrain",
 	"manifest_version": 3,
@@ -15,9 +15,7 @@
 		"default_icon": "logo.png"
 	},
 	"host_permissions": [
-		"https://api-testing.mygptbrain.com/",
 		"https://api.mygptbrain.com/",
-		"https://testing.mygptbrain.com/",
 		"https://mygptbrain.com/"
 	],
 	"permissions": [
