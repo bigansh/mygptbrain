@@ -19,7 +19,10 @@ const createChat = async (chatQueryObject, profile_id) => {
 		})
 
 		const foundChats = await Chat.findMany({
-			where: { profile_id: profile_id },
+			where: {
+				profile_id: profile_id,
+				preferences: { document_id: null },
+			},
 			select: { chat_id: true },
 		})
 

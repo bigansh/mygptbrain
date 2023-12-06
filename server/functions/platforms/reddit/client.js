@@ -4,9 +4,11 @@ import redditClient from '../../../utils/api/reddit.js'
 
 const client = async (profile_id) => {
 	try {
-		const { reddit, reddit_id } = await Auth.findUnique({
+		const { reddit } = await Auth.findUnique({
 			where: { profile_id: profile_id },
-			include: { reddit: true },
+			select: {
+				reddit: { select: { access_token: true, refresh_token: true } },
+			},
 		})
 
 		const redditUserClient = redditClient(reddit.refresh_token)

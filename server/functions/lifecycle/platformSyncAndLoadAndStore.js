@@ -3,6 +3,7 @@ import redditSync from '../platforms/reddit/redditSync.js'
 import twitterSync from '../platforms/twitter/twitterSync.js'
 import pocketSync from '../platforms/pocket/pocketSync.js'
 import googleSync from '../platforms/google/googleSync.js'
+import notionSync from '../platforms/notion/notionSync.js'
 
 /**
  * A function that syncs all the data from all the connected platform of a user and then loads and store them in the DB
@@ -23,6 +24,9 @@ const platformSyncAndLoadAndStore = async (profile_id) => {
 		}
 		if (userAuth.twitter_id) {
 			platforms.push(twitterSync(profile_id))
+		}
+		if (userAuth.notion_id) {
+			platforms.push(notionSync(profile_id))
 		}
 		if (
 			userAuth.google.scope_authenticated.some((scope) =>
