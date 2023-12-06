@@ -51,7 +51,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 			)
 		}
 	} catch (err) {
-		console.log(err, 'Error checking cookie or fetching user data.')
+		console.error(err)
 	}
 })
 
