@@ -18,14 +18,7 @@
 		"https://api.mygptbrain.com/",
 		"https://mygptbrain.com/"
 	],
-	"permissions": [
-		"storage",
-		"tabs",
-		"action",
-		"activeTab",
-		"webNavigation",
-		"cookies"
-	],
+	"permissions": ["storage", "tabs", "action", "activeTab", "cookies"],
 	"options_page": "options.html",
 	"background": {
 		"service_worker": "background.js"
