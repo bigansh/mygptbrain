@@ -130,6 +130,7 @@ const Dashboard = () => {
 			<RightSidebar
 				isSidebarOpen={isSidebarOpen}
 				setIsSidebarOpen={setIsSidebarOpen}
+				onPaymentModalOpen={onPaymentModalOpen}
 			/>
 			{currentView == 'chat' && currentThread !== 'new' && (
 				<Box

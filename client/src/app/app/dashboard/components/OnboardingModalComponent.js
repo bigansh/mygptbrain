@@ -34,8 +34,14 @@ import {
 	RedditIcon,
 } from '@/icons'
 import mixpanel from 'mixpanel-browser'
-import isValidHttpUrl from '@/utils/valid-http-check'
-import { useScrapeLink, useUploadDoc, useUserData } from '@/app/query-hooks'
+import isValidHttpUrl, { upgradeFunction } from '@/utils/valid-http-check'
+import {
+	useDocumentsData,
+	useScrapeLink,
+	useUploadDoc,
+	useUserData,
+} from '@/app/query-hooks'
+import { useToastManager } from '@/utils/customToasts'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -49,12 +55,17 @@ const OnboardingModal = ({
 	onPaymentModalOpen,
 }) => {
 	const [link, setLink] = useState('')
-
+	const showToast = useToastManager()
 	const uploadRef = useRef(null)
 	const toast = useToast()
 	const queryClient = useQueryClient()
-	const { data, isLoading } = useUserData()
 
+	const { data: userData } = useUserData()
+
+	const { data: docData, isLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
+	})
 	useEffect(() => {
 		// if (localStorage.getItem('tour') == 'true') {
 
@@ -77,37 +88,40 @@ const OnboardingModal = ({
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
-
+		console.log('here')
 		if (
 			!userData?.userMetadata?.subscription_status &&
-			docData?.length >= 5
+			docData?.length >= 2
 		) {
 			onPaymentModalOpen()
-			toast({
-				title: 'More than 5 files upload are paid',
-				description: 'Please upgrade your plan.',
-				position: 'top',
-				variant: 'subtle',
-				status: 'info',
-				duration: 3000,
-			})
+			showToast('UPLOAD_LIMIT_REACHED')
+			onToggle()
 			event.target.value = ''
 			return
 		}
+
+		// Check for file size larger than 10MB
 		if (
 			!userData?.userMetadata?.subscription_status &&
 			file &&
 			file.size > 10 * 1024 * 1024
 		) {
 			onPaymentModalOpen()
-			toast({
-				title: 'Files larger than 10MB are paid',
-				description: 'Please select a file less than 10MB.',
-				position: 'top',
-				variant: 'subtle',
-				status: 'info',
-				duration: 3000,
-			})
+			showToast('FILE_TOO_LARGE')
+			onToggle()
+			event.target.value = ''
+			return
+		}
+
+		// Check if the uploaded file is an image and payment is false
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			file &&
+			file.type.startsWith('image/')
+		) {
+			onPaymentModalOpen()
+			showToast('PAID_IMAGE_UPLOAD')
+			onToggle()
 			event.target.value = ''
 			return
 		}
@@ -182,7 +196,7 @@ const OnboardingModal = ({
 								gap={5}
 							>
 								{' '}
-								{!data?.auth?.reddit_id && (
+								{!userData?.auth?.reddit_id && (
 									<PlatformCard
 										title='reddit'
 										color='rgba(255, 67, 0, 1)'
@@ -193,7 +207,7 @@ const OnboardingModal = ({
 										}
 									/>
 								)}
-								{!data?.auth?.google_id && (
+								{!userData?.auth?.google_id && (
 									<PlatformCard
 										title='drive'
 										color='rgba(255, 208, 75, 1)'
@@ -204,7 +218,7 @@ const OnboardingModal = ({
 										}
 									/>
 								)}
-								{!data?.auth?.notion_id && (
+								{!userData?.auth?.notion_id && (
 									<PlatformCard
 										title='notion'
 										color='rgba(55, 53, 48, 1)'
@@ -216,7 +230,7 @@ const OnboardingModal = ({
 										disabled='true'
 									/>
 								)}
-								{!data?.auth?.pocket_id && (
+								{!userData?.auth?.pocket_id && (
 									<PlatformCard
 										title='pocket'
 										color='rgba(213, 77, 87, 1)'
@@ -308,20 +322,14 @@ const OnboardingModal = ({
 													if (
 														userData?.userMetadata
 															?.subscription_status ||
-														docData?.length < 5
+														docData?.length < 2
 													) {
 														scrapeLinkMutate()
 													} else {
 														onPaymentModalOpen()
-														toast({
-															title: 'More than 5 files/link upload are paid',
-															description:
-																'Please upgrade your plan.',
-															position: 'Top',
-															variant: 'subtle',
-															status: 'info',
-															duration: 3000,
-														})
+														showToast(
+															'UPLOAD_LIMIT_REACHED'
+														)
 														setLink('')
 													}
 												} else {
@@ -360,18 +368,27 @@ const OnboardingModal = ({
 	)
 }
 
-const PlatformCard = ({ title, color, icon }) => {
-	const { data } = useUserData()
-
+const PlatformCard = ({ title, color, icon, state, onOpen }) => {
+	const { userData } = useUserData()
+	const showToast = useToastManager()
 	return (
 		<Flex
 			flexDir={'column'}
 			gap={2}
 			cursor={'pointer'}
 			onClick={() =>
-				connectPlatform({
-					platform: title,
-					profileId: data?.profile_id,
+				upgradeFunction({
+					status: userData?.userMetadata?.subscription_status,
+					usernextFunc: () => {
+						connectPlatform({
+							platform: name,
+							profileId: userData?.profile_id,
+						})
+					},
+					onOpen: () => {
+						showToast('PLATFORMS')
+						onOpen()
+					},
 				})
 			}
 		>

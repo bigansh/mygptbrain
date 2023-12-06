@@ -47,6 +47,7 @@ import {
 	useUploadDoc,
 	useUserData,
 } from '@/app/query-hooks'
+import { useToastManager } from '@/utils/customToasts'
 
 const LeftSideBarDrawer = ({
 	isOpenDrawer,
@@ -58,7 +59,7 @@ const LeftSideBarDrawer = ({
 	const [threadInput, setThreadInput] = useState('')
 	const [documentInput, setDocumentInput] = useState('')
 	const [link, setLink] = useState('')
-
+	const showToast = useToastManager()
 	const {
 		isOpen: isOpenSetting,
 		onOpen: onOpenSetting,
@@ -111,38 +112,39 @@ const LeftSideBarDrawer = ({
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
 		console.log(userData?.userMetadata?.subscription_status ? true : false)
-
+		// Check for subscription status and number of documents
 		if (
 			!userData?.userMetadata?.subscription_status &&
-			docData?.length >= 5
+			docData?.length >= 2
 		) {
 			onPaymentModalOpen()
-			toast({
-				title: 'More than 5 files upload are paid',
-				description: 'Please upgrade your plan.',
-				position: 'top',
-				variant: 'subtle',
-				status: 'info',
-				duration: 3000,
-			})
+			showToast('UPLOAD_LIMIT_REACHED')
 			onToggle()
 			event.target.value = ''
 			return
 		}
+
+		// Check for file size larger than 10MB
 		if (
 			!userData?.userMetadata?.subscription_status &&
 			file &&
 			file.size > 10 * 1024 * 1024
 		) {
 			onPaymentModalOpen()
-			toast({
-				title: 'Files larger than 10MB are paid',
-				description: 'Please select a file less than 10MB.',
-				position: 'top',
-				variant: 'subtle',
-				status: 'info',
-				duration: 3000,
-			})
+			showToast('FILE_TOO_LARGE')
+			onToggle()
+			event.target.value = ''
+			return
+		}
+
+		// Check if the uploaded file is an image and payment is false
+		if (
+			!userData?.userMetadata?.subscription_status &&
+			file &&
+			file.type.startsWith('image/')
+		) {
+			onPaymentModalOpen()
+			showToast('PAID_IMAGE_UPLOAD')
 			onToggle()
 			event.target.value = ''
 			return
@@ -195,7 +197,20 @@ const LeftSideBarDrawer = ({
 							title='new thread'
 							cursor={'pointer'}
 							onClick={() => {
-								setCurrentThread('new')
+								if (
+									!userData?.userMetadata
+										?.subscription_status &&
+									threadsData?.filter(
+										(item) =>
+											item?.preferences?.document_id ==
+											null
+									)?.length >= 2
+								) {
+									onPaymentModalOpen()
+									showToast('THREADS_LIMIT_REACHED')
+								} else {
+									setCurrentThread('new')
+								}
 								setCurrentView('chat')
 								onCloseDrawer()
 							}}

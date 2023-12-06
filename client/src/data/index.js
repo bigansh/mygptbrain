@@ -9,7 +9,7 @@ export const llmButtons = [
 		title: 'palm2',
 		llmTypeValue: 'PaLM',
 		iconSrc: '/palm.png',
-		isPro: false,
+		isPro: true,
 	},
 	{
 		title: 'chatgpt4',

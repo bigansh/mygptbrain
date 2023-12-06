@@ -53,7 +53,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	}
 	return (
 		<Modal
-			size={['2xl', '6xl']}
+			size={['4xl', '6xl']}
 			isOpen={isOpenSetting}
 			onClose={onCloseSetting}
 		>
@@ -61,7 +61,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 				backdropFilter='blur(2px)'
 				//bg='rgba(123, 130, 148, 0.2)'
 			/>
-			<ModalContent mx={4}>
+			<ModalContent mx={[0, 4]}>
 				<ModalCloseButton />
 				<ModalBody p={0}>
 					<Grid
@@ -75,14 +75,24 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 						<Flex
 							flexDir='column'
 							bg={base800}
-							p={5}
+							p={[2, 5]}
 							h={['auto', '100%']}
 							gap={2}
 						>
-							<Heading fontSize={'2xl'} fontWeight={'500'} mb={4}>
+							<Heading
+								fontSize={'2xl'}
+								fontWeight={'500'}
+								mb={4}
+								p={[2, 0]}
+							>
 								setting
 							</Heading>
-							<Flex flexDir={['row', 'column']} gap={[0, 2]}>
+							<Flex
+								display={['grid', 'flex']}
+								gridTemplateColumns={'1fr 1fr'}
+								flexDir={['row', 'column']}
+								gap={[0, 2]}
+							>
 								<SidebarItem
 									activeButton={activeButton}
 									cursor={'pointer'}
@@ -124,7 +134,9 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 								/>
 							</Flex>
 						</Flex>
-						<Flex bg={base}>{childComponent}</Flex>
+						<Flex bg={base} overflow={'scroll'}>
+							{childComponent}
+						</Flex>
 					</Grid>
 				</ModalBody>
 			</ModalContent>
@@ -156,6 +168,8 @@ const SidebarItem = ({
 			disabled={disabled}
 			textAlign={['center', 'left']}
 			m={'auto'}
+			px={[1, 4]}
+			isTruncated
 		>
 			<Text textAlign={['center', 'left']} margin={['auto', 'unset']}>
 				{title}

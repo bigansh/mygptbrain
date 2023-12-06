@@ -34,8 +34,13 @@ import {
 } from '@/app/query-hooks'
 import { llmButtons } from '@/data'
 import { FiCheck } from 'react-icons/fi'
+import { useToastManager } from '@/utils/customToasts'
 
-const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+const RightSidebar = ({
+	isSidebarOpen,
+	setIsSidebarOpen,
+	onPaymentModalOpen,
+}) => {
 	const { data: userData } = useQuery({
 		queryKey: ['user'],
 		queryFn: getUser,
@@ -44,7 +49,7 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 	const { base800, base700, base600, text, redbg } = useColors()
 	const [llmType, setLlmType] = useState('chatGPT')
 	const [promptTemp, setPromptTemp] = useState()
-
+	const showToast = useToastManager()
 	const {
 		isOpen: isOpenLLM,
 		onToggle: onToggleLLM,
@@ -382,7 +387,17 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 										enabled={llmType == llmTypeValue}
 										cursor={'pointer'}
 										onClick={() => {
-											mutateChatPreferences(llmTypeValue)
+											if (
+												!userData?.userMetadata
+													?.subscription_status
+											) {
+												onPaymentModalOpen()
+												showToast('LLM_TYPE_CHANGE')
+											} else {
+												mutateChatPreferences(
+													llmTypeValue
+												)
+											}
 										}}
 										icon={<img src={iconSrc} />}
 									/>
@@ -440,7 +455,15 @@ const RightSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 									cursor={'pointer'}
 									enabled={index == promptTemp}
 									onClick={() => {
-										mutatePT(String(index))
+										if (
+											!userData?.userMetadata
+												?.subscription_status
+										) {
+											onPaymentModalOpen()
+											showToast('TEMPLATE_CHANGE')
+										} else {
+											mutatePT(String(index))
+										}
 									}}
 									icon={index == promptTemp && <FiCheck />}
 								/>

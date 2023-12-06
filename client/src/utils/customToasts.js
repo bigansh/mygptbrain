@@ -8,6 +8,12 @@ const toasts = {
 		variant: 'subtle',
 		duration: 5000,
 	},
+	THREADS_LIMIT_REACHED: {
+		title: 'threads limit exhausted',
+		status: 'info',
+		variant: 'subtle',
+		duration: 5000,
+	},
 	FILE_TOO_LARGE: {
 		title: 'file size too large',
 		status: 'info',
@@ -15,13 +21,28 @@ const toasts = {
 		duration: 5000,
 	},
 	PAID_IMAGE_UPLOAD: {
-		title: 'Uploading images requires a paid plan',
+		title: 'uploading images requires a paid plan',
 		status: 'info',
 		variant: 'subtle',
 		duration: 5000,
 	},
 	EMPTY_INPUT: {
 		title: 'please enter a valid url',
+		status: 'error',
+		duration: 5000,
+	},
+	LLM_TYPE_CHANGE: {
+		title: 'changing an LLM type requires a paid plan',
+		status: 'error',
+		duration: 5000,
+	},
+	TEMPLATE_CHANGE: {
+		title: 'changing a template requires a paid plan',
+		status: 'error',
+		duration: 5000,
+	},
+	PLATFORMS: {
+		title: 'syncing a platform requires a paid plan',
 		status: 'error',
 		duration: 5000,
 	},

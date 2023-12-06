@@ -128,7 +128,7 @@ const AccountComponent = () => {
 	}
 
 	return (
-		<Flex flexDir={'column'} mt={2} p={4}>
+		<Flex flexDir={'column'} mt={2} p={4} mb={6} w={'100%'}>
 			<FormLabel fontSize={'xl'} fontWeight={'400'} mb={0}>
 				name
 			</FormLabel>
@@ -210,10 +210,11 @@ const AccountComponent = () => {
 				w={'fit-content'}
 				onClick={() => setUpdatePassword(true)}
 				mt={8}
+				py={[4, 'unset']}
 			>
 				update password
 			</Button>
-			<Flex gap={5} mt={4}>
+			<Flex gap={5} mt={4} pb={4}>
 				<Button
 					cursor={'pointer'}
 					onClick={() => {

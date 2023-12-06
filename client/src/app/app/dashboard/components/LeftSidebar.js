@@ -87,12 +87,10 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0]
-		console.log(userData?.userMetadata?.subscription_status ? true : false)
-
 		// Check for subscription status and number of documents
 		if (
 			!userData?.userMetadata?.subscription_status &&
-			docData?.length >= 5
+			docData?.length >= 2
 		) {
 			onPaymentModalOpen()
 			showToast('UPLOAD_LIMIT_REACHED')
@@ -188,7 +186,18 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 						className={'threads'}
 						cursor={'pointer'}
 						onClick={() => {
-							setCurrentThread('new')
+							if (
+								!userData?.userMetadata?.subscription_status &&
+								threadsData?.filter(
+									(item) =>
+										item?.preferences?.document_id == null
+								)?.length >= 2
+							) {
+								onPaymentModalOpen()
+								showToast('THREADS_LIMIT_REACHED')
+							} else {
+								setCurrentThread('new')
+							}
 							setCurrentView('chat')
 						}}
 						icon={<AddIcon fill={text} />}

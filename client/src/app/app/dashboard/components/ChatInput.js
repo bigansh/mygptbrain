@@ -16,7 +16,11 @@ import {
 } from '@chakra-ui/react'
 import { useColors } from '@/utils/colors'
 import { logtail } from '@/app/providers'
-import { useDocumentsData, useUserData } from '@/app/query-hooks'
+import {
+	useDocumentsData,
+	useThreadsData,
+	useUserData,
+} from '@/app/query-hooks'
 const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const queryClient = useQueryClient()
 
@@ -26,6 +30,11 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const toast = useToast()
 	const { userData } = useUserData()
 	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
+		enabled: !!userData?.profile_id,
+		funcArgs: { profile_id: userData?.profile_id },
+	})
+
+	const { data: threadsData, isLoading: threadsIsLoading } = useThreadsData({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
@@ -186,17 +195,34 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 				<Box
 					cursor={'pointer'}
 					onClick={() => {
-						docData?.length == 0
-							? toast({
-									title: 'Add a document to get started',
-									position: 'top',
-									variant: 'subtle',
-									status: 'warning',
-									duration: 3000,
-							  })
-							: currentThread == 'new'
-							? addMutate()
-							: updateMutate()
+						if (docData?.length == 0) {
+							toast({
+								title: 'Add a document to get started',
+								position: 'top',
+								variant: 'subtle',
+								status: 'warning',
+								duration: 3000,
+							})
+						} else {
+							if (currentThread == 'new') {
+								if (
+									!userData?.userMetadata
+										?.subscription_status &&
+									threadsData?.filter(
+										(item) =>
+											item?.preferences?.document_id ==
+											null
+									)?.length >= 2
+								) {
+									onPaymentModalOpen()
+									showToast('THREADS_LIMIT_REACHED')
+								} else {
+									addMutate()
+								}
+							} else {
+								updateMutate()
+							}
+						}
 					}}
 					style={{
 						cursor: docData?.length == 0 ? 'not-allowed' : '',

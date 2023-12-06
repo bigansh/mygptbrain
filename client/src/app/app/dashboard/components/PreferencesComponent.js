@@ -106,11 +106,11 @@ const PreferencesComponent = () => {
 			<Text fontSize={'xl'} fontWeight={'400'}>
 				prompt templates
 			</Text>
-			<Flex maxW={'300px'} w={'300px'} mt={2.5}>
+			<Flex maxW={['200px', '300px']} w={['200px', '300px']} mt={2.5}>
 				<Popover
 					placement='bottom-start'
 					isOpen={isOpen}
-					w={'300px'}
+					w={['200px', '300px']}
 					returnFocusOnClose={false}
 					onClose={onClose}
 				>
@@ -143,7 +143,7 @@ const PreferencesComponent = () => {
 						borderTopRadius={'0px'}
 						borderTop={`1px solid ${text}`}
 						background={base700}
-						w={'300px'}
+						w={['200px', '300px']}
 						style={{ 'backdrop-filter': 'blur(5px)' }}
 						className='documentupload'
 					>

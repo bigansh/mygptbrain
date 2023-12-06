@@ -23,7 +23,7 @@ function isValidHttpUrl(str) {
 export default isValidHttpUrl
 
 export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
-	status == true ? onOpen() : usernextFunc()
+	status == status ? onOpen() : usernextFunc()
 }
 
 export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
@@ -34,8 +34,8 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 			isCentered
 		>
 			<ModalOverlay />
-			<ModalContent pb={4}>
-				<ModalCloseButton />
+			<ModalContent pb={4} bg={'white'} text={'black'}>
+				<ModalCloseButton color={'black'} />
 				<ModalBody mt={0}>
 					<stripe-pricing-table
 						className='green'

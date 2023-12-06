@@ -4,6 +4,7 @@ import { connectPlatform, getUser } from '@/api'
 import { DriveIcon, NotionIcon, PockketIcon, RedditIcon } from '@/icons'
 import { useUserData } from '@/app/query-hooks'
 import { PaymentModal, upgradeFunction } from '@/utils/valid-http-check'
+import { useToastManager } from '@/utils/customToasts'
 
 const PlatformComponent = () => {
 	const {
@@ -80,7 +81,7 @@ const PlatformCard = ({ name, color, icon, state, onOpen }) => {
 		queryKey: ['user'],
 		queryFn: getUser,
 	})
-
+	const showToast = useToastManager()
 	return (
 		<Flex
 			flexDir={'column'}
@@ -95,7 +96,10 @@ const PlatformCard = ({ name, color, icon, state, onOpen }) => {
 							profileId: data?.profile_id,
 						})
 					},
-					onOpen,
+					onOpen: () => {
+						showToast('PLATFORMS')
+						onOpen()
+					},
 				})
 			}
 		>

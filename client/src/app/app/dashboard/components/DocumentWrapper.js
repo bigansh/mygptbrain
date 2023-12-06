@@ -795,9 +795,19 @@ const ChatInput = ({
 												}
 												cursor={'pointer'}
 												onClick={() => {
-													mutateChatPreferences(
-														llmTypeValue
-													)
+													if (
+														!userData?.userMetadata
+															?.subscription_status
+													) {
+														onPaymentModalOpen()
+														showToast(
+															'LLM_TYPE_CHANGE'
+														)
+													} else {
+														mutateChatPreferences(
+															llmTypeValue
+														)
+													}
 												}}
 												bg={true}
 												icon={<img src={iconSrc} />}
@@ -859,7 +869,15 @@ const ChatInput = ({
 											cursor={'pointer'}
 											enabled={index == promptTemp}
 											onClick={() => {
-												mutatePT(String(index))
+												if (
+													!userData?.userMetadata
+														?.subscription_status
+												) {
+													onPaymentModalOpen()
+													showToast('TEMPLATE_CHANGE')
+												} else {
+													mutatePT(String(index))
+												}
 											}}
 											bg={true}
 											icon={
