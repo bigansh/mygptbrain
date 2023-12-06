@@ -91,7 +91,7 @@ export const updateUser = async (data) => {
 	return response.data
 }
 
-export const updatePassword = async (data) => {
+export const updatePasswordFunc = async (data) => {
 	const response = await apiClient.patch(`/auth/update`, data)
 	return response.data
 }
