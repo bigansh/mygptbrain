@@ -114,7 +114,7 @@ const Popup: React.FC<{}> = () => {
 	const getCookie = async () => {
 		await chrome.cookies
 			.get({
-				url: 'https://testing.mygptbrain.com/',
+				url: 'https://mygptbrain.com/',
 				name: 'x-session-token',
 			})
 			.then((c) => {
@@ -132,7 +132,7 @@ const Popup: React.FC<{}> = () => {
 									tabs[0].url
 								)
 								chrome.tabs.create({
-									url: `https://testing.mygptbrain.com/onboarding/login?redirect=${redirectUrl}`,
+									url: `https://mygptbrain.com/onboarding/login?redirect=${redirectUrl}`,
 								})
 							}
 						}
@@ -146,7 +146,7 @@ const Popup: React.FC<{}> = () => {
 					'The cookie is missing a required attribute.'
 				) {
 					chrome.tabs.create({
-						url: `http://testing.mygptbrain.com/onboarding/login?redirect=${chrome.runtime.getURL()}`,
+						url: `http://mygptbrain.com/onboarding/login?redirect=${chrome.runtime.getURL()}`,
 					})
 				}
 			})
