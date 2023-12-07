@@ -19,6 +19,7 @@ import {
 	InputGroup,
 	InputRightElement,
 	useToast,
+	Img,
 } from '@chakra-ui/react'
 
 import { useEffect, useRef, useState } from 'react'
@@ -27,6 +28,7 @@ import { AiOutlineCloudUpload } from 'react-icons/ai'
 import { connectPlatform } from '@/api'
 import { useQueryClient } from '@tanstack/react-query'
 import {
+	ArrowRightIcon,
 	DriveIcon,
 	LinkIcon,
 	NotionIcon,
@@ -42,6 +44,7 @@ import {
 	useUserData,
 } from '@/app/query-hooks'
 import { useToastManager } from '@/utils/customToasts'
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -66,6 +69,19 @@ const OnboardingModal = ({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
 	})
+	const [currentGif, setCurrentGif] = useState(0)
+	const gifs = [
+		{
+			heading: 'upload heading here',
+			description: 'upload dec here ',
+			gif: '/upload.gif',
+		},
+		{
+			heading: 'chat heading here ',
+			description: 'chat dec here ',
+			gif: '/chat.gif',
+		},
+	]
 	useEffect(() => {
 		// if (localStorage.getItem('tour') == 'true') {
 
@@ -151,7 +167,11 @@ const OnboardingModal = ({
 				backdropFilter='blur(2px)'
 				bg='rgba(123, 130, 148, 0.2)'
 			/>
-			<ModalContent h={'80vh'} margin={['10px', 'auto']} bg={base800}>
+			<ModalContent
+				h={['70vh', '80vh']}
+				margin={['10px', 'auto']}
+				bg={base800}
+			>
 				<ModalCloseButton
 					cursor={'pointer'}
 					onClick={onCloseOnboarding}
@@ -175,75 +195,72 @@ const OnboardingModal = ({
 							gap={4}
 							w={'100%'}
 						>
-							<Heading
-								fontSize={['xl', '2xl']}
-								fontWeight={'400'}
-							>
-								welcome to mygptbrain! please...
-							</Heading>
-							<Box
-								border={'1px solid black'}
+							<Box>
+								<Heading
+									fontSize={['xl', '2xl']}
+									fontWeight={'400'}
+								>
+									{gifs[currentGif].heading}
+								</Heading>
+								<Text pt={0} mt={0}>
+									{gifs[currentGif].description}
+								</Text>
+							</Box>
+
+							<Flex
 								borderColor={text}
-								opacity={0.2}
 								w={'100%'}
 								m={'auto'}
 								my={2}
+								pos={'relative'}
+								h={['200px', '350px']}
+								flexDir={'column'}
+								justifyContent={'center'}
+								alignItems={'center'}
+							>
+								<Img
+									h={['auto', '100%']}
+									src={gifs[currentGif].gif}
+									alt='Computer man'
+								/>
+								{currentGif == 1 && (
+									<Box
+										pos={'absolute'}
+										top={['80%', 0]}
+										left={[20, -10]}
+										display={'flex'}
+										h={['auto', '100%']}
+										alignItems={'center'}
+										onClick={() => setCurrentGif(0)}
+										mt={[6, 0]}
+									>
+										<BsArrowLeft color={text} size={30} />
+									</Box>
+								)}
+								{currentGif == 0 && (
+									<Box
+										pos={'absolute'}
+										top={['80%', 0]}
+										right={[20, -10]}
+										display={'flex'}
+										h={['auto', '100%']}
+										alignItems={'center'}
+										onClick={() => setCurrentGif(1)}
+										mt={[6, 0]}
+									>
+										<BsArrowRight color={text} size={30} />
+									</Box>
+								)}
+							</Flex>
+
+							<Box
+								w={'100%'}
+								border={`0.5px solid ${text}`}
+								opacity={'40%'}
+								my={4}
 							></Box>
 
-							<Grid
-								gridTemplateColumns={'1fr 1fr'}
-								gridTemplateRows={'1fr 1fr'}
-								gap={5}
-							>
-								{' '}
-								{!userData?.auth?.reddit_id && (
-									<PlatformCard
-										title='reddit'
-										color='rgba(255, 67, 0, 1)'
-										icon={
-											<RedditIcon
-												fill={'rgba(255, 255, 255, 1)'}
-											/>
-										}
-									/>
-								)}
-								{!userData?.auth?.google_id && (
-									<PlatformCard
-										title='drive'
-										color='rgba(255, 208, 75, 1)'
-										icon={
-											<DriveIcon
-												fill={'rgba(255, 255, 255, 1)'}
-											/>
-										}
-									/>
-								)}
-								{!userData?.auth?.notion_id && (
-									<PlatformCard
-										title='notion'
-										color='rgba(55, 53, 48, 1)'
-										icon={
-											<NotionIcon
-												fill={'rgba(255, 255, 255, 1)'}
-											/>
-										}
-										disabled='true'
-									/>
-								)}
-								{!userData?.auth?.pocket_id && (
-									<PlatformCard
-										title='pocket'
-										color='rgba(213, 77, 87, 1)'
-										icon={
-											<PockketIcon
-												fill={'rgba(255, 255, 255, 1)'}
-											/>
-										}
-									/>
-								)}
-							</Grid>
-
-							<Box position='relative' py={6} fontSize={'18px'}>
+							{/* <Box position='relative' py={6} fontSize={'18px'}>
 								<Divider
 									borderColor={text}
 									opacity={0.2}
@@ -253,12 +270,14 @@ const OnboardingModal = ({
 								<AbsoluteCenter px='4' bg={base800}>
 									or
 								</AbsoluteCenter>
-							</Box>
+							</Box> */}
 
 							<Grid
 								gap={5}
 								templateColumns={'1fr 1fr'}
-								w={'80%'}
+								w={['100%', '80%']}
+								display={['flex', 'grid']}
+								flexDir={'column'}
 								m='auto'
 							>
 								<Input
@@ -295,6 +314,7 @@ const OnboardingModal = ({
 									<Input
 										h={'100%'}
 										pr={12}
+										py={2}
 										type='text'
 										value={link}
 										placeholder='paste a link'

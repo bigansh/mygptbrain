@@ -38,9 +38,12 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 				<ModalCloseButton color={'black'} />
 				<ModalBody mt={0}>
 					<stripe-pricing-table
-						className='green'
-						pricing-table-id='prctbl_1NuDELSItRikWRCiwkkTpwBo'
-						publishable-key='pk_live_51N456YSItRikWRCiUrt8boF6w21p5R164Rog5R34A3M9b8uHiMwYiKEH35MCZZHU9vuC4P0LdNI2DYCkDeO9tybn00KTSj3dAb'
+						pricing-table-id={
+							process.env.NEXT_PUBLIC_STRIPE_TABLE_ID
+						}
+						publishable-key={
+							process.env.NEXT_PUBLIC_PUBLISHABLE_KEY
+						}
 					></stripe-pricing-table>
 				</ModalBody>
 			</ModalContent>
