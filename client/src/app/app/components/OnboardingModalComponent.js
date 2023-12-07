@@ -72,13 +72,15 @@ const OnboardingModal = ({
 	const [currentGif, setCurrentGif] = useState(0)
 	const gifs = [
 		{
-			heading: 'upload heading here',
-			description: 'upload dec here ',
+			heading: 'please upload a document to get started',
+			description:
+				"you need to upload a document to get started. you can't use the app without uploading a document. the below gif will help you understand how to upload a document. ",
 			gif: '/upload.gif',
 		},
 		{
-			heading: 'chat heading here ',
-			description: 'chat dec here ',
+			heading: 'start chatting with your document',
+			description:
+				'perfect! now that we have a document uploaded, we can start chatting with that document. ask all your queries and the ai will respond. below gif will help you get started.',
 			gif: '/chat.gif',
 		},
 	]

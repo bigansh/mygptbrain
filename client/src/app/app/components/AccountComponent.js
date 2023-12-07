@@ -206,7 +206,7 @@ const AccountComponent = () => {
 							userDetails.newPassword == userDetails.oldPassword
 						) {
 							toast({
-								title: 'New password and old password cannot be the same',
+								title: 'new and old password cannot be the same',
 								position: 'top',
 								variant: 'subtle',
 								status: 'error',
