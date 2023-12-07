@@ -203,10 +203,10 @@ const AccountComponent = () => {
 						setUpdatePassword(true)
 					} else {
 						if (
-							userDetails.newPassword !== userDetails.oldPassword
+							userDetails.newPassword == userDetails.oldPassword
 						) {
 							toast({
-								title: 'New password and old password has to be the same',
+								title: 'New password and old password cannot be the same',
 								position: 'top',
 								variant: 'subtle',
 								status: 'error',
