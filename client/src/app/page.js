@@ -75,7 +75,7 @@ function LandingPage() {
 	]
 
 	return (
-		<main className='min-h-screen relative bg-white text-black'>
+		<main className='min-h-screen relative bg-white text-black w-screen overflow-x-hidden'>
 			<div className='pt-28 relative z-20 space-y-[60px] px-4'>
 				{/* hero section */}
 				<section className='flex flex-col gap-5 justify-center items-center'>
