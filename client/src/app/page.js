@@ -1,8 +1,6 @@
 "use client"
 
 import React from 'react'
-import './tailwind.css'
-import Image from 'next/image'
 import Link from 'next/link'
 import ProductIllustration from '../assets/productIllustration.png'
 import { ArrowRight, CheckCircleIcon } from '../icons'
@@ -20,6 +18,7 @@ import TranslateIcon from '../icons/Translate.svg'
 import ProLabel from '../assets/proLabel.svg'
 import FreeLabel from '../assets/freeLabel.svg'
 import BgGrid from '../assets/grid.svg'
+import './tailwind.css'
 
 function LandingPage() {
 
@@ -76,7 +75,7 @@ function LandingPage() {
 
 	return (
 		<main className='min-h-screen relative bg-white text-black w-screen overflow-x-hidden'>
-			<div className='pt-28 relative z-20 space-y-[60px] px-4'>
+			<div className='pt-28 relative z-20 space-y-[60px] px-4 w-screen'>
 				{/* hero section */}
 				<section className='flex flex-col gap-5 justify-center items-center'>
 					<h1
@@ -95,8 +94,8 @@ function LandingPage() {
 						<ArrowRight fill={'black'} />
 					</Link>
 
-					<Image
-						src={ProductIllustration}
+					<img
+						src={ProductIllustration.src}
 						className='md:p-12'
 					/>
 				</section>
@@ -125,7 +124,7 @@ function LandingPage() {
 						<div className='w-full p-2.5 bg-primary/50 rounded-md space-y-2.5'>
 							{personas.map((personas) => (
 								<div key={personas.name} className='bg-[#DFE8FF] p-2.5 rounded-md shrink-0 flex items-center gap-2.5'>
-									<Image src={personas.image} alt={personas.name} width={32} height={32} />
+									<img src={personas.image.src} alt={personas.name} width={32} height={32} />
 									<p>{personas.name}</p>
 								</div>
 							))}
@@ -148,7 +147,7 @@ function LandingPage() {
 						{features.map(feature => (
 							<div key={feature.id} className='p-2.5 bg-primary/50 flex flex-col rounded-md space-y-2.5'>
 								<div className='flex items-center gap-2.5 md:text-xl shrink-0'>
-									<Image src={feature.icon} />
+									<img src={feature.icon.src} />
 									<h2>{feature.title}</h2>
 								</div>
 								<p className='bg-primary p-2.5 rounded-md h-full'>{feature.description}</p>
@@ -174,7 +173,7 @@ function LandingPage() {
 
 								<div className='items-center text-xl flex gap-2.5'>
 									<h2>myGPTBrain</h2>
-									<Image src={ProLabel} className='mt-1' />
+									<img src={ProLabel.src} className='mt-1' />
 								</div>
 
 								{/* benefits */}
@@ -205,7 +204,7 @@ function LandingPage() {
 
 								<div className='items-center text-xl flex gap-2.5'>
 									<h2>myGPTBrain</h2>
-									<Image src={FreeLabel} className='mt-1' />
+									<img src={FreeLabel.src} className='mt-1' />
 								</div>
 
 								{/* benefits */}
@@ -266,10 +265,12 @@ function LandingPage() {
 
 			</div>
 
-			<Image
-				src={BgGrid}
-				className='w-screen min-w-[1000px] mx-auto h-full z-10 absolute top-0 left-0 border-2 border-red-500'
-			/>
+			<div className='w-screen overflow-x-hidden z-10 absolute top-0 left-0'>
+				<img
+					src={BgGrid.src}
+					className=' min-w-[1000px] mx-auto h-full'
+				/>
+			</div>
 
 		</main>
 
