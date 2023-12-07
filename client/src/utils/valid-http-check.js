@@ -23,7 +23,7 @@ function isValidHttpUrl(str) {
 export default isValidHttpUrl
 
 export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
-	status == status ? onOpen() : usernextFunc()
+	status == false ? onOpen() : usernextFunc()
 }
 
 export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
