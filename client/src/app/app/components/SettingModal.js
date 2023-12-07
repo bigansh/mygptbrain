@@ -53,7 +53,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 	}
 	return (
 		<Modal
-			size={['4xl', '6xl']}
+			size={['full', '6xl']}
 			isOpen={isOpenSetting}
 			onClose={onCloseSetting}
 		>
@@ -65,7 +65,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 				<ModalCloseButton />
 				<ModalBody p={0}>
 					<Grid
-						h={'80vh'}
+						h={['100vh', '80vh']}
 						templateColumns={'1fr 4fr'}
 						rounded={'lg'}
 						overflow={'hidden'}

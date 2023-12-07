@@ -78,7 +78,7 @@ const Dashboard = () => {
 				status: 'info',
 				duration: 3000,
 			})
-			router.push('/onboarding/signup')
+			router.push('/onboarding')
 		}
 		if (currentView == 'document') {
 			setIsSidebarOpen(false)

@@ -71,6 +71,8 @@ const AccountComponent = () => {
 		})
 
 	const [userDetails, setUserDetails] = useState({
+		name: data?.name || '',
+		email: data?.email || '',
 		oldPassword: '',
 		newPassword: '',
 	})
@@ -225,7 +227,7 @@ const AccountComponent = () => {
 					cursor={'pointer'}
 					onClick={() => {
 						localStorage.removeItem('x-session-token')
-						router.push('/onboarding/login')
+						router.push('/onboarding')
 						toast({
 							title: 'Logged out',
 							position: 'top',
