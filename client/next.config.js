@@ -15,12 +15,12 @@ const nextConfig = {
 				permanent: false,
 			},
 			{
-				source: '/onboarding/:path*',
+				source: '/onboarding/:path',
 				destination: '/onboarding',
 				permanent: true,
 			},
 			{
-				source: '/app/:path*',
+				source: '/app/:path',
 				destination: '/app',
 				permanent: true,
 			},
