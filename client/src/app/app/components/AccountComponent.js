@@ -1,5 +1,5 @@
 'use client'
-import { deleteUser, getUser } from '@/api'
+import { deleteUser, getUser, updatePasswordFunc } from '@/api'
 import { logtail } from '@/app/providers'
 import { useColors } from '@/utils/colors'
 import { removeTokens } from '@/utils/helpers'
@@ -38,21 +38,6 @@ const AccountComponent = () => {
 		queryFn: getUser,
 		enabled: false,
 	})
-	const [userDetails, setUserDetails] = useState({
-		name: data?.name || '',
-		email: data?.email || '',
-		oldPassword: '',
-		newPassword: '',
-	})
-
-	// {
-	// 	profile_id
-	// 	userObject: {
-	// 		authDetails: {
-	// 			password: ''
-	// 		}
-	// 	}
-	// }
 
 	const { mutate: deleteAcMutate, isLoading: deleteAcIsLoading } =
 		useMutation({
@@ -85,24 +70,36 @@ const AccountComponent = () => {
 			},
 		})
 
+	const [userDetails, setUserDetails] = useState({
+		name: data?.name || '',
+		email: data?.email || '',
+		oldPassword: '',
+		newPassword: '',
+	})
+
 	const { mutate: updatePassMutate, isLoading: updatePassIsLoading } =
 		useMutation({
-			mutationFn: () => updatePassword(data?.profile_id),
+			mutationFn: (pass) =>
+				updatePasswordFunc({
+					profile_id: data?.profile_id,
+					userObject: {
+						authDetails: {
+							password: pass,
+						},
+					},
+				}),
 			onSuccess: (data) => {
-				// toast({
-				// 	title: 'Account deleted successfully!',
-				// 	position: 'top',
-				// 	variant: 'subtle',
-				// 	status: 'success',
-				// 	duration: 3000,
-				// })
-				onCloseDelete()
-				removeTokens()
-				router.push('/')
+				toast({
+					title: 'Password updated successfully',
+					position: 'top',
+					variant: 'subtle',
+					status: 'success',
+					duration: 3000,
+				})
 			},
 			onError: (error) => {
 				toast({
-					title: 'Error deleting account!',
+					title: 'Error updating password',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',
@@ -110,22 +107,12 @@ const AccountComponent = () => {
 				})
 
 				removeTokens()
-				logtail.info('Error deleting account', error)
+				logtail.info('Error deleting password', error)
 				logtail.flush()
-				router.push('/')
 			},
 		})
 
 	const [updatePassword, setUpdatePassword] = useState(false)
-	const [showUpdatePassword, setShowUpdatePassword] = useState(false)
-	const [showDeleteAccount, setShowDeleteAccount] = useState(false)
-
-	const handleUpdatePassword = () => {
-		setShowUpdatePassword(!showUpdatePassword)
-		setOldPassword('')
-		setNewPassword('')
-		setShowDeleteAccount(false)
-	}
 
 	return (
 		<Flex flexDir={'column'} mt={2} p={4} mb={6} w={'100%'}>
@@ -208,18 +195,39 @@ const AccountComponent = () => {
 				justifyContent={'space-between'}
 				fontWeight={'400'}
 				w={'fit-content'}
-				onClick={() => setUpdatePassword(true)}
+				onClick={() => {
+					if (
+						userDetails.newPassword == '' &&
+						userDetails.oldPassword == ''
+					) {
+						setUpdatePassword(true)
+					} else {
+						if (
+							userDetails.newPassword !== userDetails.oldPassword
+						) {
+							toast({
+								title: 'New password and old password has to be the same',
+								position: 'top',
+								variant: 'subtle',
+								status: 'error',
+								duration: 3000,
+							})
+						} else {
+							updatePassMutate(userDetails.newPassword)
+						}
+					}
+				}}
 				mt={8}
 				py={[4, 'unset']}
 			>
-				update password
+				{updatePassIsLoading ? <Spinner /> : 'update password'}
 			</Button>
 			<Flex gap={5} mt={4} pb={4}>
 				<Button
 					cursor={'pointer'}
 					onClick={() => {
 						localStorage.removeItem('x-session-token')
-						router.push('/onboarding/login')
+						router.push('/onboarding')
 						toast({
 							title: 'Logged out',
 							position: 'top',

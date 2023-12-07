@@ -102,7 +102,7 @@ const PreferencesComponent = () => {
 	})
 
 	return (
-		<Flex flexDir={'column'} mt={2} p={4}>
+		<Flex flexDir={'column'} mt={2} p={4} w={'100%'}>
 			<Text fontSize={'xl'} fontWeight={'400'}>
 				prompt templates
 			</Text>
@@ -179,7 +179,7 @@ const PreferencesComponent = () => {
 				bg={base700}
 				border={'0px'}
 				p={2.5}
-				rows={8}
+				rows={12}
 				w={['100%', '500px']}
 				mt={2.5}
 			/>

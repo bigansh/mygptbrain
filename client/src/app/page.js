@@ -25,7 +25,7 @@ export default function Home() {
 
 	useEffect(() => {
 		if (localStorage.getItem('x-session-token')) {
-			router.push('/app/dashboard')
+			router.push('/app')
 		}
 		function scrollHandler(e) {
 			const indexToSet = Math.round(
@@ -118,7 +118,7 @@ export default function Home() {
 				<Text fontSize='larger' color='black' marginBottom='2'>
 					now stop imagining...
 				</Text>
-				<Link href='/onboarding/login'>
+				<Link href='/onboarding'>
 					<Button
 						title='login'
 						fontWeight={'400'}

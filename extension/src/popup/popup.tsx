@@ -132,7 +132,7 @@ const Popup: React.FC<{}> = () => {
 									tabs[0].url
 								)
 								chrome.tabs.create({
-									url: `https://mygptbrain.com/onboarding/login?redirect=${redirectUrl}`,
+									url: `https://mygptbrain.com/onboarding?redirect=${redirectUrl}`,
 								})
 							}
 						}
@@ -146,7 +146,7 @@ const Popup: React.FC<{}> = () => {
 					'The cookie is missing a required attribute.'
 				) {
 					chrome.tabs.create({
-						url: `http://mygptbrain.com/onboarding/login?redirect=${chrome.runtime.getURL()}`,
+						url: `http://mygptbrain.com/onboarding?redirect=${chrome.runtime.getURL()}`,
 					})
 				}
 			})
