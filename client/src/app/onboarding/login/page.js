@@ -58,7 +58,7 @@ const Login = () => {
 		if (!verifyEmail(userDetails.email)) {
 			setUserDetails({ email: '', password: '' })
 			toast({
-				title: 'Email not valid. Please use a valid email address',
+				title: 'please enter a valid email',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -75,7 +75,7 @@ const Login = () => {
 			})
 			if (res.status == 200) {
 				toast({
-					title: 'Logged in successfully',
+					title: 'successfully logged in',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -93,7 +93,7 @@ const Login = () => {
 
 			if (redirectUrl && typeof redirectUrl === 'string') {
 				toast({
-					title: 'Logged in successfully',
+					title: 'successfully logged in',
 					description: 'Redirecting to the page you were on...',
 					position: 'top',
 					variant: 'subtle',
@@ -106,7 +106,7 @@ const Login = () => {
 			}
 		} catch (error) {
 			toast({
-				title: 'Error while logging in',
+				title: 'error while logging in',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -152,7 +152,7 @@ const Login = () => {
 							type='password'
 							value={userDetails.password}
 							onChange={handleChange}
-							placeholder='***'
+							placeholder='*****'
 						/>
 
 						<Button

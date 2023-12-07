@@ -5,11 +5,13 @@ export const gpt_turbo = new OpenAI({
 	modelName: 'gpt-3.5-turbo',
 	openAIApiKey: process.env.OPENAI_ID,
 	temperature: 0,
+	verbose: true,
 })
 
 export const gpt_4 = new OpenAI({
 	modelName: 'gpt-4',
 	openAIApiKey: process.env.OPENAI_ID,
+	verbose: true,
 	temperature: 0,
 })
 

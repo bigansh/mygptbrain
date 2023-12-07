@@ -55,7 +55,7 @@ const promptQuery = async (prompt, chat) => {
 		// 	send_type = 'refine'
 		// }
 
-		const promptTemplate = `Given the following conversation and a follow up question, provide the most accurate response. ${
+		const promptTemplate = `${
 			user.userMetadata.prompt_templates[preferences.prompt_template]
 		}
 		Chat History: {chat_history}
@@ -74,6 +74,7 @@ const promptQuery = async (prompt, chat) => {
 				returnSourceDocuments: true,
 				// qaChainOptions: { type: send_type },
 				qaTemplate: promptTemplate,
+				verbose: true,
 			}
 		)
 
