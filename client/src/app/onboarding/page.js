@@ -53,7 +53,7 @@ const Auth = () => {
 		if (!verifyEmail(signupUserDetails.email)) {
 			setSignupUserDetails({ email: '', password: '' })
 			toast({
-				title: 'Email not valid. Please use a valid email address',
+				title: 'please enter a valid email',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -68,7 +68,7 @@ const Auth = () => {
 			})
 			if (res.status == 200) {
 				toast({
-					title: 'Signed up successfully',
+					title: 'signup successful',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -81,7 +81,7 @@ const Auth = () => {
 			setSignupLoading(false)
 			if (redirectUrl && typeof redirectUrl === 'string') {
 				toast({
-					title: 'Signed in successfully',
+					title: 'user logged in',
 					description: 'Redirecting to the page you were on...',
 					position: 'top',
 					variant: 'subtle',
@@ -96,7 +96,7 @@ const Auth = () => {
 		} catch (error) {
 			setSignupLoading(false)
 			toast({
-				title: 'Error while signing up',
+				title: 'error signing up',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -135,7 +135,7 @@ const Auth = () => {
 		if (!verifyEmail(userLoginDetails.email)) {
 			setUserLoginDetails({ email: '', password: '' })
 			toast({
-				title: 'Email not valid. Please use a valid email address',
+				title: 'please enter a valid email',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -152,7 +152,7 @@ const Auth = () => {
 			})
 			if (res.status == 200) {
 				toast({
-					title: 'Logged in successfully',
+					title: 'used logged in',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -170,7 +170,7 @@ const Auth = () => {
 
 			if (redirectUrl && typeof redirectUrl === 'string') {
 				toast({
-					title: 'Logged in successfully',
+					title: 'used logged in',
 					description: 'Redirecting to the page you were on...',
 					position: 'top',
 					variant: 'subtle',
@@ -183,7 +183,7 @@ const Auth = () => {
 			}
 		} catch (error) {
 			toast({
-				title: 'Error while logging in',
+				title: 'error logging in',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',

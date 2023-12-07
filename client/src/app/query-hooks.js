@@ -66,7 +66,7 @@ export const useUploadDoc = ({ onSuccess }) => {
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(['documents'])
 			toast({
-				title: 'Document uploaded successfully',
+				title: 'document uploaded',
 				position: 'top',
 				variant: 'subtle',
 				status: 'success',
@@ -76,7 +76,7 @@ export const useUploadDoc = ({ onSuccess }) => {
 		},
 		onError: (error) => {
 			toast({
-				title: 'Error uploading document',
+				title: 'error uploading document',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -94,7 +94,7 @@ export const useSyncDoc = (onSuccess = () => {}) => {
 	return useMutation(() => syncDoc(), {
 		onSuccess: () => {
 			toast({
-				title: 'Data synced successfully',
+				title: 'platforms synced',
 				position: 'top',
 				variant: 'subtle',
 				status: 'success',
@@ -104,7 +104,7 @@ export const useSyncDoc = (onSuccess = () => {}) => {
 		},
 		onError: (error) => {
 			toast({
-				title: 'Error syncing data',
+				title: 'error syncing data',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -125,7 +125,7 @@ export const useScrapeLink = ({ link, onSuccess }) => {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['documents'])
 			toast({
-				title: 'Link scraped successfully',
+				title: 'link scraped',
 				position: 'top',
 				variant: 'subtle',
 				status: 'success',
@@ -135,7 +135,7 @@ export const useScrapeLink = ({ link, onSuccess }) => {
 		},
 		onError: (error) => {
 			toast({
-				title: 'Error uploading link',
+				title: 'error scraping the link',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -158,7 +158,7 @@ export const useChatPreferences = ({ currentThread, onSuccess }) => {
 
 		onSuccess: (data) => {
 			toast({
-				title: 'Chat preference updated successfully',
+				title: 'chat preference updated',
 				position: 'top',
 				variant: 'subtle',
 				status: 'success',
@@ -185,7 +185,7 @@ export const useChatPromptTemplate = ({ currentThread, onSuccess }) => {
 
 		onSuccess: (data) => {
 			toast({
-				title: 'Chat prompt template updated successfully',
+				title: 'prompt template updated',
 				position: 'top',
 				variant: 'subtle',
 				status: 'success',

@@ -56,7 +56,7 @@ const AccountComponent = () => {
 			},
 			onError: (error) => {
 				toast({
-					title: 'Error deleting account!',
+					title: 'error deleting account!',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',
@@ -90,7 +90,7 @@ const AccountComponent = () => {
 				}),
 			onSuccess: (data) => {
 				toast({
-					title: 'Password updated successfully',
+					title: 'password updated successfully',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -99,7 +99,7 @@ const AccountComponent = () => {
 			},
 			onError: (error) => {
 				toast({
-					title: 'Error updating password',
+					title: 'error updating the password',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',
@@ -107,7 +107,7 @@ const AccountComponent = () => {
 				})
 
 				removeTokens()
-				logtail.info('Error deleting password', error)
+				logtail.info('Error deleting the password', error)
 				logtail.flush()
 			},
 		})
@@ -229,7 +229,7 @@ const AccountComponent = () => {
 						localStorage.removeItem('x-session-token')
 						router.push('/onboarding')
 						toast({
-							title: 'Logged out',
+							title: 'user logged out',
 							position: 'top',
 							variant: 'subtle',
 							status: 'info',

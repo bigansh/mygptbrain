@@ -154,7 +154,7 @@ feel free to customize your experience by changing the thread's name, the model 
 			onSuccess: () => {
 				queryClient.invalidateQueries(['documents'])
 				toast({
-					title: 'Document deleted',
+					title: 'document deleted',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -168,7 +168,7 @@ feel free to customize your experience by changing the thread's name, the model 
 				logtail.info('Error deleting document', error)
 				logtail.flush()
 				toast({
-					title: 'Error deleting document',
+					title: 'error deleting the document',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',
@@ -500,7 +500,7 @@ const ChatInput = ({
 		},
 		onError: (error) => {
 			toast({
-				title: 'Error creating document chat',
+				title: 'error chatting with the document',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -570,7 +570,7 @@ const ChatInput = ({
 			onSuccess: (data) => {
 				queryClient.invalidateQueries(['doc-threads', currentDocument])
 				toast({
-					title: 'Thread deleted',
+					title: 'thread deleted',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -584,7 +584,7 @@ const ChatInput = ({
 				logtail.info('Error deleting thread', error)
 				logtail.flush()
 				toast({
-					title: 'Error deleting thread',
+					title: 'error deleting thread',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',

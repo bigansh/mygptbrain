@@ -140,7 +140,7 @@ const RightSidebar = ({
 					return [data]
 				})
 				toast({
-					title: 'Name updated',
+					title: 'name updated',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -164,7 +164,7 @@ const RightSidebar = ({
 			onSuccess: (data) => {
 				queryClient.invalidateQueries(['threads'])
 				toast({
-					title: 'Thread deleted',
+					title: 'thread deleted',
 					position: 'top',
 					variant: 'subtle',
 					status: 'success',
@@ -179,7 +179,7 @@ const RightSidebar = ({
 				logtail.info('Error deleting thread', error)
 				logtail.flush()
 				toast({
-					title: 'Error deleting thread',
+					title: 'error deleting thread',
 					position: 'top',
 					variant: 'subtle',
 					status: 'error',

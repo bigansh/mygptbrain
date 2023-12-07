@@ -354,7 +354,7 @@ const OnboardingModal = ({
 													}
 												} else {
 													toast({
-														title: 'Invalid Link',
+														title: 'invalid link',
 														position: 'top',
 														variant: 'left-accent',
 														status: 'error',

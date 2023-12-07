@@ -72,7 +72,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		if (!localStorage.getItem('x-session-token')) {
 			toast({
-				title: 'Login to continue',
+				title: 'please login to continue',
 				position: 'top',
 				variant: 'subtle',
 				status: 'info',

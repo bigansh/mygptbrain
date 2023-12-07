@@ -66,7 +66,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 		},
 		onError: (error) => {
 			toast({
-				title: 'Error creating chat',
+				title: 'error creating chat',
 				position: 'top',
 				variant: 'subtle',
 				status: 'error',
@@ -154,7 +154,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					onClick={() => {
 						docData?.length == 0 &&
 							toast({
-								title: 'Add a document to get started',
+								title: 'please add a document to start',
 								position: 'top',
 								variant: 'subtle',
 								status: 'warning',
@@ -197,7 +197,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 					onClick={() => {
 						if (docData?.length == 0) {
 							toast({
-								title: 'Add a document to get started',
+								title: 'please upload a document to start',
 								position: 'top',
 								variant: 'subtle',
 								status: 'warning',

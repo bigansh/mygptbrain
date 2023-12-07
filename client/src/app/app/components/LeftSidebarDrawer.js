@@ -395,9 +395,9 @@ const LeftSideBarDrawer = ({
 													} else {
 														onPaymentModalOpen()
 														toast({
-															title: 'More than 5 files/link upload are paid',
+															title: 'limit reached',
 															description:
-																'Please upgrade your plan.',
+																'please upgrade your plan',
 															position: 'Top',
 															variant: 'subtle',
 															status: 'info',
@@ -407,7 +407,7 @@ const LeftSideBarDrawer = ({
 													}
 												} else {
 													toast({
-														title: 'Invalid Link',
+														title: 'invalid link',
 														position: 'top',
 														variant: 'left-accent',
 														status: 'error',
