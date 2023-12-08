@@ -4,7 +4,7 @@ async function getSessionTokenCookie() {
 	return new Promise((resolve, reject) => {
 		chrome.cookies.get(
 			{
-				url: 'https://api.mygptbrain.com/',
+				url: 'https://mygptbrain.com/',
 				name: 'x-session-token',
 			},
 			(cookie) => {

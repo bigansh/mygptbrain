@@ -45,6 +45,7 @@ import {
 } from '@/app/query-hooks'
 import { useToastManager } from '@/utils/customToasts'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
+import { useThreads } from '@/context'
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL, {
 	track_pageview: true,
@@ -156,6 +157,8 @@ const OnboardingModal = ({
 			},
 		})
 
+	const { currentThread, setCurrentThread, currentView, setCurrentView } =
+		useThreads()
 	const { base, base800, base700, text } = useColors()
 	return (
 		<Modal
@@ -289,26 +292,56 @@ const OnboardingModal = ({
 									display={'none'}
 								/>
 
-								<Button
-									display={'flex'}
-									overflow={'hidden'}
-									justifyContent={'space-between'}
-									background={base700}
-									_hover={{ background: base700 }}
-									py={6}
-									px='10px'
-									gap={2}
-									fontWeight={'400'}
-									cursor={'pointer'}
-									onClick={() => uploadRef.current.click()}
-								>
-									upload document
-									{uploadDocIsLoading ? (
-										<Spinner />
-									) : (
-										<AiOutlineCloudUpload />
-									)}
-								</Button>
+								{currentGif == 0 && (
+									<Button
+										display={'flex'}
+										overflow={'hidden'}
+										justifyContent={'space-between'}
+										background={base700}
+										_hover={{ background: base700 }}
+										py={6}
+										px='10px'
+										gap={2}
+										fontWeight={'400'}
+										cursor={'pointer'}
+										onClick={() =>
+											uploadRef.current.click()
+										}
+									>
+										upload document
+										{uploadDocIsLoading ? (
+											<Spinner />
+										) : (
+											<AiOutlineCloudUpload />
+										)}
+									</Button>
+								)}
+								{currentGif == 1 && (
+									<Button
+										display={'flex'}
+										overflow={'hidden'}
+										justifyContent={'space-between'}
+										background={base700}
+										_hover={{ background: base700 }}
+										py={6}
+										px='10px'
+										gap={2}
+										fontWeight={'400'}
+										cursor={'pointer'}
+										onClick={() => {
+											setCurrentView('chat')
+											onCloseOnboarding()
+											setCurrentThread('new')
+										}}
+									>
+										upload document
+										{uploadDocIsLoading ? (
+											<Spinner />
+										) : (
+											<AiOutlineCloudUpload />
+										)}
+									</Button>
+								)}
 								<InputGroup
 									border={'0px solid transparent'}
 									h={'100%'}
@@ -387,49 +420,6 @@ const OnboardingModal = ({
 				</ModalBody>
 			</ModalContent>
 		</Modal>
-	)
-}
-
-const PlatformCard = ({ title, color, icon, state, onOpen }) => {
-	const { userData } = useUserData()
-	const showToast = useToastManager()
-	return (
-		<Flex
-			flexDir={'column'}
-			gap={2}
-			cursor={'pointer'}
-			onClick={() =>
-				upgradeFunction({
-					status: userData?.userMetadata?.subscription_status,
-					usernextFunc: () => {
-						connectPlatform({
-							platform: name,
-							profileId: userData?.profile_id,
-						})
-					},
-					onOpen: () => {
-						showToast('PLATFORMS')
-						onOpen()
-					},
-				})
-			}
-		>
-			<Text fontSize={'xl'} fontWeight={'400'}>
-				{title}
-			</Text>
-			<Flex
-				alignItems={'center'}
-				bg={color}
-				gap={[10, 20]}
-				color={'white'}
-				rounded={'5px'}
-				p={2.5}
-				justifyContent={'space-between'}
-			>
-				<Text>connect</Text>
-				{icon}
-			</Flex>
-		</Flex>
 	)
 }
 

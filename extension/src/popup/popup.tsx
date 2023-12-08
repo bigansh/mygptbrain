@@ -34,6 +34,10 @@ const theme = extendTheme({
 	},
 })
 
+const err = '#feb2b2'
+const info = '#90cdf4'
+const success = '#9ae6b4'
+
 const Popup: React.FC<{}> = () => {
 	const [options, setOptions] = useState(null)
 	const [cookie, setCookie] = useState<any>()
@@ -153,23 +157,31 @@ const Popup: React.FC<{}> = () => {
 	}
 
 	const Error = ({ error }) => {
-		console.log(error, 'mod')
+		console.log(error, 'error', error.subject == 'error')
 		return (
-			<Flex w={'300px'} p={2} gap={2} flexDir={'column'}>
-				{error?.subject == 'error' && (
+			<Flex w={'300px'} p={4} gap={2} flexDir={'column'} bg={err}>
+				{error.subject == 'error' && (
 					<>
-						<h1>{error?.content}</h1>
-						<p>Some error occured while bookmarking</p>
+						<Heading fontSize={'xl'}>{error?.content}</Heading>
+						<Text>Some error occured while bookmarking</Text>
 					</>
 				)}
-				{error?.subject == 'pay' && (
+				{error.subject == 'pay' && (
 					<>
-						<h1>Free Tier Exhausted</h1>
-						<p>Upgrade to add unlimited bookmarks</p>
+						<Heading fontSize={'xl'}>Free Tier Exhausted</Heading>
+						<Text>Upgrade to add unlimited bookmarks</Text>
 
-						<a href='https://checkout.stripe.com/c/pay/cs_test_b16bzjrtko4x1G0tUkOdm1cR29eYr76ncIBp1TdWkc7UUMPwXeWZTqM6kr#fidkdWxOYHwnPyd1blpxYHZxWjA0SzEwM1xWTHFXbG5SV0ZsU1wzVXRucnNvYWg8YHU9ZHFQYTNRcEFQbjVsa1B3PWBqYktmV2BgUH1zdG8wUFVcbUQ2fGBnYk4yMlBfNHNgfGlUNE90aTxoNTVNcG9iUFNzRid4JSUl'>
+						<Button
+							mt={4}
+							bg={'blue.100'}
+							onClick={() =>
+								chrome.tabs.create({
+									url: 'https://checkout.stripe.com/c/pay/cs_test_b16bzjrtko4x1G0tUkOdm1cR29eYr76ncIBp1TdWkc7UUMPwXeWZTqM6kr#fidkdWxOYHwnPyd1blpxYHZxWjA0SzEwM1xWTHFXbG5SV0ZsU1wzVXRucnNvYWg8YHU9ZHFQYTNRcEFQbjVsa1B3PWBqYktmV2BgUH1zdG8wUFVcbUQ2fGBnYk4yMlBfNHNgfGlUNE90aTxoNTVNcG9iUFNzRid4JSUl',
+								})
+							}
+						>
 							Upgrade
-						</a>
+						</Button>
 					</>
 				)}
 			</Flex>
@@ -196,8 +208,8 @@ const Popup: React.FC<{}> = () => {
 		<ChakraProvider theme={theme}>
 			{cookie &&
 				(loading ? (
-					<Flex w={'400px'} p={2} gap={2} flexDir={'column'}>
-						<h1>loading</h1>
+					<Flex w={'300px'} p={4} gap={2} flexDir={'column'}>
+						<Heading fontSize={'xl'}>loading...</Heading>
 					</Flex>
 				) : error ? (
 					<Error error={error} />
@@ -207,9 +219,9 @@ const Popup: React.FC<{}> = () => {
 						className='popup'
 						direction='column'
 						gap={4}
-						m={6}
+						p={4}
 					>
-						<Heading lineHeight={1} fontWeight={400} fontSize='2xl'>
+						<Heading lineHeight={1} fontWeight={400} fontSize='xl'>
 							Bookmark Saved!
 						</Heading>
 						<Text

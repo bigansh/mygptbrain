@@ -16,14 +16,10 @@
 	},
 	"host_permissions": [
 		"https://api.mygptbrain.com/",
-		"https://mygptbrain.com/"
+		"https://mygptbrain.com/",
+		"https://testing.mygptbrain.com/"
 	],
-	"permissions": [
-		"storage",
-		"tabs",
-		"activeTab",
-		"cookies"
-	],
+	"permissions": ["storage", "tabs", "activeTab", "cookies"],
 	"options_page": "options.html",
 	"background": {
 		"service_worker": "background.js"

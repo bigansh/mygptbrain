@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 	try {
 		const cookie = await checkCookie()
-
+		console.log(cookie)
 		if (!cookie) {
 			chrome.tabs.create({
 				url: 'https://mygptbrain.com/onboarding',
@@ -39,18 +39,25 @@ chrome.runtime.onInstalled.addListener(async () => {
 			setStoredLinks([])
 			chrome.action.setBadgeBackgroundColor({ color: '#50C878' })
 
-			const user = await getUser().then((res) => res.json())
+			const user = await getUser()
+			console.log(user, 'user')
 
-			const links = await getLinks({ profileId: user.profile_id }).then(
-				(res) => res.json()
-			)
+
+			const links = await getLinks({ profileId: user.profile_id })
+			console.log(links, 'links')
 			setStoredUser(user)
 			setStoredLinks(
 				links.filter((link) => link.documentMetadata.url !== null)
 			)
 		}
 	} catch (err) {
-		console.error(err)
+		chrome.runtime.sendMessage({
+			msg: 'ERROR',
+			data: {
+				subject: 'error',
+				content: 'Error in authorization',
+			},
+		})
 	}
 })
 
