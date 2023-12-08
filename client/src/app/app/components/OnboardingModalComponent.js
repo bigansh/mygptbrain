@@ -177,10 +177,10 @@ const OnboardingModal = ({
 				margin={['10px', 'auto']}
 				bg={base800}
 			>
-				<ModalCloseButton
+				{/* <ModalCloseButton
 					cursor={'pointer'}
 					onClick={onCloseOnboarding}
-				/>
+				/> */}
 				<ModalBody
 					w={['100%', '60%']}
 					m={'auto'}
