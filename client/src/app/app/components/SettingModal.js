@@ -126,7 +126,7 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 											?.subscription_status
 											? handleButtonClick('billing')
 											: router.push(
-													`https://billing.stripe.com/p/login/test_3cs29PciO4B2aWY000?prefilled_email=${userData.email}`
+													`https://billing.stripe.com/p/login/${process.env.NEXT_PUBLIC_BILLING_PORTAL}?prefilled_email=${userData.email}`
 											  )
 									}
 									title='billing'
