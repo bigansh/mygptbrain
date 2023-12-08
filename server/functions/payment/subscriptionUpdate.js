@@ -23,7 +23,7 @@ const subscriptionUpdate = async (stripeObject) => {
 		// )
 
 		const foundUser = await User.findFirst({
-			where: { email: customer_email },
+			where: { email: { equals: customer_email, mode: 'insensitive' } },
 		})
 
 		if (!foundUser) {
