@@ -1,4 +1,4 @@
-import { Button, useDisclosure } from '@chakra-ui/react'
+import { Button, Text, useDisclosure } from '@chakra-ui/react'
 import {
 	Modal,
 	ModalOverlay,
@@ -32,11 +32,23 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 			onClose={onPaymentModalClose}
 			isOpen={isPaymentModalOpen}
 			isCentered
+			size={'sm'}
 		>
 			<ModalOverlay />
 			<ModalContent pb={4} bg={'white'} text={'black'}>
 				<ModalCloseButton color={'black'} />
 				<ModalBody mt={0}>
+					<Text
+						fontSize={'lg'}
+						fontWeight={'400'}
+						color={'#000000'}
+						textAlign={'center'}
+						pt={12}
+						px={4}
+					>
+						please use the email that <br /> you use this account
+						with.
+					</Text>
 					<stripe-pricing-table
 						pricing-table-id={
 							process.env.NEXT_PUBLIC_STRIPE_TABLE_ID
