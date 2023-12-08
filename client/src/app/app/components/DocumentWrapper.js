@@ -62,6 +62,7 @@ import { IoClose, IoCloseOutline } from 'react-icons/io5'
 import { llmButtons } from '@/data'
 import FunctionalBtn from './FunctionalBtn'
 import { FiCheck } from 'react-icons/fi'
+import { useToastManager } from '@/utils/customToasts'
 
 const DocumentWrapper = ({ isSidebarOpen, onPaymentModalOpen }) => {
 	const [inputValue, setInputValue] = useState('')
@@ -624,7 +625,7 @@ const ChatInput = ({
 			onToggleLLM()
 		},
 	})
-	const showToast = useToastManager()
+	const showToast = useToastManagerr()
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>
 			<Flex
