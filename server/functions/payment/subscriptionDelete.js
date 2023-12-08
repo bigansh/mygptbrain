@@ -11,9 +11,17 @@ const subscriptionDelete = async (stripeObject) => {
 
 		const stripeCustomer = await stripe.customers.retrieve(customer_id)
 
+		if (!stripeCustomer) {
+			throw new Error("Stripe customer doesn't exist.")
+		}
+
 		const foundUser = await User.findFirst({
 			where: { stripe_id: customer_id },
 		})
+
+		if (!foundUser) {
+			throw new Error('No profile found with that Stripe ID.')
+		}
 
 		if (stripeCustomer.email !== foundUser.email) {
 			throw new Error('Customer profile mismatch')
