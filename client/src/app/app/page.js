@@ -125,7 +125,10 @@ const Dashboard = () => {
 			{currentView == 'chat' ? (
 				<ChatWrapper isSidebarOpen={isSidebarOpen} />
 			) : (
-				<DocumentWrapper isSidebarOpen={isSidebarOpen} />
+				<DocumentWrapper
+					isSidebarOpen={isSidebarOpen}
+					onPaymentModalOpen={onPaymentModalOpen}
+				/>
 			)}
 			<RightSidebar
 				isSidebarOpen={isSidebarOpen}
