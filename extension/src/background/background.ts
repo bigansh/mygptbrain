@@ -42,11 +42,12 @@ chrome.runtime.onInstalled.addListener(async () => {
 			const user = await getUser()
 			console.log(user, 'user')
 
-
+			// @ts-ignore
 			const links = await getLinks({ profileId: user.profile_id })
 			console.log(links, 'links')
 			setStoredUser(user)
 			setStoredLinks(
+				// @ts-ignore
 				links.filter((link) => link.documentMetadata.url !== null)
 			)
 		}

@@ -163,13 +163,14 @@ const Popup: React.FC<{}> = () => {
 				{error.subject == 'error' && (
 					<>
 						<Heading fontSize={'xl'}>{error?.content}</Heading>
-						<Text>Some error occured while bookmarking</Text>
+						<Text>error while saving the document</Text>
 					</>
 				)}
 				{error.subject == 'pay' && (
 					<>
-						<Heading fontSize={'xl'}>Free Tier Exhausted</Heading>
-						<Text>Upgrade to add unlimited bookmarks</Text>
+						<Heading fontSize={'xl'}>
+							document limit reached
+						</Heading>
 
 						<Button
 							mt={4}
@@ -180,7 +181,7 @@ const Popup: React.FC<{}> = () => {
 								})
 							}
 						>
-							Upgrade
+							subscribe to myGPTBrain pro
 						</Button>
 					</>
 				)}
@@ -222,7 +223,7 @@ const Popup: React.FC<{}> = () => {
 						p={4}
 					>
 						<Heading lineHeight={1} fontWeight={400} fontSize='xl'>
-							Bookmark Saved!
+							document saved
 						</Heading>
 						<Text
 							fontSize='md'
