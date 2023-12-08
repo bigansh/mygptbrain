@@ -38,7 +38,7 @@ const Auth = () => {
 		password: '',
 	})
 
-	const [currentView, setCurrentView] = useState('signup')
+	const [currentView, setCurrentView] = useState('login')
 
 	const handleSignupChange = (e) => {
 		setSignupUserDetails({
@@ -202,7 +202,8 @@ const Auth = () => {
 			flexDir={['column-reverse', 'row']}
 			justifyContent={'center'}
 			w={'100vw'}
-			h={'100vh'}
+			minH={'100vh'}
+			h={['100%', '100vh']}
 			background={base}
 			gridTemplateColumns={'1fr 2fr'}
 		>
@@ -274,6 +275,39 @@ const Auth = () => {
 						>
 							{signupLoading ? <Spinner /> : 'signup'}
 						</Button>
+						<Box position='relative' py='4' fontSize={'18px'}>
+							<Divider
+								bg={text}
+								borderColor={text}
+								rounded={'md'}
+								borderWidth={'1px'}
+							/>
+							<AbsoluteCenter px='4' bg={base}>
+								or
+							</AbsoluteCenter>
+						</Box>
+						<Button
+							fontWeight={'400'}
+							bg={base}
+							mt={2}
+							px={4}
+							py={2}
+							border={'1px solid #e0e0e0'}
+							gap={2}
+							rounded={'lg'}
+							color={text}
+							cursor={'pointer'}
+							onClick={() => authenticateUserByGoogle()}
+						>
+							<Img
+								w={6}
+								h={6}
+								src='https://www.svgrepo.com/show/475656/google-color.svg'
+								loading='lazy'
+								alt='google logo'
+							/>
+							<span>Continue with Google</span>
+						</Button>
 						<Text
 							color='#E5A79F'
 							fontSize='16px'
@@ -323,7 +357,7 @@ const Auth = () => {
 								type='password'
 								value={userLoginDetails.password}
 								onChange={handleLoginChange}
-								placeholder='***'
+								placeholder='********'
 							/>
 
 							<Button
@@ -340,54 +374,51 @@ const Auth = () => {
 							>
 								{loginLoading ? <Spinner /> : 'login'}
 							</Button>
-
-							<Text
-								color='#E5A79F'
-								fontSize='16px'
-								ml={'auto'}
-								onClick={() => setCurrentView('signup')}
-							>
-								or sign up
-							</Text>
 						</Flex>
 					) : (
-						<>
-							<Box position='relative' py='4' fontSize={'18px'}>
-								<Divider
-									bg={text}
-									borderColor={text}
-									rounded={'md'}
-									borderWidth={'1px'}
-								/>
-								<AbsoluteCenter px='4' bg={base}>
-									or
-								</AbsoluteCenter>
-							</Box>
-
-							<Button
-								fontWeight={'400'}
-								bg={base}
-								mt={2}
-								px={4}
-								py={2}
-								border={'1px solid #e0e0e0'}
-								gap={2}
-								rounded={'lg'}
-								color={text}
-								cursor={'pointer'}
-								onClick={() => authenticateUserByGoogle()}
-							>
-								<Img
-									w={6}
-									h={6}
-									src='https://www.svgrepo.com/show/475656/google-color.svg'
-									loading='lazy'
-									alt='google logo'
-								/>
-								<span>Continue with Google</span>
-							</Button>
-						</>
+						<></>
 					)}
+					<Box position='relative' py='4' fontSize={'18px'}>
+						<Divider
+							bg={text}
+							borderColor={text}
+							rounded={'md'}
+							borderWidth={'1px'}
+						/>
+						<AbsoluteCenter px='4' bg={base}>
+							or
+						</AbsoluteCenter>
+					</Box>
+					<Button
+						fontWeight={'400'}
+						bg={base}
+						mt={2}
+						px={4}
+						py={2}
+						border={'1px solid #e0e0e0'}
+						gap={2}
+						rounded={'lg'}
+						color={text}
+						cursor={'pointer'}
+						onClick={() => authenticateUserByGoogle()}
+					>
+						<Img
+							w={6}
+							h={6}
+							src='https://www.svgrepo.com/show/475656/google-color.svg'
+							loading='lazy'
+							alt='google logo'
+						/>
+						<span>Continue with Google</span>
+					</Button>
+					<Text
+						color='#E5A79F'
+						fontSize='16px'
+						ml={'auto'}
+						onClick={() => setCurrentView('signup')}
+					>
+						or sign up
+					</Text>
 				</Flex>
 			)}
 

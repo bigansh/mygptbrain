@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import ProductIllustration from '../assets/productIllustration.png'
 import { ArrowRight, CheckCircleIcon } from '../icons'
@@ -19,6 +19,7 @@ import ProLabel from '../assets/proLabel.svg'
 import FreeLabel from '../assets/freeLabel.svg'
 import BgGrid from '../assets/grid.svg'
 import './tailwind.css'
+import { useRouter } from 'next/navigation'
 
 function LandingPage() {
 	const personas = [
@@ -88,6 +89,13 @@ function LandingPage() {
 			icon: TranslateIcon,
 		},
 	]
+
+	const router = useRouter()
+	useEffect(() => {
+		if (localStorage.getItem('x-session-token')) {
+			router.push('/app')
+		}
+	}, [])
 
 	return (
 		<main className='min-h-screen relative bg-white text-black w-screen overflow-x-hidden'>

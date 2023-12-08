@@ -63,7 +63,7 @@ import { llmButtons } from '@/data'
 import FunctionalBtn from './FunctionalBtn'
 import { FiCheck } from 'react-icons/fi'
 
-const DocumentWrapper = ({ isSidebarOpen }) => {
+const DocumentWrapper = ({ isSidebarOpen, onPaymentModalOpen }) => {
 	const [inputValue, setInputValue] = useState('')
 	const toast = useToast()
 	const [docChat, setdocChat] = useState(null)
@@ -346,6 +346,7 @@ feel free to customize your experience by changing the thread's name, the model 
 						promptTemp={promptTemp}
 						setPromptTemp={setPromptTemp}
 						setChatOpen={setChatOpen}
+						onPaymentModalOpen={onPaymentModalOpen}
 					/>
 					<Flex
 						display={['block', 'none']}
@@ -447,6 +448,7 @@ const ChatInput = ({
 	promptTemp,
 	setPromptTemp,
 	setChatOpen,
+	onPaymentModalOpen,
 }) => {
 	const queryClient = useQueryClient()
 	const ref = useRef()
@@ -622,7 +624,7 @@ const ChatInput = ({
 			onToggleLLM()
 		},
 	})
-
+	const showToast = useToastManager()
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>
 			<Flex
