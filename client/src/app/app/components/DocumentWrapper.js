@@ -625,7 +625,7 @@ const ChatInput = ({
 			onToggleLLM()
 		},
 	})
-	const showToast = useToastManagerr()
+	const showToast = useToastManager()
 	return (
 		<Flex w={'100%'} mt='auto' p={2}>
 			<Flex
