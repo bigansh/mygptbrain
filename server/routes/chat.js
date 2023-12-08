@@ -15,7 +15,7 @@ const chat = (fastify, _options, done) => {
 		'/create',
 		{
 			preHandler: fastify.rateLimit({
-				max: 1,
+				max: 2,
 				timeWindow: 1000 * 60,
 			}),
 			onRequest: [fastify.userAuth],
