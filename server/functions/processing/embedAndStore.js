@@ -11,7 +11,9 @@ import mixpanel from '../../utils/api/mixpanel.js'
  */
 const embedAndStore = async (chunks) => {
 	try {
-		await PineconeStore.fromDocuments(chunks, embeddings, { pineconeIndex })
+		await PineconeStore.fromDocuments(chunks, embeddings, {
+			pineconeIndex: pineconeIndex,
+		})
 
 		mixpanel.people.increment(
 			chunks[0].metadata.profile_id,

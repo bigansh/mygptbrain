@@ -1,4 +1,5 @@
 import updateUser from '../../functions/user/updateUser.js'
+import updateUserMetadata from '../../functions/user/updateUserMetadata.js'
 
 /**
  * A controller to handle the update requests for the account
@@ -8,9 +9,17 @@ import updateUser from '../../functions/user/updateUser.js'
  */
 const update = async (req, res) => {
 	try {
-		const { userObject } = req.body
+		const { userObject, userMetadataObject } = req.body
 
-		const data = await updateUser(userObject)
+		const { profile_id } = req.user
+
+		let data
+
+		if (req.query.query_type === 'metadata') {
+			data = await updateUserMetadata(profile_id, userMetadataObject)
+		} else {
+			data = await updateUser(userObject, profile_id)
+		}
 
 		res.status(200).send(data)
 	} catch (error) {

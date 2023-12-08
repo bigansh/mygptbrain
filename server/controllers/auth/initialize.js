@@ -7,6 +7,7 @@ import signupAuthFlow from '../../functions/platforms/login/signupAuthFlow.js'
 import loginAuthFlow from '../../functions/platforms/login/loginAuthFlow.js'
 import notionAuthFlow from '../../functions/platforms/notion/notionAuthFlow.js'
 import redditAuthFlow from '../../functions/platforms/reddit/redditAuthFlow.js'
+import checkSubscription from '../../functions/utility/checkSubscription.js'
 
 /**
  * A controller to handle the auth initialization requests
@@ -28,6 +29,8 @@ const initialize = async (req, res) => {
 				throw new Error('No profile_id param found.')
 			}
 
+			await checkSubscription(profile_id)
+
 			const { url, state, codeVerifier } = twitterAuthFlow()
 
 			authObject = { state, codeVerifier, profile_id } || {}
@@ -40,6 +43,13 @@ const initialize = async (req, res) => {
 			query_type === 'keep' ||
 			query_type === 'drive'
 		) {
+			if (
+				profile_id &&
+				(query_type === 'keep' || query_type === 'drive')
+			) {
+				await checkSubscription(profile_id)
+			}
+
 			const { state, url, authenticatedScopes } =
 				googleAuthFlow(query_type)
 
@@ -53,6 +63,8 @@ const initialize = async (req, res) => {
 				throw new Error('No profile_id param found.')
 			}
 
+			await checkSubscription(profile_id)
+
 			const { state, url, code } = await pocketAuthFlow()
 
 			authObject = { state, profile_id, code } || {}
@@ -65,6 +77,8 @@ const initialize = async (req, res) => {
 				throw new Error('No profile_id param found.')
 			}
 
+			await checkSubscription(profile_id)
+
 			const { state, url } = redditAuthFlow()
 
 			authObject = { state, profile_id } || {}
@@ -76,6 +90,8 @@ const initialize = async (req, res) => {
 			if (!profile_id) {
 				throw new Error('No profile_id param found.')
 			}
+
+			await checkSubscription(profile_id)
 
 			const { state, url } = notionAuthFlow()
 

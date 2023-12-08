@@ -4,13 +4,20 @@ import { Document } from '../../utils/initializers/prisma.js'
  * A function that returns the found document
  *
  * @param {import('../../utils/types/documentQueryObject.js').documentQueryObject} documentQueryObject
+ * @param {Object} selectObject
  */
-const findDocuments = async (documentQueryObject) => {
+const findDocuments = async (documentQueryObject, selectObject = undefined) => {
 	try {
-		return await Document.findMany({
-			where: documentQueryObject,
-			include: { documentMetadata: true },
-		})
+		if (selectObject)
+			return await Document.findMany({
+				where: documentQueryObject,
+				select: { documentMetadata: true, ...selectObject },
+			})
+		else
+			return await Document.findMany({
+				where: documentQueryObject,
+				include: { documentMetadata: true },
+			})
 	} catch (error) {
 		throw error
 	}

@@ -10,11 +10,15 @@ import promptQuery from '../processing/promptQuery.js'
  */
 const chatCreateAndQuery = async (profile_id, chatQueryObject) => {
 	try {
-		const createdChat = await createChat({
-			chat_name: 'untitled',
-			chat_history: '',
-			profile_id: profile_id,
-		})
+		const createdChat = await createChat(
+			{
+				chat_name: 'untitled',
+				chat_history: '',
+				profile_id: profile_id,
+				preferences: chatQueryObject?.preferences,
+			},
+			profile_id
+		)
 
 		const promptResult = await promptQuery(
 			chatQueryObject.prompt,

@@ -6,8 +6,12 @@
 # Libraries
 **/node_modules
 
+# Dataset
+**/helpers/personas/data
+
 # Production
 **/build
+**/dist
 
 # NextJS
 client/.next

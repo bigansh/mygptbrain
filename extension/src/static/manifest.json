@@ -1,0 +1,33 @@
+{
+	"name": "myGPTBrain",
+	"description": "Knowledge consumption made easier with myGPTBrain. Use the extension easily save pages.",
+	"version": "1.0.2",
+	"author": "myGPTBrain",
+	"manifest_version": 3,
+	"icons": {
+		"16": "logo.png",
+		"48": "logo.png",
+		"128": "logo.png"
+	},
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "myGPTBrain",
+		"default_icon": "logo.png"
+	},
+	"host_permissions": [
+		"https://api.mygptbrain.com/",
+		"https://mygptbrain.com/",
+		"https://testing.mygptbrain.com/",
+		"https://api-testing.mygptbrain.com/"
+	],
+	"permissions": [
+		"storage",
+		"tabs",
+		"activeTab",
+		"cookies"
+	],
+	"options_page": "options.html",
+	"background": {
+		"service_worker": "background.js"
+	}
+}

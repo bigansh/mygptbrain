@@ -1,12 +1,9 @@
-import {
-	ConversationalRetrievalQAChain,
-	loadQAMapReduceChain,
-	loadQAStuffChain,
-	loadQARefineChain,
-} from 'langchain/chains'
+import { ConversationalRetrievalQAChain } from 'langchain/chains'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
-import { embeddings, model } from '../../utils/api/openai.js'
+import { embeddings, gpt_4, gpt_turbo } from '../../utils/api/openai.js'
+import { palm } from '../../utils/api/google.js'
+import { cohere } from '../../utils/api/cohere.js'
 import pineconeIndex from '../../utils/api/pinecone.js'
 import mixpanel from '../../utils/api/mixpanel.js'
 
@@ -20,34 +17,65 @@ const promptQuery = async (prompt, chat) => {
 	try {
 		if (!chat) throw new Error('No chat with that chat_id found.')
 
-		const { preferences, chat_history } = chat
+		const { preferences, chat_history, user } = chat
 
-		const pineconeQuery = {
-			// chunk_source: preferences.data_sources,
-			profile_id: chat.profile_id,
+		let model,
+			send_type,
+			pineconeQuery = {
+				profile_id: chat.profile_id,
+			}
+
+		if (preferences.llm_model === 'ChatGPT') {
+			model = gpt_turbo
+		} else if (preferences.llm_model === 'GPT4') {
+			model = gpt_4
+		} else if (preferences.llm_model === 'PaLM') {
+			model = palm
+		} else if (preferences.llm_model === 'Cohere') {
+			model = cohere
 		}
 
+		if (!preferences.data_sources.includes('All')) {
+			pineconeQuery = {
+				...pineconeQuery,
+				chunk_source: { $in: preferences.data_sources },
+			}
+		} else if (preferences.document_id) {
+			pineconeQuery = {
+				...pineconeQuery,
+				document_id: preferences.document_id,
+			}
+		}
+
+		// if (preferences.send_type === 'Stuff') {
+		// 	send_type = 'stuff'
+		// } else if (preferences.send_type === 'Map Reduce') {
+		// 	send_type = 'map_reduce'
+		// } else if (preferences.send_type === 'Refine') {
+		// 	send_type = 'refine'
+		// }
+
+		const promptTemplate = `${
+			user.userMetadata.prompt_templates[preferences.prompt_template]
+		}
+		Chat History: {chat_history}
+		Follow Up Input: {question}
+		Input Documents: {context}
+		`
+
 		const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-			pineconeIndex,
+			pineconeIndex: pineconeIndex,
 		})
-
-		// ! This will be used for to allow users to change how the query is fed to the system. For a later date.
-		// const method = new ConversationalRetrievalQAChain({
-		// 	combineDocumentsChain: loadQAStuffChain(model),
-		// 	questionGeneratorChain: loadQAStuffChain(model),
-		// 	retriever: vectorStore.asRetriever(5, pineconeQuery),
-		// 	returnSourceDocuments: true,
-		// })
-
-		// const chain = method.fromLLM(
-		// 	model,
-		// 	vectorStore.asRetriever(5, pineconeQuery)
-		// )
 
 		const chain = ConversationalRetrievalQAChain.fromLLM(
 			model,
 			vectorStore.asRetriever(5, pineconeQuery),
-			{ returnSourceDocuments: true }
+			{
+				returnSourceDocuments: true,
+				// qaChainOptions: { type: send_type },
+				qaTemplate: promptTemplate,
+				verbose: true,
+			}
 		)
 
 		const res = await chain.call({

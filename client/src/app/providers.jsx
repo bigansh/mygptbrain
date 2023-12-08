@@ -4,7 +4,6 @@ import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThreadsProvider, useThreads, UserProvider, useUser } from '@/context'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import '@fontsource/poppins'
 import { Logtail } from '@logtail/browser'
 
@@ -38,7 +37,7 @@ const queryClient = new QueryClient({
 	},
 })
 
-export const logtail = new Logtail('EFgZ1Fe1TgHWWNCnknBWjdkS')
+export const logtail = new Logtail(process.env.NEXT_PUBLIC_LOGTAIL)
 
 export function Providers({ children }) {
 	return (
@@ -48,7 +47,6 @@ export function Providers({ children }) {
 					<CacheProvider>
 						<ChakraProvider theme={theme}>
 							{children}
-							<ReactQueryDevtools initialIsOpen={false} />
 						</ChakraProvider>
 					</CacheProvider>
 				</QueryClientProvider>

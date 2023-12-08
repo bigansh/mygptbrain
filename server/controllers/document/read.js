@@ -11,7 +11,7 @@ const read = async (req, res) => {
 		/**
 		 * @type {{documentQueryObject: import('../../utils/types/documentQueryObject.js').documentQueryObject}}
 		 */
-		const { documentQueryObject } = req.body
+		const { documentQueryObject, selectObject } = req.body
 
 		const { profile_id } = req.user
 
@@ -23,7 +23,7 @@ const read = async (req, res) => {
 			throw new Error("You aren't authorized to read this document.")
 		}
 
-		const data = await findDocuments(documentQueryObject)
+		const data = await findDocuments(documentQueryObject, selectObject)
 
 		res.status(200).send(data)
 	} catch (error) {

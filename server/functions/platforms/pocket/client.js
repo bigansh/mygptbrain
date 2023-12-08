@@ -9,9 +9,9 @@ import { Auth } from '../../../utils/initializers/prisma.js'
  */
 const client = async (profile_id) => {
 	try {
-		const { pocket_id, pocket } = await Auth.findUnique({
+		const { pocket } = await Auth.findUnique({
 			where: { profile_id: profile_id },
-			include: { pocket: true },
+			select: { pocket: { select: { access_token: true } } },
 		})
 
 		return pocketClient(undefined, pocket.access_token)

@@ -24,6 +24,26 @@ apiClient.interceptors.request.use(
 	(error) => Promise.reject(error)
 )
 
+const personaApiClient = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_URL,
+	withCredentials: true,
+	headers: {
+		Accept: 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		'Content-Type': 'application/json',
+	},
+})
+
+personaApiClient.interceptors.request.use(
+	(config) => {
+		config.headers[
+			'Authorization'
+		] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZWNyZXQiOiJNIyN3UGtxZTZZNXZaIzdLJCNCSFBjWG9MNHFzNWtWcDN3XnJrJllWUWhnU1FnS3QzS3YqdEhqJXUlWkhQQFc0In0.Q_uuXmA6FmZuRkYor47Ic3TPVXGzlMR6F4nQUlFfpjg`
+		return config
+	},
+	(error) => Promise.reject(error)
+)
+
 /**
  ** Auth EndPoints
  **/
@@ -71,6 +91,11 @@ export const updateUser = async (data) => {
 	return response.data
 }
 
+export const updatePasswordFunc = async (data) => {
+	const response = await apiClient.patch(`/auth/update`, data)
+	return response.data
+}
+
 export const deleteUser = async (id) => {
 	const response = await apiClient.delete(`/user/delete`, {
 		chatQueryObject: { chat_id: id },
@@ -85,6 +110,15 @@ export const deleteUser = async (id) => {
 export const getDoc = async (data) => {
 	const response = await apiClient.post(`/document/read`, {
 		documentQueryObject: data,
+		selectObject: {
+			document_id: true,
+			profile_id: true,
+			body: data?.document_id !== undefined ? true : false,
+			heading: true,
+			createdAt: true,
+			updatedAt: true,
+			documentMetadata: true,
+		},
 	})
 	return response.data
 }
@@ -144,11 +178,44 @@ export const createChat = async (prompt) => {
 	return response.data
 }
 
+export const createDocumentChat = async (data) => {
+	const response = await apiClient.post(`/chat/create`, {
+		chatQueryObject: data,
+	})
+	return response.data
+}
+
+export const updatePromptTemplate = async (data) => {
+	const response = await apiClient.patch('/user/update?query_type=metadata', {
+		userMetadataObject: data,
+	})
+	return response.data
+}
+
 export const readChat = async (data) => {
 	//{ prompt?, chat_name?, chat_id?, profile_id }
 
 	const response = await apiClient.post(`/chat/read`, {
 		chatQueryObject: data,
+		selectObject: {
+			chat_id: true,
+			chat_name: true,
+			profile_id: true,
+			chat_array:
+				data?.chat_id !== undefined ||
+				data?.preferences?.document_id !== undefined
+					? true
+					: false,
+			source_documents: true,
+			chat_history:
+				data?.chat_id !== undefined ||
+				data?.preferences?.document_id !== undefined
+					? true
+					: false,
+			createdAt: true,
+			updatedAt: true,
+			preferences: true,
+		},
 	})
 
 	return response.data
@@ -191,4 +258,13 @@ export const verifyEmail = async (email) => {
 		`https://disposable.debounce.io/?email=${email}`
 	)
 	return res.data.disposable
+}
+
+export const updatePersona = async (data) => {
+	// { prompt, chat_id }
+	const response = await personaApiClient.post(`/persona/chat`, {
+		chatQueryObject: data,
+	})
+
+	return response.data
 }

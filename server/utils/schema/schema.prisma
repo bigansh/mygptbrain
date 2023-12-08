@@ -13,6 +13,7 @@ model User {
   name         String
   email        String        @unique
   profile_id   String        @id @unique @default(uuid())
+  stripe_id    String?       @unique
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   auth         Auth?
@@ -24,11 +25,13 @@ model User {
 }
 
 model UserMetadata {
-  profile_id          String   @id @unique
-  subscription_status Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  user                User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
+  profile_id              String   @id @unique
+  subscription_status     Boolean  @default(false)
+  prompt_templates        String[] @default(["You are a helpful assistant that answers questions only with the data and the context at hand. You don't generate random answers or hallucinate based on your base model. You provide concise answers to every question with no filler words. If an answer is much better represented in bullet points, answer in bullet points. If an answer to a question requires detailed paragraphs, use paragraphs to answer the question.", "Aim for 3-5 clear, informative points per response that directly address the user's query. Prioritize information based on its importance and relevance, using numbers or symbols to organize the points. Start each bullet point with a strong action verb or keyword to grab the user's attention and avoid unnecessary details or jargon. If further information is available, offer resources for independent exploration. If a query requires more nuance, provide a brief bullet-point summary. Maintain a professional and informative tone and continuously learn to improve your ability to generate accurate and helpful bullet-point responses.", ""])
+  default_prompt_template String   @default("0")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  user                    User     @relation(fields: [profile_id], references: [profile_id], onDelete: Cascade)
 }
 
 model Auth {
@@ -56,7 +59,7 @@ model Notion {
   access_token String   @unique
   notion_id    String   @id @unique
   workspace_id String   @unique
-  database_ids String[]
+  pages_ids    String[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   auth         Auth     @relation(fields: [notion_id], references: [notion_id], onDelete: Cascade)
@@ -114,11 +117,12 @@ model Document {
 model DocumentMetadata {
   document_id        String   @id @unique
   source             String
-  twitter_status_id  String?  @unique
-  reddit_post_id     String?  @unique
+  twitter_status_id  String?
+  reddit_post_id     String?
   pocket_article_id  String?
   document_file_type String?
-  drive_document_id  String?  @unique
+  notion_document_id String?
+  drive_document_id  String?
   keep_id            String?
   url                String?
   createdAt          DateTime @default(now())
@@ -142,10 +146,13 @@ model Chat {
 }
 
 model ChatPreferences {
-  llm_model    String   @default("ChatGPT")
-  data_sources String[] @default(["All"])
-  chat_id      String   @id @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  chat         Chat     @relation(fields: [chat_id], references: [chat_id], onDelete: Cascade)
+  chat_id         String   @id @unique
+  llm_model       String   @default("ChatGPT")
+  data_sources    String[] @default(["All"])
+  send_type       String   @default("Stuff")
+  document_id     String?
+  prompt_template String?  @default("0")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  chat            Chat     @relation(fields: [chat_id], references: [chat_id], onDelete: Cascade)
 }

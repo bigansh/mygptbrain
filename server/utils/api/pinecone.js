@@ -1,8 +1,6 @@
-import { PineconeClient } from '@pinecone-database/pinecone'
+import { Pinecone } from '@pinecone-database/pinecone'
 
-const client = new PineconeClient()
-
-await client.init({
+const client = new Pinecone({
 	apiKey: process.env.PINECONE_ID,
 	environment: process.env.PINECONE_ENVIRONMENT,
 })

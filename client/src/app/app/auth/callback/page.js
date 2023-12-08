@@ -1,5 +1,6 @@
 'use client'
 
+import { syncDoc } from '@/api'
 import { Flex, Heading, Spinner } from '@chakra-ui/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -12,7 +13,9 @@ const Callback = () => {
 
 	useEffect(() => {
 		localStorage.setItem('x-session-token', sessionToken)
-		router.push('/app/dashboard')
+		document.cookie = `x-session-token=${sessionToken}; path=/; domain=.mygptbrain.com; expires=Fri, 31 Dec 9999 21:10:10 GMT`
+		syncDoc()
+		router.push('/app')
 	}, [])
 
 	return (

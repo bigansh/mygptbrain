@@ -11,9 +11,15 @@ const updateChat = async (chatQueryObject) => {
 			throw new Error('No such chat found.')
 		}
 
+		chatQueryObject = { ...chatQueryObject, preferences: undefined }
+
 		return await Chat.update({
 			where: { chat_id: chatQueryObject.chat_id },
-			data: chatQueryObject,
+			data: {
+				preferences: chatQueryObject.preferences,
+				...chatQueryObject,
+			},
+			include: { preferences: true },
 		})
 	} catch (error) {
 		throw error

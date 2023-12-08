@@ -4,8 +4,7 @@ import client from './client.js'
 
 import documentLoadAndStore from '../../lifecycle/documentLoadAndStore.js'
 import findDocuments from '../../document/findDocuments.js'
-
-import { Document } from '../../../utils/initializers/prisma.js'
+import createDocument from '../../document/createDocument.js'
 
 /**
  * A function that syncs Reddit bookmarks
@@ -40,20 +39,17 @@ const redditSync = async (profile_id) => {
 				continue
 			}
 			const saveAndLoadPromise = new Promise(async (resolve) => {
-				const createdDocument = await Document.create({
-					data: {
-						body: xss(post?.body || post?.selftext),
-						heading: xss(post?.title || post?.link_title),
-						profile_id: profile_id,
-						documentMetadata: {
-							create: {
-								source: 'reddit',
-								reddit_post_id: post.id,
-								url: `https://reddit.com/comments/${post.id}`,
-							},
+				const createdDocument = await createDocument(profile_id, {
+					body: xss(post?.body || post?.selftext),
+					heading: xss(post?.title || post?.link_title),
+					profile_id: profile_id,
+					documentMetadata: {
+						create: {
+							source: 'reddit',
+							reddit_post_id: post.id,
+							url: `https://reddit.com/comments/${post.id}`,
 						},
 					},
-					include: { documentMetadata: true },
 				})
 
 				await documentLoadAndStore(profile_id, createdDocument)

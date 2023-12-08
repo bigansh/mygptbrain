@@ -1,7 +1,7 @@
-import { Document, User } from '../../utils/initializers/prisma.js'
-
+import createDocument from '../document/createDocument.js'
 import scrapeArticle from '../processing/scrapeArticle.js'
 import scrapeThread from '../processing/scrapeThread.js'
+import scrapeYT from '../processing/scrapeYT.js'
 import documentLoadAndStore from './documentLoadAndStore.js'
 
 /**
@@ -15,24 +15,36 @@ const scrapeAndLoadAndStore = async (url, profile_id) => {
 		let data
 
 		if (url.includes('https://twitter.com')) {
-			data = await scrapeThread(url)
+			data = await scrapeArticle(
+				url.replace('https://twitter.com', 'https://nitter.net')
+			)
+
+			data.source = 'twitter'
+		} else if (
+			url.includes('https://youtube.com') ||
+			url.includes('https://www.youtube.com') ||
+			url.includes('https://www.youtu.be') ||
+			url.includes('https://youtu.be')
+		) {
+			data = await scrapeYT(url)
+
+			data.source = 'youtube'
 		} else {
 			data = await scrapeArticle(url)
+
+			data.source = 'article'
 		}
 
-		const createdDocument = await Document.create({
-			data: {
-				body: data.content,
-				heading: data.title,
-				profile_id: profile_id,
-				documentMetadata: {
-					create: {
-						source: 'custom',
-						url: url,
-					},
+		const createdDocument = await createDocument(profile_id, {
+			body: data.content,
+			heading: data.title,
+			profile_id: profile_id,
+			documentMetadata: {
+				create: {
+					source: data.source,
+					url: url,
 				},
 			},
-			include: { documentMetadata: true },
 		})
 
 		await documentLoadAndStore(profile_id, createdDocument)
