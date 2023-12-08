@@ -13,6 +13,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 		return new Promise((resolve, reject) => {
 			chrome.cookies.get(
 				{
+					// url: 'https://testing.mygptbrain.com/',
 					url: 'https://mygptbrain.com/',
 					name: 'x-session-token',
 				},
@@ -56,7 +57,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 			msg: 'ERROR',
 			data: {
 				subject: 'error',
-				content: 'Error in authorization',
+				content: 'authorization error',
 			},
 		})
 	}
@@ -117,7 +118,7 @@ chrome.runtime.onMessage.addListener(async (res) => {
 						msg: 'ERROR',
 						data: {
 							subject: 'error',
-							content: 'Error bookmarking the page.',
+							content: 'error saving this page',
 						},
 					})
 				}
@@ -128,7 +129,7 @@ chrome.runtime.onMessage.addListener(async (res) => {
 				msg: 'ERROR',
 				data: {
 					subject: 'error',
-					content: 'Something went wrong.',
+					content: 'something went wrong',
 				},
 			})
 		}
