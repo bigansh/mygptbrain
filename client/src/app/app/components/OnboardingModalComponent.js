@@ -91,6 +91,7 @@ const OnboardingModal = ({
 		useUploadDoc({
 			onSuccess: (data) => {
 				setArrow(true)
+				setCurrentGif(1)
 				setCurrentDocument(data?.document_id)
 				setCurrentView('document')
 			},
@@ -220,7 +221,7 @@ const OnboardingModal = ({
 									src={gifs[currentGif].gif}
 									alt='Computer man'
 								/>
-								{currentGif == 1 && (
+								{/* {currentGif == 1 && (
 									<Box
 										pos={'absolute'}
 										top={['80%', 0]}
@@ -247,7 +248,7 @@ const OnboardingModal = ({
 									>
 										<BsArrowRight color={text} size={30} />
 									</Box>
-								)}
+								)} */}
 							</Flex>
 
 							<Box
