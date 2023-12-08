@@ -81,6 +81,7 @@ const DocumentWrapper = ({ isSidebarOpen, onPaymentModalOpen }) => {
 	const queryClient = useQueryClient()
 
 	const { data: userData } = useUserData()
+
 	const [llmType, setLlmType] = useState('chatGPT')
 	const [promptTemp, setPromptTemp] = useState()
 
@@ -456,7 +457,8 @@ const ChatInput = ({
 	const { currentDocument } = useThreads()
 	const { base, base600, base700, text, redbg } = useColors()
 	const toast = useToast()
-	const { userData } = useUserData()
+	const { data: userData } = useUserData()
+	console.log(userData, '6')
 	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },

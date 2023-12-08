@@ -28,7 +28,7 @@ const ChatInput = ({ inputValue, setInputValue, divRef }) => {
 	const { currentThread, setCurrentThread } = useThreads()
 	const { base, base800, base700, text } = useColors()
 	const toast = useToast()
-	const { userData } = useUserData()
+	const { data: userData } = useUserData()
 	const { data: docData, isLoading: docsIsLoading } = useDocumentsData({
 		enabled: !!userData?.profile_id,
 		funcArgs: { profile_id: userData?.profile_id },
