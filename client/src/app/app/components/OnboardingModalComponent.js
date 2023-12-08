@@ -9,12 +9,9 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalBody,
-	ModalCloseButton,
 	Spinner,
 	Text,
 	Grid,
-	Divider,
-	AbsoluteCenter,
 	Input,
 	InputGroup,
 	InputRightElement,
@@ -25,18 +22,10 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useColors } from '@/utils/colors'
 import { AiOutlineCloudUpload } from 'react-icons/ai'
-import { connectPlatform } from '@/api'
 import { useQueryClient } from '@tanstack/react-query'
-import {
-	ArrowRightIcon,
-	DriveIcon,
-	LinkIcon,
-	NotionIcon,
-	PockketIcon,
-	RedditIcon,
-} from '@/icons'
+import { AddIcon, LinkIcon } from '@/icons'
 import mixpanel from 'mixpanel-browser'
-import isValidHttpUrl, { upgradeFunction } from '@/utils/valid-http-check'
+import isValidHttpUrl from '@/utils/valid-http-check'
 import {
 	useDocumentsData,
 	useScrapeLink,
@@ -97,9 +86,11 @@ const OnboardingModal = ({
 		localStorage.setItem('modal-display', true)
 	}, [])
 
+	const [arrow, setArrow] = useState(false)
 	const { mutate: uploadDocMutate, isLoading: uploadDocIsLoading } =
 		useUploadDoc({
 			onSuccess: (data) => {
+				setArrow(true)
 				setCurrentDocument(data?.document_id)
 				setCurrentView('document')
 			},
@@ -200,7 +191,7 @@ const OnboardingModal = ({
 							gap={4}
 							w={'100%'}
 						>
-							<Box>
+							<Flex flexDir={'column'} gap={2}>
 								<Heading
 									fontSize={['xl', '2xl']}
 									fontWeight={'400'}
@@ -210,7 +201,7 @@ const OnboardingModal = ({
 								<Text pt={0} mt={0}>
 									{gifs[currentGif].description}
 								</Text>
-							</Box>
+							</Flex>
 
 							<Flex
 								borderColor={text}
@@ -218,12 +209,13 @@ const OnboardingModal = ({
 								m={'auto'}
 								my={2}
 								pos={'relative'}
-								h={['200px', '350px']}
+								h={['200px', '300px']}
 								flexDir={'column'}
 								justifyContent={'center'}
 								alignItems={'center'}
 							>
 								<Img
+									borderRadius={'md'}
 									h={['auto', '100%']}
 									src={gifs[currentGif].gif}
 									alt='Computer man'
@@ -242,7 +234,7 @@ const OnboardingModal = ({
 										<BsArrowLeft color={text} size={30} />
 									</Box>
 								)}
-								{currentGif == 0 && (
+								{currentGif == 0 && arrow && (
 									<Box
 										pos={'absolute'}
 										top={['80%', 0]}
@@ -280,7 +272,7 @@ const OnboardingModal = ({
 							<Grid
 								gap={5}
 								templateColumns={'1fr 1fr'}
-								w={['100%', '80%']}
+								w={['100%', '100%']}
 								display={['flex', 'grid']}
 								flexDir={'column'}
 								m='auto'
@@ -334,12 +326,8 @@ const OnboardingModal = ({
 											setCurrentThread('new')
 										}}
 									>
-										upload document
-										{uploadDocIsLoading ? (
-											<Spinner />
-										) : (
-											<AiOutlineCloudUpload />
-										)}
+										create thread
+										<AddIcon fill={text} />
 									</Button>
 								)}
 								<InputGroup
