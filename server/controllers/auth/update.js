@@ -16,7 +16,7 @@ const update = async (req, res) => {
 			throw new Error('No userObject found!')
 		}
 
-		if (userObject.personalDetails.profile_id !== profile_id) {
+		if (userObject.profile_id !== profile_id) {
 			throw new Error(
 				"profile_id passed doesn't match with the user logged in."
 			)
