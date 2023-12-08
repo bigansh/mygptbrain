@@ -32,7 +32,7 @@ const toasts = {
 		duration: 5000,
 	},
 	LLM_TYPE_CHANGE: {
-		title: 'changing an LLM type requires a paid plan',
+		title: 'changing an llm type requires a paid plan',
 		status: 'error',
 		duration: 5000,
 	},
