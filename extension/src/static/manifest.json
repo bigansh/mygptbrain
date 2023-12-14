@@ -14,6 +14,14 @@
 		"default_title": "myGPTBrain",
 		"default_icon": "logo.png"
 	},
+	"content_scripts": [
+		{
+			"js": [
+				"src/content-test.js"
+			],
+			"matches": ["<all_urls>"]
+		}
+	],
 	"host_permissions": [
 		"https://api.mygptbrain.com/",
 		"https://mygptbrain.com/",
