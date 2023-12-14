@@ -3,15 +3,26 @@ import React from 'react'
 
 const BillingComponent = () => {
 	return (
-		<Flex height={'100%'} flexDir={'column'}>
+		<Flex height={'100%'} flexDir={'column'} alignItems={'flex-start'}>
 			<Text
 				paddingBlock={6}
+				pb={0}
 				paddingInline={4}
 				fontSize={'xl'}
 				fontWeight={'400'}
 			>
 				subscriptions
 			</Text>
+			<Text
+				paddingBlock={6}
+				pt={0}
+				paddingInline={4}
+				fontSize={'md'}
+				fontWeight={'400'}
+			>
+				please use the email that you use this account with
+			</Text>
+
 			<>
 				<script
 					async
