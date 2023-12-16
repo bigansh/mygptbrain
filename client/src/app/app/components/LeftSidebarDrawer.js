@@ -594,6 +594,7 @@ const LeftSideBarDrawer = ({
 				<SettingModal
 					isOpenSetting={isOpenSetting}
 					onCloseSetting={onCloseSetting}
+					onPaymentModalOpen={onPaymentModalOpen}
 				/>
 			</DrawerContent>
 		</Drawer>

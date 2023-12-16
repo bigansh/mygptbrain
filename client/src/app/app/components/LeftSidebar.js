@@ -576,6 +576,7 @@ const LeftSidebar = ({ onPaymentModalOpen }) => {
 			<SettingModal
 				isOpenSetting={isOpenSetting}
 				onCloseSetting={onCloseSetting}
+				onPaymentModalOpen={onPaymentModalOpen}
 			/>
 		</Flex>
 	)

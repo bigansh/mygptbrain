@@ -23,7 +23,11 @@ import {
 import { BillingIcon, PlatformIcon, UserIcon, PreferencesIcon } from '@/icons'
 import { useRouter } from 'next/navigation'
 import { useUserData } from '@/app/query-hooks'
-const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
+const SettingModal = ({
+	isOpenSetting,
+	onCloseSetting,
+	onPaymentModalOpen,
+}) => {
 	const { base, base800, text } = useColors()
 	const router = useRouter()
 	const [activeButton, setActiveButton] = useState('account')
@@ -43,7 +47,9 @@ const SettingModal = ({ isOpenSetting, onCloseSetting }) => {
 			childComponent = <PlatformComponent />
 			break
 		case 'preferences':
-			childComponent = <PreferencesComponent />
+			childComponent = (
+				<PreferencesComponent onPaymentModalOpen={onPaymentModalOpen} />
+			)
 			break
 		case 'billing':
 			childComponent = <BillingComponent />
