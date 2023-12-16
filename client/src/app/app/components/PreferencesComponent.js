@@ -29,11 +29,13 @@ import { useState } from 'react'
 import FunctionalBtn from './FunctionalBtn'
 import { useUserData } from '@/app/query-hooks'
 import { FiCheck } from 'react-icons/fi'
+import { useToastManager } from '@/utils/customToasts'
 
-const PreferencesComponent = () => {
+const PreferencesComponent = ({ onPaymentModalOpen }) => {
 	const router = useRouter()
 	const toast = useToast()
 	const queryClient = useQueryClient()
+	const showToast = useToastManager()
 	const { isOpen, onToggle, onClose } = useDisclosure()
 	const { base, base800, base700, base600, text, redbg } = useColors()
 	const {
@@ -174,7 +176,14 @@ const PreferencesComponent = () => {
 				id='email'
 				type='email'
 				value={promptValue}
-				onChange={(e) => setPromptValue(e.target.value)}
+				onChange={(e) => {
+					if (!userData?.userMetadata?.subscription_status) {
+						onPaymentModalOpen()
+						showToast('PROMPT_PAID')
+					} else {
+						setPromptValue(e.target.value)
+					}
+				}}
 				fontSize={'18px'}
 				bg={base700}
 				border={'0px'}
@@ -187,19 +196,28 @@ const PreferencesComponent = () => {
 			<Flex gap={5} mt={5}>
 				<Button
 					cursor={'pointer'}
-					onClick={() =>
-						userData?.userMetadata?.prompt_templates[
-							currentTemplate
-						] !== promptValue
-							? mutateUpdate()
-							: toast({
-									title: 'nothing to update',
-									position: 'top',
-									variant: 'subtle',
-									status: 'info',
-									duration: 3000,
-							  })
-					}
+					onClick={() => {
+						if (
+							userData?.userMetadata?.prompt_templates[
+								currentTemplate
+							] !== promptValue
+						) {
+							if (!userData?.userMetadata?.subscription_status) {
+								onPaymentModalOpen()
+								showToast('PROMPT_PAID')
+							} else {
+								mutateUpdate()
+							}
+						} else {
+							toast({
+								title: 'nothing to update',
+								position: 'top',
+								variant: 'subtle',
+								status: 'info',
+								duration: 3000,
+							})
+						}
+					}}
 					bg={
 						userData?.userMetadata?.prompt_templates[
 							currentTemplate
@@ -216,12 +234,21 @@ const PreferencesComponent = () => {
 
 				<Button
 					cursor={'pointer'}
-					onClick={
-						currentTemplate !==
+					onClick={() => {
+						if (
+							currentTemplate !==
 							Number(
 								userData?.userMetadata?.default_prompt_template
-							) && mutateDefault
-					}
+							)
+						) {
+							if (!userData?.userMetadata?.subscription_status) {
+								onPaymentModalOpen()
+								showToast('PROMPT_PAID')
+							} else {
+								mutateDefault()
+							}
+						}
+					}}
 					bg={'rgba(88, 221, 88, 0.5)'}
 					_hover={{
 						opacity:

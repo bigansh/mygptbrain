@@ -46,6 +46,11 @@ const toasts = {
 		status: 'error',
 		duration: 5000,
 	},
+	PROMPT_PAID: {
+		title: 'using a prompt template requires a paid plan',
+		status: 'error',
+		duration: 5000,
+	},
 	// ... add more predefined toasts here
 }
 
