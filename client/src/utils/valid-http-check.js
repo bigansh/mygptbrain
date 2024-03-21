@@ -6,6 +6,8 @@ import {
 	ModalBody,
 	ModalCloseButton,
 } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
+import { getUser } from '@/api'
 
 function isValidHttpUrl(str) {
 	const pattern = new RegExp(
@@ -27,6 +29,11 @@ export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
 }
 
 export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
+	const { data } = useQuery({
+		queryKey: ['user'],
+		queryFn: getUser,
+	})
+
 	return (
 		<Modal
 			onClose={onPaymentModalClose}
@@ -56,6 +63,7 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 						publishable-key={
 							process.env.NEXT_PUBLIC_PUBLISHABLE_KEY
 						}
+						customer-email={data.email}
 					></stripe-pricing-table>
 				</ModalBody>
 			</ModalContent>
