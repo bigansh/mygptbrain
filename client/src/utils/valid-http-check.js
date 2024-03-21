@@ -62,7 +62,7 @@ export const PaymentModal = ({
 						publishable-key={
 							process.env.NEXT_PUBLIC_PUBLISHABLE_KEY
 						}
-						customer-email={data.email}
+						customer-email={data?.email}
 					></stripe-pricing-table>
 				</ModalBody>
 			</ModalContent>
