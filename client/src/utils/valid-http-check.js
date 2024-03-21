@@ -1,4 +1,4 @@
-import { Button, Text, useDisclosure } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 import {
 	Modal,
 	ModalOverlay,
@@ -33,7 +33,6 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 		queryKey: ['user'],
 		queryFn: getUser,
 	})
-
 	return (
 		<Modal
 			onClose={onPaymentModalClose}
@@ -63,7 +62,7 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 						publishable-key={
 							process.env.NEXT_PUBLIC_PUBLISHABLE_KEY
 						}
-						customer-email={data.email}
+						customer-email={data?.email}
 					></stripe-pricing-table>
 				</ModalBody>
 			</ModalContent>

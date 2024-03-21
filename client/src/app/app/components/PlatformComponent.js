@@ -69,6 +69,7 @@ const PlatformComponent = () => {
 			<PaymentModal
 				isPaymentModalOpen={isPaymentModalOpen}
 				onPaymentModalClose={onPaymentModalClose}
+				data={data}
 			/>
 		</Grid>
 	)
