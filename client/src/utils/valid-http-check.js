@@ -28,11 +28,11 @@ export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
 	status == false ? onOpen() : usernextFunc()
 }
 
-export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
-	const { data } = useQuery({
-		queryKey: ['user'],
-	})
-
+export const PaymentModal = ({
+	isPaymentModalOpen,
+	onPaymentModalClose,
+	data,
+}) => {
 	return (
 		<Modal
 			onClose={onPaymentModalClose}
@@ -62,7 +62,7 @@ export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
 						publishable-key={
 							process.env.NEXT_PUBLIC_PUBLISHABLE_KEY
 						}
-						customer-email={data?.email}
+						customer-email={data.email}
 					></stripe-pricing-table>
 				</ModalBody>
 			</ModalContent>
