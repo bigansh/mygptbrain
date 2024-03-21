@@ -1,4 +1,4 @@
-import { Button, Text, useDisclosure } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 import {
 	Modal,
 	ModalOverlay,
@@ -28,11 +28,11 @@ export const upgradeFunction = ({ status, usernextFunc, onOpen }) => {
 	status == false ? onOpen() : usernextFunc()
 }
 
-export const PaymentModal = ({
-	isPaymentModalOpen,
-	onPaymentModalClose,
-	data,
-}) => {
+export const PaymentModal = ({ isPaymentModalOpen, onPaymentModalClose }) => {
+	const { data } = useQuery({
+		queryKey: ['user'],
+		queryFn: getUser,
+	})
 	return (
 		<Modal
 			onClose={onPaymentModalClose}
